@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>Ladder</groupId>
-            <artifactId>Ladder</artifactId>
+            <groupId>ladder</groupId>
+            <artifactId>ladder</artifactId>
             <version>0.9.3-LADDER</version>
         </dependency>
         <dependency>
