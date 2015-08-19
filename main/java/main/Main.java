@@ -1,11 +1,9 @@
 package main;
 
-import net.ShowItemServerSolver;
+import net.ShowItemNormalServerSolver;
 import server.Server;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by xlo on 2015/8/19.
@@ -31,7 +29,7 @@ public class Main {
                 @Override
                 public void run() {
                     Server server = Server.getNewServer();
-                    server.setSolverBuilder(ShowItemServerSolver::new);
+                    server.setSolverBuilder(ShowItemNormalServerSolver::new);
                     server.getInstance(8000);
                     server.accept();
                     System.out.println("end");
