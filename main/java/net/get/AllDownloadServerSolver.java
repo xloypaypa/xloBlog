@@ -1,7 +1,10 @@
-package net;
+package net.get;
 
+import net.ShowResourcePage;
 import safeList.SafeModelManager;
 import server.serverSolver.normalServer.NormalServerSolver;
+import tool.connection.event.ConnectionEvent;
+import tool.connection.event.ConnectionEventManager;
 import tool.ioAble.FileIOBuilder;
 import tool.ioAble.NormalFileIO;
 import tool.streamConnector.NormalStreamConnector;
@@ -22,11 +25,16 @@ public class AllDownloadServerSolver extends NormalServerSolver implements ShowR
     protected FileIOBuilder fileIOBuilder;
     protected String path;
 
+    public AllDownloadServerSolver() {
+        ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
+                (event, solver) -> closeSocket());
+    }
+
     @Override
     protected boolean checkRequestExist() {
         try {
             path = URLDecoder.decode(this.requestSolver.getRequestHeadReader().getUrl().getFile(), "UTF-8");
-            this.file = new File("."+ path);
+            this.file = new File("." + path);
             if (!this.file.exists() || !this.file.isFile()) {
                 ShowResourcePage.send404(this.file.getName().endsWith("html"), this.requestSolver);
                 return false;
@@ -60,7 +68,7 @@ public class AllDownloadServerSolver extends NormalServerSolver implements ShowR
     @Override
     protected boolean afterSendHead() {
         this.fileIOBuilder = new NormalFileIO();
-        this.fileIOBuilder.setFile(this.path);
+        this.fileIOBuilder.setFile(this.file.getAbsolutePath());
         return this.fileIOBuilder.buildIO();
     }
 

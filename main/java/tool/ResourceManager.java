@@ -1,13 +1,18 @@
 package tool;
 
+import tool.ioAble.IOAble;
 import tool.ioAble.NormalByteIO;
+import tool.ioAble.NormalFileIO;
 import tool.streamConnector.NormalStreamConnector;
 import tool.streamConnector.StreamConnector;
 import tool.streamConnector.io.NormalStreamIONode;
 import tool.streamConnector.io.StreamIONode;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,15 +22,17 @@ import java.util.concurrent.Executors;
  * it's will cache the resource
  */
 public class ResourceManager {
-    protected Map<String, byte[]> resource;
-    protected Map<String, CacheState> cached;
+    protected final Map<String, CacheState> cacheStateMap;
+    protected final Map<String, Set<Thread>> waiting;
+    protected Map<String, byte[]> cache;
     protected ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     private static ResourceManager resourceManager = new ResourceManager();
 
     private ResourceManager() {
-        this.resource = new HashMap<>();
-        this.cached = new HashMap<>();
+        this.cacheStateMap = new HashMap<>();
+        this.waiting = new HashMap<>();
+        this.cache = new HashMap<>();
     }
 
     public static ResourceManager getResourceManager() {
@@ -33,33 +40,7 @@ public class ResourceManager {
     }
 
     public boolean haveResource(String path) {
-        return checkResource(path);
-    }
-
-    public byte[] getResource(String path) {
-        if (checkResource(path)) {
-            if (this.isCached(path) == CacheState.END) {
-                return this.resource.get(path);
-            } else if (this.isCached(path) == CacheState.NONE) {
-                this.loadResource(path);
-                return this.resource.get(path);
-            } else {
-                //FIXME busy waiting
-                while (this.isCached(path) == CacheState.START) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ignored) {
-                    }
-                }
-                return this.resource.get(path);
-            }
-        } else {
-            return null;
-        }
-    }
-
-    private boolean checkResource(String path) {
-        if (this.getClass().getResource(path) != null) {
+        if (this.checkResourceExist(path)) {
             cacheResource(path);
             return true;
         } else {
@@ -67,40 +48,96 @@ public class ResourceManager {
         }
     }
 
-    private synchronized void cacheResource(String path) {
-        if (this.cached.containsKey(path)) return ;
-        if (!checkResource(path)) return;
-
-        this.cached.put(path, CacheState.START);
-        this.executorService.execute(() -> loadResource(path));
+    public byte[] getResource(String path) {
+        if (!checkResourceExist(path)) return null;
+        cacheResource(path);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sleep(Long.MAX_VALUE);
+                } catch (InterruptedException ignored) {
+                }
+            }
+        };
+        synchronized (this.cacheStateMap) {
+            if (this.cacheStateMap.get(path) == CacheState.END) {
+                return this.cache.get(path);
+            }
+            synchronized (waiting) {
+//                System.out.println("waiting");
+                thread.start();
+                buildWaitingSet(path);
+                waiting.get(path).add(thread);
+            }
+        }
+        try {
+//            System.out.println("join");
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return this.cache.get(path);
     }
 
-    private synchronized CacheState isCached(String path) {
-        if (!this.cached.containsKey(path)) {
-            return CacheState.NONE;
+    private boolean checkResourceExist(String path) {
+        return this.getClass().getResource(path) != null;
+    }
+
+    private void cacheResource(String path) {
+        synchronized (this.cacheStateMap) {
+            if (this.cacheStateMap.containsKey(path)) {
+                return;
+            }
+            this.cacheStateMap.put(path, CacheState.START);
         }
-        return this.cached.get(path);
+        executorService.execute(() -> {
+            loadResource(path);
+
+            synchronized (cacheStateMap) {
+                cacheStateMap.put(path, CacheState.END);
+                synchronized (waiting) {
+                    buildWaitingSet(path);
+//                    System.out.println("interrupt");
+                    waiting.get(path).forEach(Thread::interrupt);
+                }
+            }
+        });
+    }
+
+    private void buildWaitingSet(String path) {
+        if (this.waiting.get(path) == null) {
+            this.waiting.put(path, new HashSet<>());
+        }
     }
 
     private void loadResource(String path) {
-        this.cached.put(path, CacheState.START);
-        StreamConnector streamConnector = new NormalStreamConnector();
-        StreamIONode streamIONode = new NormalStreamIONode();
-        ResourceIO resourceIO = new ResourceIO();
-        resourceIO.setPath(path);
-        resourceIO.buildIO();
+        IOAble ioAble;
+        File file = new File("." + path);
+        if (file.exists() && file.isFile()) {
+            ioAble = new NormalFileIO();
+            ((NormalFileIO) ioAble).setFile(file.getAbsolutePath());
+            ioAble.buildIO();
+        } else {
+            ioAble = new ResourceIO();
+            ((ResourceIO) ioAble).setPath(path);
+            ioAble.buildIO();
+        }
 
-        NormalByteIO normalByteIO = new NormalByteIO();
-        normalByteIO.setInitValue(new byte[0]);
-        normalByteIO.buildIO();
+        NormalByteIO byteIO = new NormalByteIO();
+        byteIO.setInitValue(new byte[0]);
+        byteIO.buildIO();
 
-        streamIONode.setInputStream(resourceIO.getInputStream());
-        streamIONode.addOutputStream(normalByteIO.getOutputStream());
+        StreamConnector connector = new NormalStreamConnector();
+        StreamIONode ioNode = new NormalStreamIONode();
+        ioNode.setInputStream(ioAble.getInputStream());
+        ioNode.addOutputStream(byteIO.getOutputStream());
+        connector.addMember(ioNode);
+        connector.connect();
 
-        streamConnector.addMember(streamIONode);
-        streamConnector.connect();
+        this.cache.put(path, byteIO.getValue());
 
-        this.resource.put(path, normalByteIO.getValue());
-        this.cached.put(path, CacheState.END);
+        ioAble.close();
     }
+
 }

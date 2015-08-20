@@ -1,5 +1,6 @@
-package net;
+package net.get;
 
+import net.ShowResourcePage;
 import safeList.SafeModelManager;
 import server.serverSolver.normalServer.NormalServerSolver;
 import tool.ResourceManager;
@@ -82,7 +83,7 @@ public class ShowItemNormalServerSolver extends NormalServerSolver implements Sh
     protected boolean afterSendHead() {
         if (this.file.exists() && this.file.isFile()) {
             FileIOBuilder fileIOBuilder = new NormalFileIO();
-            fileIOBuilder.setFile(this.path);
+            fileIOBuilder.setFile(this.file.getAbsolutePath());
             this.IOBuilder = fileIOBuilder;
         } else {
             NormalByteIO normalByteIO = new NormalByteIO();

@@ -5,5 +5,5 @@ package tool;
  * it's the resource cache state
  */
 public enum CacheState {
-    START, END, NONE
+    START, END
 }
