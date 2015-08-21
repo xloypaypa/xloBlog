@@ -1,3 +1,4 @@
 <config>
     <type>ShowFileTypeConfig</type>
+    <type>ReturnCodeConfig</type>
 </config>

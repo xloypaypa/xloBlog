@@ -1,5 +1,6 @@
 package config;
 
+import org.dom4j.DocumentException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class ShowFileTypeConfigTest {
     @Test
-    public void testLoad() {
+    public void testLoad() throws DocumentException {
         ShowFileTypeConfig showFileTypeConfig = new ShowFileTypeConfig();
         showFileTypeConfig.init();
         assertTrue(showFileTypeConfig.isShow("abc.html"));

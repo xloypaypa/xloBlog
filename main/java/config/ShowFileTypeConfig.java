@@ -1,9 +1,7 @@
 package config;
 
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import tool.ResourceManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,21 +19,17 @@ public class ShowFileTypeConfig implements ConfigInterface {
     }
 
     @Override
-    public void init() {
-        try {
-            Element root = DocumentHelper.parseText(new String(ResourceManager.getResourceManager().getResource("/showFileType.xml"))).getRootElement();
-            List node = root.elements();
-            for (Object now : node) {
-                Element element = (Element) now;
-                this.showFileNameEndWith.add(element.getText());
-            }
-        } catch (DocumentException e) {
-            e.printStackTrace();
+    public void init() throws DocumentException {
+        Element root = ConfigInterface.getRootElement("/showFileType.xml");
+        List node = root.elements();
+        for (Object now : node) {
+            Element element = (Element) now;
+            this.showFileNameEndWith.add(element.getText());
         }
     }
 
     @Override
-    public void reload() {
+    public void reload() throws DocumentException {
         this.showFileNameEndWith.clear();
         init();
     }

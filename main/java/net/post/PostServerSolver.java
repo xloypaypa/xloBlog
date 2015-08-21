@@ -10,6 +10,13 @@ import server.serverSolver.normalServer.DynamicServerSolver;
 public class PostServerSolver extends DynamicServerSolver {
     @Override
     public void buildAimSolver(RequestSolver requestSolver) {
-
+        if (this.requestSolver.getRequestHeadReader().getUrl().getFile().equals("login")) {
+            this.aimSolver = new LoginServerSolver() {
+                public LoginServerSolver set(RequestSolver requestSolver) {
+                    this.requestSolver = requestSolver;
+                    return this;
+                }
+            }.set(requestSolver);
+        }
     }
 }

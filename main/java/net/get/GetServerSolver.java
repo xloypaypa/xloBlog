@@ -19,7 +19,7 @@ public class GetServerSolver extends DynamicServerSolver {
             String path = URLDecoder.decode(requestSolver.getRequestHeadReader().getUrl().getFile(), "UTF-8");
             ShowFileTypeConfig showFileTypeConfig = (ShowFileTypeConfig) ConfigManager.getConfigManager().getConfig(ShowFileTypeConfig.class);
             if (showFileTypeConfig.isShow(path)) {
-                this.aimSolver = new ShowItemNormalServerSolver(){
+                this.aimSolver = new ShowItemNormalServerSolver() {
                     public ShowItemNormalServerSolver set(RequestSolver requestSolver) {
                         this.requestSolver = requestSolver;
                         return this;

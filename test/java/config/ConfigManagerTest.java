@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 public class ConfigManagerTest {
     @Test
     public void testLoad() {
+        assertNotNull(ConfigManager.getConfigManager().getConfig(ShowFileTypeConfig.class));
         assertTrue(((ShowFileTypeConfig)ConfigManager.getConfigManager().getConfig(ShowFileTypeConfig.class)).isShow("abc.html"));
     }
 }

@@ -1,9 +1,7 @@
 package config;
 
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import tool.ResourceManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +27,7 @@ public class ConfigManager implements ConfigInterface {
 
     public ConfigInterface getConfig(Class<? extends ConfigInterface> config) {
         for (ConfigInterface configInterface : this.configInterfaces) {
+            System.out.println(configInterface.getClass().getName());
             if (configInterface.getClass().equals(config)) {
                 return configInterface;
             }
@@ -37,14 +36,19 @@ public class ConfigManager implements ConfigInterface {
     }
 
     public void reloadConfig(Class<? extends ConfigInterface> config) {
-        this.configInterfaces.stream().filter(configInterface ->
-                configInterface.getClass().equals(config)).forEach(configInterface -> configInterface.reload());
+        for (ConfigInterface now : this.configInterfaces) {
+            if (!now.getClass().equals(config)) continue;
+            try {
+                now.reload();
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     @Override
     public void init() {
         try {
-            Element root = DocumentHelper.parseText(new String(ResourceManager.getResourceManager().getResource("/configs.xml"))).getRootElement();
+            Element root = ConfigInterface.getRootElement("/configs.xml");
             List node = root.elements();
             for (Object now : node) {
                 Element element = (Element) now;
@@ -56,7 +60,7 @@ public class ConfigManager implements ConfigInterface {
                     e.printStackTrace();
                 }
             }
-        } catch (DocumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -65,6 +69,11 @@ public class ConfigManager implements ConfigInterface {
     public void reload() {
         this.configInterfaces.clear();
         this.init();
-        this.configInterfaces.forEach(ConfigInterface::reload);
+        for (ConfigInterface now : this.configInterfaces) {
+            try {
+                now.reload();
+            } catch (Exception ignored) {
+            }
+        }
     }
 }
