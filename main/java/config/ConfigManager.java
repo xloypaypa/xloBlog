@@ -27,7 +27,6 @@ public class ConfigManager implements ConfigInterface {
 
     public ConfigInterface getConfig(Class<? extends ConfigInterface> config) {
         for (ConfigInterface configInterface : this.configInterfaces) {
-            System.out.println(configInterface.getClass().getName());
             if (configInterface.getClass().equals(config)) {
                 return configInterface;
             }

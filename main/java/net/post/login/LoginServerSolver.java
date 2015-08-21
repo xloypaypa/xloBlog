@@ -1,4 +1,4 @@
-package net.post;
+package net.post.login;
 
 import config.ConfigManager;
 import config.ReturnCodeConfig;
@@ -90,10 +90,8 @@ public class LoginServerSolver extends AbstractServerSolver {
         JSONObject jsonObject = new JSONObject();
         if (username == null || password == null) {
             jsonObject.put("error head", returnCodeConfig.getCode("error head"));
-        } else if (userAccessManager.checkUser(username, password)) {
-            jsonObject.put("accept", returnCodeConfig.getCode("accept"));
         } else {
-            jsonObject.put("forbidden", returnCodeConfig.getCode("forbidden"));
+            jsonObject.put("forbidden", userAccessManager.checkUser(username, password));
         }
         this.message = jsonObject.toString();
     }

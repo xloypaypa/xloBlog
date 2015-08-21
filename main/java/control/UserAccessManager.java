@@ -1,5 +1,8 @@
 package control;
 
+import config.ConfigManager;
+import config.ReturnCodeConfig;
+
 /**
  * Created by xlo on 2015/8/21.
  * it's the user access manager
@@ -19,7 +22,13 @@ public class UserAccessManager {
         return true;
     }
 
-    public boolean checkUser(String username, String password) {
-        return true;
+    public String checkUser(String username, String password) {
+        ReturnCodeConfig returnCodeConfig = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
+        return returnCodeConfig.getCode("accept");
+    }
+
+    public String register(String username, String password) {
+        ReturnCodeConfig returnCodeConfig = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
+        return returnCodeConfig.getCode("accept");
     }
 }
