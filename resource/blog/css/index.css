@@ -1,39 +1,17 @@
-*{
-    margin:0;
-    padding:0;
-}
-body{
-    background:#FFF8DC;
-}
-li{
-    list-style:none;
-}
 
-/*************导航条************/
-nav{
-    background:#006633;
-}
-nav .container-fluid{
-    width:80%;
-}
-nav .pull-right{
-    padding-top:8px;
-}
+
+
 /**************头部************/
 .header{
     padding:60px 10%;
 }
-
-/**********主要内容***************/
-.content{
-    width:80%;
-    margin:20px auto;
-    padding:20px;
+.index-box{
     border:1px solid #ddd;
     border-radius:5px;
     overflow:hidden;
     background:#fff;
 }
+
 /******侧栏************/
 .content .aside{
     width:25%;

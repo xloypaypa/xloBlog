@@ -1,0 +1,46 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    background:#FFF8DC;
+}
+li{
+    list-style:none;
+}
+/*************导航条************/
+nav{
+    background:#006633;
+}
+nav .container-fluid{
+    width:80%;
+}
+nav .pull-right{
+    padding-top:8px;
+}
+/**********主要内容***************/
+.content{
+    width:80%;
+    margin:0 auto;
+    margin-top:50px;
+}
+/*******表单**********/
+#login,#reg{
+    width:400px;
+    background:#fff;
+    padding:30px 50px;
+    margin:0 auto;
+    margin-top:120px;
+}
+#login h2,#reg h2{
+    font-size:24px;
+    padding-bottom:10px;
+}
+#login .input-group,#reg .input-group{
+    margin:20px 0;
+}
+#login button,#reg button{
+    display:block;
+    width:80%;
+    margin:30px auto;
+}
