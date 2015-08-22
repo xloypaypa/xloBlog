@@ -4,6 +4,8 @@ import config.ConfigManager;
 import config.ShowFileTypeConfig;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.DynamicServerSolver;
+import tool.connection.event.ConnectionEvent;
+import tool.connection.event.ConnectionEventManager;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -33,6 +35,10 @@ public class GetServerSolver extends DynamicServerSolver {
                     }
                 }.set(requestSolver);
             }
+
+            ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
+                    (event, solver) ->ConnectionEventManager.getConnectionEventManager()
+                            .invoke(ConnectionEvent.connectEnd, aimSolver));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

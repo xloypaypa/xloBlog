@@ -4,6 +4,8 @@ import net.post.login.LoginServerSolver;
 import net.post.register.RegisterServerSolverRead;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.DynamicServerSolver;
+import tool.connection.event.ConnectionEvent;
+import tool.connection.event.ConnectionEventManager;
 
 /**
  * Created by xlo on 2015/8/20.
@@ -27,5 +29,9 @@ public class PostServerSolver extends DynamicServerSolver {
                 }
             }.set(requestSolver);
         }
+
+        ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
+                (event, solver) ->ConnectionEventManager.getConnectionEventManager()
+                        .invoke(ConnectionEvent.connectEnd, aimSolver));
     }
 }
