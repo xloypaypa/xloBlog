@@ -89,9 +89,9 @@ public class LoginServerSolver extends AbstractServerSolver {
 
         JSONObject jsonObject = new JSONObject();
         if (username == null || password == null) {
-            jsonObject.put("error head", returnCodeConfig.getCode("error head"));
+            jsonObject.put("return", returnCodeConfig.getCode("error head"));
         } else {
-            jsonObject.put("forbidden", userAccessManager.checkUser(username, password));
+            jsonObject.put("return", userAccessManager.checkUser(username, password));
         }
         this.message = jsonObject.toString();
     }

@@ -71,7 +71,7 @@ public class RegisterServerSolverWrite extends WriteServerSolver {
     private void buildReturnMessage() {
         JSONObject object = new JSONObject();
         UserAccessManager userAccessManager = UserAccessManager.getUserAccessManager();
-        object.put("code", userAccessManager.register(this.username, this.password));
+        object.put("return", userAccessManager.register(this.username, this.password));
         this.message = object.toString();
     }
 }
