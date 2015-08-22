@@ -1,0 +1,133 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    background:#FFF8DC;
+}
+li{
+    list-style:none;
+}
+
+/*************导航条************/
+nav{
+    background:#006633;
+}
+nav .container-fluid{
+    width:80%;
+}
+nav .pull-right{
+    padding-top:8px;
+}
+/**************头部************/
+.header{
+    padding:60px 10%;
+}
+
+/**********主要内容***************/
+.content{
+    width:80%;
+    margin:20px auto;
+    padding:20px;
+    border:1px solid #ddd;
+    border-radius:5px;
+    overflow:hidden;
+    background:#fff;
+}
+/******侧栏************/
+.content .aside{
+    width:25%;
+    float:left;
+}
+.aside h2{
+    font-size:18px;
+    background:#999;
+    line-height:24px;
+    text-align:center;
+    color:#fff;
+    margin:0;
+}
+.aside .myInfo,.aside .search,.aside .classify,.aside .read-rank,.aside .latestComment{
+
+    border:1px solid #ddd;
+}
+.aside .search,.aside .classify,.aside .read-rank,.aside .latestComment{
+     margin-top:20px;
+}
+/**********个人资料*************/
+
+.myInfo .myInfo-content{
+    padding:20px;
+    overflow:hidden;
+}
+.myInfo-content img{
+    display:block;
+    width:144px;
+    height:144px;
+    margin:5px auto;
+}
+.myInfo-content .nickName{
+    text-align:center;
+}
+.myInfo-content .btn-group{
+    width:100%;
+    border-bottom:1px dashed #333;
+    padding:10px;
+}
+.myInfo-content .btn-group .buttons{
+    width:116px;
+    height:30px;
+    margin:0 auto;
+}
+.buttons button{
+    float:left;
+}
+.myInfo-rank{
+    padding:10px;
+    border-bottom:1px dashed #333;
+}
+.myInfo-statistics{
+    padding:10px;
+}
+/********文章搜索*************/
+.aside .search{
+
+}
+.search .input-group{
+    padding:15px;
+}
+/**************主要内容******************/
+.content .main{
+    width:70%;
+    padding:20px;
+    float:right;
+    background:#fff;
+    border:1px solid #ddd;
+}
+.main .article{
+   border-bottom:1px dashed #333;
+   overflow:hidden;
+}
+.article p{
+    text-indent:2em;
+}
+.article h2 a:hover{
+    text-decoration:none;
+}
+.article .article-message{
+    float:right;
+}
+/*********分页***********/
+.content .main nav{
+    background:#fff;
+}
+nav .pagination{
+    margin-left:100px;
+}
+/************脚部****************/
+footer{
+    width:100%;
+    height:200px;
+    border-top:1px solid #ddd;
+    background:#fff;
+}
