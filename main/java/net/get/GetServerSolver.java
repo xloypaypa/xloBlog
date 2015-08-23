@@ -36,9 +36,7 @@ public class GetServerSolver extends DynamicServerSolver {
                 }.set(requestSolver);
             }
 
-            ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
-                    (event, solver) ->ConnectionEventManager.getConnectionEventManager()
-                            .invoke(ConnectionEvent.connectEnd, aimSolver));
+            ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

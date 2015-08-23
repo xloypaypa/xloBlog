@@ -34,8 +34,6 @@ public class CommandServerSolver extends DynamicServerSolver {
             this.aimSolver = postServerSolver;
         }
 
-        ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
-                (event, solver) ->ConnectionEventManager.getConnectionEventManager()
-                        .invoke(ConnectionEvent.connectEnd, aimSolver));
+        ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
     }
 }
