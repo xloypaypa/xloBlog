@@ -19,6 +19,11 @@ public abstract class WriteServerSolver extends NormalKeepAliveServerSolver {
     }
 
     @Override
+    public boolean readRequest() {
+        return true;
+    }
+
+    @Override
     public void startNextServerSolver() {
         ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
                 (event, solver) -> closeSocket());

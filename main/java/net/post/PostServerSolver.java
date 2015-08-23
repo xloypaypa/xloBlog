@@ -1,6 +1,6 @@
 package net.post;
 
-import net.post.login.LoginServerSolver;
+import net.post.login.LoginServerSolverReader;
 import net.post.register.RegisterServerSolverRead;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.DynamicServerSolver;
@@ -15,8 +15,8 @@ public class PostServerSolver extends DynamicServerSolver {
     @Override
     public void buildAimSolver(RequestSolver requestSolver) {
         if (this.requestSolver.getRequestHeadReader().getUrl().getFile().equals("login")) {
-            this.aimSolver = new LoginServerSolver() {
-                public LoginServerSolver set(RequestSolver requestSolver) {
+            this.aimSolver = new LoginServerSolverReader() {
+                public LoginServerSolverReader set(RequestSolver requestSolver) {
                     this.requestSolver = requestSolver;
                     return this;
                 }

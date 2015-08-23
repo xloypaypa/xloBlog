@@ -1,34 +1,56 @@
 package control;
 
-import config.ConfigManager;
-import config.ReturnCodeConfig;
+import model.db.UserCollection;
+import model.event.Event;
+import model.lock.NameLockImpl;
+import net.post.register.RegisterServerSolverWrite;
+import server.serverSolver.RequestSolver;
 
 /**
  * Created by xlo on 2015/8/21.
  * it's the user access manager
  */
 public class UserAccessManager {
-    private static UserAccessManager userAccessManager = new UserAccessManager();
+    protected RequestSolver requestSolver;
 
-    private UserAccessManager() {
+    public UserAccessManager(RequestSolver requestSolver) {
+        this.requestSolver = requestSolver;
+    }
+
+    public void loginUser(String username, String password) {
 
     }
 
-    public static UserAccessManager getUserAccessManager() {
-        return userAccessManager;
-    }
+    public void register(String username, String password) {
+        new Event() {
+            @Override
+            public void lock() {
+                NameLockImpl.getNameLock().lock("username");
+            }
 
-    public boolean userExist(String username) {
-        return true;
-    }
+            @Override
+            public void checkPoint() {
 
-    public String checkUser(String username, String password) {
-        ReturnCodeConfig returnCodeConfig = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
-        return returnCodeConfig.getCode("accept");
-    }
+            }
 
-    public String register(String username, String password) {
-        ReturnCodeConfig returnCodeConfig = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
-        return returnCodeConfig.getCode("accept");
+            @Override
+            public boolean process() {
+                UserCollection userCollection = new UserCollection();
+                sendWhileSuccess(new RegisterServerSolverWrite(requestSolver,
+                        userCollection.register(username, password)));
+                sendWhileFail(new RegisterServerSolverWrite(requestSolver, "db error"));
+                return true;
+            }
+
+            @Override
+            public void rollback() {
+
+            }
+
+            @Override
+            public void unlock() {
+                NameLockImpl.getNameLock().unlock("username");
+            }
+        }.submit();
     }
 }

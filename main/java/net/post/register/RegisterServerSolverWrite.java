@@ -1,7 +1,5 @@
 package net.post.register;
 
-import control.UserAccessManager;
-import net.sf.json.JSONObject;
 import net.tool.WriteServerSolver;
 import server.serverSolver.RequestSolver;
 import tool.head.writer.CustomReplyHeadWriter;
@@ -16,13 +14,11 @@ import tool.streamConnector.io.StreamIONode;
  * * it's register server solver's writer
  */
 public class RegisterServerSolverWrite extends WriteServerSolver {
-    protected String username, password;
-    private String message;
+    protected String message;
 
     public RegisterServerSolverWrite(RequestSolver requestSolver, Object... data) {
         super(requestSolver, data);
-        this.username = (String) data[0];
-        this.password = (String) data[1];
+        this.message = (String) data[0];
     }
 
     @Override
@@ -37,8 +33,6 @@ public class RegisterServerSolverWrite extends WriteServerSolver {
 
     @Override
     protected boolean sendingHead() {
-        buildReturnMessage();
-
         CustomReplyHeadWriter customReplyHeadWriter = this.requestSolver.getReplyHeadWriter();
         customReplyHeadWriter.setReply(200);
         customReplyHeadWriter.setVersion("HTTP/1.1");
@@ -66,12 +60,5 @@ public class RegisterServerSolverWrite extends WriteServerSolver {
         connector.addMember(ioNode);
         connector.connect();
         ioBuilder.close();
-    }
-
-    private void buildReturnMessage() {
-        JSONObject object = new JSONObject();
-        UserAccessManager userAccessManager = UserAccessManager.getUserAccessManager();
-        object.put("return", userAccessManager.register(this.username, this.password));
-        this.message = object.toString();
     }
 }

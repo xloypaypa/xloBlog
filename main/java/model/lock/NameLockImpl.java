@@ -1,6 +1,10 @@
 package model.lock;
 
+import config.ConfigManager;
+import config.LockConfig;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +23,15 @@ public class NameLockImpl implements NameLock {
     protected NameLockImpl() {
         this.owner = new HashMap<>();
         this.waiter = new HashMap<>();
+        initFromConfig();
+    }
+
+    private void initFromConfig() {
+        LockConfig lockConfig = (LockConfig) ConfigManager.getConfigManager().getConfig(LockConfig.class);
+        for (String name : lockConfig.getLocks()) {
+            this.owner.put(name, nullThread);
+            this.waiter.put(name, new HashSet<>());
+        }
     }
 
     public static NameLockImpl getNameLock() {

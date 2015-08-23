@@ -1,5 +1,6 @@
 package net.post.register;
 
+import control.UserAccessManager;
 import net.sf.json.JSONObject;
 import net.tool.ReadServerSolver;
 import tool.connection.event.ConnectionEvent;
@@ -24,7 +25,6 @@ public class RegisterServerSolverRead extends ReadServerSolver {
                 (event, solver) -> {
                     if (stringIO != null) stringIO.close();
                 });
-        this.setWriterBuilder(() -> new RegisterServerSolverWrite(requestSolver, username, password));
     }
 
     @Override
@@ -69,5 +69,8 @@ public class RegisterServerSolverRead extends ReadServerSolver {
         JSONObject jsonObject = JSONObject.fromObject(this.stringIO.getValue());
         this.username = jsonObject.getString("username");
         this.password = jsonObject.getString("password");
+
+        UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
+        userAccessManager.register(username, password);
     }
 }
