@@ -1,6 +1,6 @@
-package net.post.register;
+package net.tool;
 
-import net.tool.WriteServerSolver;
+import log.LogManager;
 import server.serverSolver.RequestSolver;
 import tool.head.writer.CustomReplyHeadWriter;
 import tool.ioAble.NormalStringIO;
@@ -10,13 +10,13 @@ import tool.streamConnector.io.NormalStreamIONode;
 import tool.streamConnector.io.StreamIONode;
 
 /**
- * Created by xlo on 2015/8/21.
- * * it's register server solver's writer
+ * Created by xlo on 2015/8/24.
+ * it's the server solver who write message to client
  */
-public class RegisterServerSolverWrite extends WriteServerSolver {
+public class WriteMessageServerSolver extends WriteServerSolver {
     protected String message;
 
-    public RegisterServerSolverWrite(RequestSolver requestSolver, Object... data) {
+    public WriteMessageServerSolver(RequestSolver requestSolver, Object... data) {
         super(requestSolver, data);
         this.message = (String) data[0];
     }
@@ -43,7 +43,7 @@ public class RegisterServerSolverWrite extends WriteServerSolver {
 
     @Override
     protected boolean afterSendHead() {
-        return true;
+        return false;
     }
 
     @Override
@@ -60,5 +60,7 @@ public class RegisterServerSolverWrite extends WriteServerSolver {
         connector.addMember(ioNode);
         connector.connect();
         ioBuilder.close();
+
+        LogManager.getLogManager().writeLog("blog write", this.message);
     }
 }

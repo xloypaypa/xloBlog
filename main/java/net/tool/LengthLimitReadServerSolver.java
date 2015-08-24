@@ -1,8 +1,6 @@
-package net.post.register;
+package net.tool;
 
-import control.UserAccessManager;
-import net.sf.json.JSONObject;
-import net.tool.ReadServerSolver;
+import log.LogManager;
 import tool.connection.event.ConnectionEvent;
 import tool.connection.event.ConnectionEventManager;
 import tool.ioAble.NormalStringIO;
@@ -12,17 +10,18 @@ import tool.streamConnector.io.LengthLimitStreamIONode;
 import tool.streamConnector.io.StreamIONode;
 
 /**
- * Created by xlo on 2015/8/21.
- * it's register server solver's reader
+ * Created by xlo on 2015/8/24.
+ * it's length limit read server solver
  */
-public class RegisterServerSolverRead extends ReadServerSolver {
-    protected String username, password;
+public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
+    protected String message;
     protected NormalStringIO stringIO;
     protected long length;
 
-    public RegisterServerSolverRead() {
+    public LengthLimitReadServerSolver() {
         ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
                 (event, solver) -> {
+                    solveMessage();
                     if (stringIO != null) stringIO.close();
                 });
     }
@@ -66,11 +65,9 @@ public class RegisterServerSolverRead extends ReadServerSolver {
 
         connector.connect();
 
-        JSONObject jsonObject = JSONObject.fromObject(this.stringIO.getValue());
-        this.username = jsonObject.getString("username");
-        this.password = jsonObject.getString("password");
-
-        UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
-        userAccessManager.register(username, password);
+        this.message = this.stringIO.getValue();
+        LogManager.getLogManager().writeLog("blog read", this.message);
     }
+
+    public abstract void solveMessage();
 }

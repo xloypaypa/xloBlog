@@ -1,9 +1,12 @@
 package main;
 
+import log.ConsoleLog;
+import log.LogManager;
 import net.CommandServerSolver;
 import server.Server;
 import tool.connection.event.ConnectionEvent;
 import tool.connection.event.ConnectionEventManager;
+import values.SystemStrings;
 
 import javax.swing.*;
 
@@ -13,6 +16,10 @@ import javax.swing.*;
  */
 public class Main {
     public static void main(String[] args) {
+        LogManager.getLogManager().putLog(SystemStrings.readHead, new ConsoleLog());
+        LogManager.getLogManager().putLog("blog read", new ConsoleLog());
+        LogManager.getLogManager().putLog("blog write", new ConsoleLog());
+
         JFrame frame = new JFrame("blog");
         frame.setBounds(100, 100, 300, 300);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

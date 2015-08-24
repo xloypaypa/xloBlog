@@ -1,6 +1,5 @@
 package model.db;
 
-import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -44,7 +43,6 @@ public class UserCollection extends DBClient {
     }
 
     public String register(String username, String password) {
-        if (userExist(username)) return returnCodeConfig.getCode("conflict");
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
         map.put("password", password);

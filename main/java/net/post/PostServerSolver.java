@@ -1,7 +1,7 @@
 package net.post;
 
-import net.post.login.LoginServerSolverReader;
-import net.post.register.RegisterServerSolverRead;
+import net.post.user.LoginServerSolverReader;
+import net.post.user.RegisterServerSolverRead;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.DynamicServerSolver;
 import tool.connection.event.ConnectionEvent;
