@@ -11,7 +11,7 @@ function checkNull(_this){
         'color':'red',
         'font-style':'normal',
         'z-index':99,
-        'display':'none'
+        'display':'display'
     });
     $(_this).find('input[type=text]').blur(function(){
         if($(this).val()){
