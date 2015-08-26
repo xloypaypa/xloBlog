@@ -1,14 +1,16 @@
 $(function(){
     checkNull($('#login'));
     $('.submit').click(function(){
+        console.log($('input[name=username]').val());
+        console.log($('input[name=password]').val());
         window.sessionStorage.setItem('username',$('input[name=username]').val());
         window.sessionStorage.setItem('password',$('input[name=password]').val());
         $.ajax({
             url:'/login',
             type:'POST',
             beforeSend:function(XML){
-                XML.setHttpRequest('username',window.username);
-                XML.setHttpRequest('password',window.password);
+                XML.setRequestHeader('username',window.username);
+                XML.setRequestHeader('password',window.password);
             },
             success:function(response){
                 console.log(response);
