@@ -19,6 +19,11 @@ public abstract class WriteServerSolver extends NormalKeepAliveServerSolver {
     }
 
     @Override
+    public boolean checkIP() {
+        return true;
+    }
+
+    @Override
     public boolean readRequest() {
         return true;
     }
