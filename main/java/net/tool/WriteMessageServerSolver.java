@@ -43,7 +43,7 @@ public class WriteMessageServerSolver extends WriteServerSolver {
 
     @Override
     protected boolean afterSendHead() {
-        return false;
+        return true;
     }
 
     @Override
