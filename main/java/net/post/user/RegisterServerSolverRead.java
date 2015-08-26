@@ -19,12 +19,16 @@ import tool.streamConnector.io.StreamIONode;
 public class RegisterServerSolverRead extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
-        String username, password;
-        JSONObject jsonObject = JSONObject.fromObject(this.message);
-        username = jsonObject.getString("username");
-        password = jsonObject.getString("password");
+        try {
+            String username, password;
+            JSONObject jsonObject = JSONObject.fromObject(this.message);
+            username = jsonObject.getString("username");
+            password = jsonObject.getString("password");
 
-        UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
-        userAccessManager.register(username, password);
+            UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
+            userAccessManager.register(username, password);
+        } catch (Exception e) {
+            closeSocket();
+        }
     }
 }
