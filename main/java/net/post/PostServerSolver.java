@@ -22,7 +22,7 @@ public class PostServerSolver extends DynamicServerSolver {
         chooserMap.put("login", new AimSolverChooser() {
             @Override
             public boolean isThisSolver(RequestSolver requestSolver) {
-                return requestSolver.getRequestHeadReader().getUrl().getFile().equals("login");
+                return requestSolver.getRequestHeadReader().getUrl().getFile().equals("/login");
             }
 
             @Override
@@ -39,7 +39,7 @@ public class PostServerSolver extends DynamicServerSolver {
         chooserMap.put("register", new AimSolverChooser() {
             @Override
             public boolean isThisSolver(RequestSolver requestSolver) {
-                return requestSolver.getRequestHeadReader().getUrl().getFile().equals("register");
+                return requestSolver.getRequestHeadReader().getUrl().getFile().equals("/register");
             }
 
             @Override
@@ -56,6 +56,7 @@ public class PostServerSolver extends DynamicServerSolver {
 
     @Override
     public void buildAimSolver(RequestSolver requestSolver) {
+        System.out.println(this.requestSolver.getRequestHeadReader().getUrl().getFile());
         for (Map.Entry<String, AimSolverChooser> now : chooserMap.entrySet()) {
             if (now.getValue().isThisSolver(this.requestSolver)) {
                 this.aimSolver = now.getValue().getSolver(this.requestSolver);
