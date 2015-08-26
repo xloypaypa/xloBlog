@@ -56,7 +56,6 @@ public class PostServerSolver extends DynamicServerSolver {
 
     @Override
     public void buildAimSolver(RequestSolver requestSolver) {
-        System.out.println(this.requestSolver.getRequestHeadReader().getUrl().getFile());
         for (Map.Entry<String, AimSolverChooser> now : chooserMap.entrySet()) {
             if (now.getValue().isThisSolver(this.requestSolver)) {
                 this.aimSolver = now.getValue().getSolver(this.requestSolver);

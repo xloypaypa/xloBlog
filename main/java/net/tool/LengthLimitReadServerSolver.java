@@ -58,14 +58,19 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
     public void connect() {
         StreamConnector connector = new NormalStreamConnector();
 
-        StreamIONode ioNode = new LengthLimitStreamIONode(length);
-        ioNode.setInputStream(this.requestSolver.getSocketIoBuilder().getInputStream());
-        ioNode.addOutputStream(this.stringIO.getOutputStream());
-        connector.addMember(ioNode);
+        if (length > 0) {
+            StreamIONode ioNode = new LengthLimitStreamIONode(length);
+            ioNode.setInputStream(this.requestSolver.getSocketIoBuilder().getInputStream());
+            ioNode.addOutputStream(this.stringIO.getOutputStream());
+            connector.addMember(ioNode);
 
-        connector.connect();
+            connector.connect();
 
-        this.message = this.stringIO.getValue();
+            this.message = this.stringIO.getValue();
+        } else {
+            this.message = "";
+        }
+
         LogManager.getLogManager().writeLog("blog read", this.message);
     }
 

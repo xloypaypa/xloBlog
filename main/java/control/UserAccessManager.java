@@ -5,6 +5,7 @@ import config.ReturnCodeConfig;
 import model.db.UserCollection;
 import model.event.Event;
 import model.lock.NameLockImpl;
+import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
 import server.serverSolver.RequestSolver;
 
@@ -34,7 +35,9 @@ public class UserAccessManager {
 
             @Override
             public boolean process() {
-                sendWhileFail(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("event fail")));
+                JSONObject object = new JSONObject();
+                object.put("return", returnCodeConfig.getCode("event fail"));
+                sendWhileFail(new WriteMessageServerSolver(requestSolver, object.toString()));
                 if (username == null || password == null) {
                     return false;
                 }
@@ -71,7 +74,9 @@ public class UserAccessManager {
 
             @Override
             public boolean process() {
-                sendWhileFail(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("event fail")));
+                JSONObject object = new JSONObject();
+                object.put("return", returnCodeConfig.getCode("event fail"));
+                sendWhileFail(new WriteMessageServerSolver(requestSolver, object.toString()));
                 if (username == null || password == null) {
                     return false;
                 }
