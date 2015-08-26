@@ -12,6 +12,7 @@ $(function(){
         $.ajax({
             url:'/register',
             type:'POST',
+            dataType:'json',
             data:data,
             success:function(response){
                 console.log(response);
