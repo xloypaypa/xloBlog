@@ -1,23 +1,18 @@
 $(function(){
     checkNull($('#login'));
+    $('.submit').click(function(){
+        window.sessionStorage.setItem('username',$('input[name=username]').val());
+        window.sessionStorage.setItem('password',$('input[name=password]').val());
+        $.ajax({
+            url:'/login',
+            type:'POST',
+            beforeSend:function(XML){
+                XML.setHttpRequest('username',window.username);
+                XML.setHttpRequest('password',window.password);
+            },
+            success:function(response){
+                console.log(response);
+            }
+        });
+    });
 });
-function checkNull(_this){
-    $(_this).find('.input-group').append('<em>不得为空</em>');
-    $(_this).find('.input-group input').css('position','relative')
-    $(_this).find('em').css({
-        'position':'absolute',
-        'top':'5px',
-        'right':'5px',
-        'color':'red',
-        'font-style':'normal',
-        'z-index':99,
-        'display':'display'
-    });
-    $(_this).find('input[type=text]').blur(function(){
-        if($(this).val()){
-
-        }else{
-
-        }
-    });
-};
