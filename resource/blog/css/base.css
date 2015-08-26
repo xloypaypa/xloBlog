@@ -8,6 +8,9 @@ body{
 li{
     list-style:none;
 }
+img{
+    display:block;
+}
 /*************导航条************/
 nav{
     background:#006633;
@@ -23,6 +26,7 @@ nav .pull-right{
     width:80%;
     margin:0 auto;
     margin-top:50px;
+    overflow:hidden;
 }
 /*******表单**********/
 #login,#reg{
