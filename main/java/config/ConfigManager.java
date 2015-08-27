@@ -1,6 +1,5 @@
 package config;
 
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import java.util.HashSet;

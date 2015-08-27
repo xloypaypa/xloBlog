@@ -1,8 +1,9 @@
 package config;
 
+import model.db.DBClient;
 import org.dom4j.Element;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xlo on 15-8-23.
@@ -11,9 +12,10 @@ import java.util.List;
 public class DBConfig implements ConfigInterface {
     protected String host = "127.0.0.1";
     protected int port = 27017;
+    protected Map<String, String> collections;
 
     protected DBConfig() {
-
+        this.collections = new HashMap<>();
     }
 
     @Override
@@ -24,6 +26,9 @@ public class DBConfig implements ConfigInterface {
             Element element = (Element) now;
             if (element.getName().equals("host")) this.host = element.getText();
             else if (element.getName().equals("port")) this.port = Integer.valueOf(element.getText());
+            else if (element.getName().equals("collection")) {
+                this.collections.put(element.attributeValue("type"), element.getText());
+            }
         }
     }
 
@@ -38,5 +43,13 @@ public class DBConfig implements ConfigInterface {
 
     public int getPort() {
         return port;
+    }
+
+    public String getCollectionName(Class<? extends DBClient> type) {
+        return this.collections.get(type.getName());
+    }
+
+    public HashMap<String, String> getCollections() {
+        return new HashMap<>(this.collections);
     }
 }
