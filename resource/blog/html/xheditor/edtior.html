@@ -18,16 +18,20 @@
             </div>
             <button class="btn btn-default" type="button">search</button>
         </form>
-        <div class="btn-group pull-right">
-            <button  class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
-                菜单<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a href="#">1</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">1</a></li>
-            </ul>
-        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="../login.html">登陆</a></li>
+            <li><a href="../reg.html">注册</a></li>
+            <li class="btn-group pull-right">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+                    菜单<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">1</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </nav>
 <div class="content">
@@ -43,14 +47,26 @@
         <li role="presentation"><a href="#">草稿箱</a></li>
     </ul>
     <div class="blogEdit">
-        <div></div>
-        <div></div>
-        <div></div>
+        <div class="blog-title">
+            <h3>文章标题</h3>
+            <select>
+                <option>原创</option>
+                <option>转载</option>
+                <option>日记</option>
+                <option>译文</option>
+            </select>
+            <input type="text"/>
+        </div>
+        <div class="blog-content">
+            <textarea name="content" class="xheditor">test</textarea>
+        </div>
+        <div class="blog-tag"></div>
     </div>
 </div>
 <footer></footer>
 
 <script src="../../libs/jquery-1.11.2.min.js"></script>
+<script src="../../libs/xheditor/xheditor-1.1.14-zh-cn.min.js"></script>
 <script src="../../libs/bootstrap/bootstrap.min.js"></script>
 <script src="../../js/base.js"></script>
 <script src="../../js/editor/editor.js"></script>

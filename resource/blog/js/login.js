@@ -5,7 +5,6 @@ $(function(){
         console.log($('input[name=password]').val());
         window.sessionStorage.setItem('username',$('input[name=username]').val());
         window.sessionStorage.setItem('password',$('input[name=password]').val());
-
         $.ajax({
             url:'/login',
             type:'POST',
