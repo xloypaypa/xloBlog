@@ -1,8 +1,5 @@
 package model.lock;
 
-import config.ConfigManager;
-import config.LockConfig;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,6 +11,7 @@ import java.util.Set;
  */
 public class NameLockImpl implements NameLock {
     protected final Map<String, Thread> owner;
+    protected final Map<String, Integer> times;
     protected final Map<String, Set<Thread>> waiter;
 
     final protected static Thread nullThread = new Thread();
@@ -23,24 +21,23 @@ public class NameLockImpl implements NameLock {
     protected NameLockImpl() {
         this.owner = new HashMap<>();
         this.waiter = new HashMap<>();
-        initFromConfig();
-    }
-
-    private void initFromConfig() {
-        LockConfig lockConfig = (LockConfig) ConfigManager.getConfigManager().getConfig(LockConfig.class);
-        for (String name : lockConfig.getLocks()) {
-            this.owner.put(name, nullThread);
-            this.waiter.put(name, new HashSet<>());
-        }
+        this.times = new HashMap<>();
     }
 
     public static NameLockImpl getNameLock() {
-        if (nameLock == null) nameLock = new NameLockImpl();
+        if (nameLock == null) {
+            synchronized (NameLockImpl.class) {
+                if (nameLock == null) {
+                    nameLock = new NameLockImpl();
+                }
+            }
+        }
         return nameLock;
     }
 
     @Override
     public void lock(String name) {
+        initName(name);
         Thread currentThread = Thread.currentThread();
         Thread wait;
         synchronized (this.owner.get(name)) {
@@ -63,6 +60,7 @@ public class NameLockImpl implements NameLock {
 
     @Override
     public boolean tryLock(String name) {
+        initName(name);
         Thread currentThread = Thread.currentThread();
         synchronized (this.owner.get(name)) {
             synchronized (this.waiter.get(name)) {
@@ -78,6 +76,7 @@ public class NameLockImpl implements NameLock {
 
     @Override
     public boolean tryLock(String name, long time) {
+        initName(name);
         Thread currentThread = Thread.currentThread();
         Thread wait;
         synchronized (this.owner.get(name)) {
@@ -100,18 +99,50 @@ public class NameLockImpl implements NameLock {
 
     @Override
     public void unlock(String name) {
+        initName(name);
         synchronized (this.owner.get(name)) {
             if (!this.owner.get(name).equals(Thread.currentThread())) return;
             synchronized (this.waiter.get(name)) {
                 this.waiter.get(name).forEach(Thread::interrupt);
                 this.waiter.get(name).clear();
-                changeOwner(name, nullThread);
+                decLock(name);
             }
         }
     }
 
     protected void changeOwner(String name, Thread currentThread) {
+        if (!this.owner.get(name).equals(currentThread)) {
+            this.times.put(name, 1);
+        } else {
+            this.times.put(name, this.times.get(name) + 1);
+        }
         this.owner.put(name, currentThread);
+    }
+
+    protected void ownerNull(String name) {
+        this.owner.put(name, nullThread);
+        this.times.put(name, 0);
+    }
+
+    protected void decLock(String name) {
+        this.times.put(name, this.times.get(name) - 1);
+        if (times.get(name) == 0 ){
+            ownerNull(name);
+        }
+    }
+
+    private synchronized void initName(String name) {
+        if (!this.owner.containsKey(name)) {
+            synchronized (this.owner) {
+                synchronized (this.waiter) {
+                    if (!this.owner.containsKey(name)) {
+                        this.owner.put(name, nullThread);
+                        this.times.put(name, 0);
+                        this.waiter.put(name, new HashSet<>());
+                    }
+                }
+            }
+        }
     }
 
     private Thread buildWaitThread() {

@@ -5,9 +5,9 @@ import com.mongodb.client.MongoCursor;
 import config.ConfigManager;
 import config.ReturnCodeConfig;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 
 /**
  * Created by xlo on 15-8-23.
@@ -17,30 +17,47 @@ public class UserCollection extends DBClient {
     protected static ReturnCodeConfig returnCodeConfig
             = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
 
-    public boolean userExist(String username) {
-        FindIterable iterable = collection.find(new Document("username", username));
-        MongoCursor cursor = iterable.iterator();
-        return cursor.hasNext();
+    public DBData getUser(String username) {
+        lockUser(username);
+        FindIterable<Document> iterable = collection.find(new Document("username", username));
+        MongoCursor<Document> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return null;
+
+        Document document = cursor.next();
+        DBData ans = new DBData();
+        ans.object = document;
+        ans.past = new Document(document);
+        ans.id = (ObjectId) document.get("_id");
+        this.using.add(ans);
+        return ans;
     }
 
-    public String checkUser(String username, String password) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("username", username);
-        map.put("password", password);
-        FindIterable iterable = collection.find(new Document(map));
-        MongoCursor cursor = iterable.iterator();
-        if (cursor.hasNext()) {
-            return returnCodeConfig.getCode("accept");
-        } else {
-            return returnCodeConfig.getCode("forbidden");
-        }
+    public DBData getUserData(String username) {
+        lockUser(username);
+        FindIterable<Document> iterable = collection.find(new Document("username", username));
+        MongoCursor<Document> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return null;
+
+        Document document = cursor.next();
+        DBData ans = new DBData();
+        ans.object = new Document(document);
+        ans.past = new Document(document);
+        ans.id = (ObjectId) document.get("_id");
+        unlock(this.lockName + "." + username);
+        return ans;
     }
 
-    public String register(String username, String password) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("username", username);
-        map.put("password", password);
-        collection.insertOne(new Document(map));
-        return returnCodeConfig.getCode("accept");
+    public void removeUser(String username) {
+        lockUser(username);
+        FindIterable<Document> iterable = collection.find(new Document("username", username));
+        MongoCursor<Document> cursor = iterable.iterator();
+
+        Document document = cursor.next();
+        collection.deleteOne(document);
+        unlock(this.lockName + "." + username);
+    }
+
+    public void lockUser(String username) {
+        lock(this.lockName + "." + username);
     }
 }

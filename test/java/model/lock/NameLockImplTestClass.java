@@ -7,16 +7,18 @@ import java.util.Vector;
  * it's the test class of name lock impl
  */
 public class NameLockImplTestClass extends NameLockImpl {
-    Vector<Long> order = new Vector<>();
+    protected Vector<Long> order = new Vector<>();
 
     @Override
     protected void changeOwner(String name, Thread currentThread) {
         super.changeOwner(name, currentThread);
-        if (currentThread.equals(nullThread)) {
-            order.add(-Thread.currentThread().getId());
-        } else {
-            order.add(Thread.currentThread().getId());
-        }
+        order.add(Thread.currentThread().getId());
+    }
+
+    @Override
+    protected void decLock(String name) {
+        super.decLock(name);
+        order.add(-Thread.currentThread().getId());
     }
 
     public static NameLockImplTestClass getNameLock() {

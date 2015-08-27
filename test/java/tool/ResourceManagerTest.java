@@ -1,6 +1,8 @@
 package tool;
 
+import model.lock.TestClass;
 import org.junit.Test;
+import testTool.Counter;
 
 import static org.junit.Assert.*;
 
@@ -8,23 +10,7 @@ import static org.junit.Assert.*;
  * Created by xlo on 15-8-19.
  * it's test resource manager.
  */
-public class ResourceManagerTest {
-    static class Counter {
-        int num;
-
-        public Counter(int num) {
-            this.num = num;
-        }
-
-        public synchronized void add(int value) {
-            this.num += value;
-        }
-
-        public synchronized int get() {
-            return this.num;
-        }
-    }
-
+public class ResourceManagerTest extends TestClass {
     @Test
     public void testLoad() throws InterruptedException {
         int n = 10;

@@ -11,7 +11,7 @@ import java.util.Set;
  * it's the manager of config
  */
 public class ConfigManager implements ConfigInterface {
-    private static ConfigManager configManager = new ConfigManager();
+    private volatile static ConfigManager configManager = new ConfigManager();
 
     protected Set<ConfigInterface> configInterfaces;
 

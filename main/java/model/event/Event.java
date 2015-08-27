@@ -1,5 +1,6 @@
 package model.event;
 
+import model.db.DBClient;
 import net.tool.WriteServerSolver;
 
 import java.util.HashSet;
@@ -20,36 +21,6 @@ public abstract class Event {
         this.failSend = new HashSet<>();
         this.commitEvent = new HashSet<>();
         this.commitSend = new HashSet<>();
-    }
-
-    public void submit() {
-        EventRunner.getEventRunner().submitAEvent(this);
-    }
-
-    public boolean call() {
-        boolean res = false;
-        lock();
-        checkPoint();
-        try {
-            if (process()) {
-                res = true;
-            }
-        } catch (Exception ignored) {
-
-        } finally {
-            if (!res) rollback();
-            unlock();
-        }
-        if (res) {
-            this.successEvent.forEach(Event::submit);
-            this.successSend.forEach(WriteServerSolver::run);
-        } else {
-            this.failEvent.forEach(Event::submit);
-            this.failSend.forEach(WriteServerSolver::run);
-        }
-        this.commitEvent.forEach(Event::submit);
-        this.commitSend.forEach(WriteServerSolver::run);
-        return res;
     }
 
     public void actionWhileSuccess(Event event) {
@@ -76,13 +47,32 @@ public abstract class Event {
         this.commitSend.add(serverSolver);
     }
 
-    public abstract void lock();
+    public void submit() {
+        EventRunner.getEventRunner().submitAEvent(this);
+    }
 
-    public abstract void checkPoint();
+    public boolean call() {
+        boolean ans;
+        try {
+            ans = run();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ans = false;
+        }
 
-    public abstract boolean process();
+        if (ans) {
+            DBClient.submitUsing();
+            this.successEvent.forEach(Event::submit);
+            this.successSend.forEach(WriteServerSolver::run);
+        } else {
+            DBClient.releaseUsing();
+            this.failEvent.forEach(Event::submit);
+            this.failSend.forEach(WriteServerSolver::run);
+        }
+        this.commitEvent.forEach(Event::submit);
+        this.commitSend.forEach(WriteServerSolver::run);
+        return ans;
+    }
 
-    public abstract void rollback();
-
-    public abstract void unlock();
+    public abstract boolean run();
 }

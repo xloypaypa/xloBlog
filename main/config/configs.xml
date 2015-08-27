@@ -1,6 +1,5 @@
 <config>
     <type>ShowFileTypeConfig</type>
     <type>ReturnCodeConfig</type>
-    <type>LockConfig</type>
     <type>DBConfig</type>
 </config>

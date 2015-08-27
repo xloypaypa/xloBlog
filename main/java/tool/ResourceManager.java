@@ -27,7 +27,7 @@ public class ResourceManager {
     protected Map<String, byte[]> cache;
     protected ExecutorService executorService = Executors.newFixedThreadPool(5);
 
-    private static ResourceManager resourceManager = new ResourceManager();
+    private volatile static ResourceManager resourceManager = new ResourceManager();
 
     private ResourceManager() {
         this.cacheStateMap = new HashMap<>();

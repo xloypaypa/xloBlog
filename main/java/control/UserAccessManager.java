@@ -2,12 +2,15 @@ package control;
 
 import config.ConfigManager;
 import config.ReturnCodeConfig;
+import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
-import model.lock.NameLockImpl;
-import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
+import org.bson.Document;
 import server.serverSolver.RequestSolver;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by xlo on 2015/8/21.
@@ -22,82 +25,46 @@ public class UserAccessManager {
     }
 
     public void loginUser(String username, String password) {
-        new Event() {
+        Event event = new Event() {
             @Override
-            public void lock() {
-                NameLockImpl.getNameLock().lock("username");
-            }
-
-            @Override
-            public void checkPoint() {
-
-            }
-
-            @Override
-            public boolean process() {
-                JSONObject object = new JSONObject();
-                object.put("return", returnCodeConfig.getCode("event fail"));
-                sendWhileFail(new WriteMessageServerSolver(requestSolver, object.toString()));
-                if (username == null || password == null) {
-                    return false;
-                }
-
+            public boolean run() {
+                if (username == null || password == null) return false;
                 UserCollection userCollection = new UserCollection();
-                sendWhileSuccess(new WriteMessageServerSolver(requestSolver,
-                        userCollection.checkUser(username, password)));
-                return true;
+                DBClient.DBData data = userCollection.getUserData(username);
+                if (data == null) return false;
+                Document document = data.object;
+                return document.get("password").equals(password);
             }
-
-            @Override
-            public void rollback() {
-
-            }
-
-            @Override
-            public void unlock() {
-                NameLockImpl.getNameLock().unlock("username");
-            }
-        }.submit();
+        };
+        addSendMessage(event);
+        event.submit();
     }
 
     public void register(String username, String password) {
-        new Event() {
+        Event event = new Event() {
             @Override
-            public void lock() {
-                NameLockImpl.getNameLock().lock("username");
-            }
+            public boolean run() {
+                UserCollection userCollection = new UserCollection();
 
-            @Override
-            public void checkPoint() {
-
-            }
-
-            @Override
-            public boolean process() {
-                JSONObject object = new JSONObject();
-                object.put("return", returnCodeConfig.getCode("event fail"));
-                sendWhileFail(new WriteMessageServerSolver(requestSolver, object.toString()));
-                if (username == null || password == null) {
+                DBClient.DBData past = userCollection.getUserData(username);
+                if (past != null) {
                     return false;
                 }
-
-                UserCollection userCollection = new UserCollection();
-                if (userCollection.userExist(username)) {
-                    sendWhileSuccess(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("conflict")));
-                    return true;
-                }
-                sendWhileSuccess(new WriteMessageServerSolver(requestSolver, userCollection.register(username, password)));
+                userCollection.lockCollection();
+                userCollection.lockUser(username);
+                Map<String, Object> data = new HashMap<>();
+                data.put("username", username);
+                data.put("password", password);
+                userCollection.insert(new Document(data));
                 return true;
             }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
 
-            @Override
-            public void rollback() {
-            }
-
-            @Override
-            public void unlock() {
-                NameLockImpl.getNameLock().unlock("username");
-            }
-        }.submit();
+    protected void addSendMessage(Event event) {
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("accept")));
+        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("forbidden")));
     }
 }
