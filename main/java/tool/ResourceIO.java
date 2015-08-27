@@ -1,8 +1,6 @@
 package tool;
 
 import tool.ioAble.AbstractIOAble;
-import tool.ioAble.NormalFileIO;
-import tool.streamConnector.io.NormalStreamIONode;
 
 /**
  * Created by xlo on 2015/8/19.

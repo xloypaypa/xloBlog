@@ -7,8 +7,6 @@ import config.ReturnCodeConfig;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.HashSet;
-
 /**
  * Created by xlo on 15-8-23.
  * it's the collection of user

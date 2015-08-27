@@ -16,7 +16,7 @@ import java.util.*;
  */
 public abstract class DBClient {
     protected static MongoClient mongoClient;
-    protected static Map<Thread, Set<DBClient>> usingDB;
+    protected volatile static Map<Thread, Set<DBClient>> usingDB;
     protected static DBConfig dbConfig
             = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
 

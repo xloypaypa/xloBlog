@@ -4,7 +4,6 @@ import config.ConfigManager;
 import config.ShowFileTypeConfig;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.DynamicServerSolver;
-import tool.connection.event.ConnectionEvent;
 import tool.connection.event.ConnectionEventManager;
 
 import java.io.UnsupportedEncodingException;
