@@ -2,18 +2,24 @@ package model.db;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
-import config.ConfigManager;
-import config.ReturnCodeConfig;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by xlo on 15-8-23.
  * it's the collection of user
  */
 public class UserCollection extends DBClient {
-    protected static ReturnCodeConfig returnCodeConfig
-            = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
+
+    public void addUser(String username, String password) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("username", username);
+        data.put("password", password);
+        this.insert(new Document(data));
+    }
 
     public DBData getUser(String username) {
         lockUser(username);
@@ -41,7 +47,7 @@ public class UserCollection extends DBClient {
         ans.object = new Document(document);
         ans.past = new Document(document);
         ans.id = (ObjectId) document.get("_id");
-        unlock(this.lockName + "." + username);
+        unlockUser(username);
         return ans;
     }
 
@@ -52,10 +58,14 @@ public class UserCollection extends DBClient {
 
         Document document = cursor.next();
         collection.deleteOne(document);
-        unlock(this.lockName + "." + username);
+        unlockUser(username);
     }
 
     public void lockUser(String username) {
         lock(this.lockName + "." + username);
+    }
+
+    public void unlockUser(String username) {
+        unlock(this.lockName + "." + username);
     }
 }

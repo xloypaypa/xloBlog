@@ -1,7 +1,5 @@
 package control;
 
-import config.ConfigManager;
-import config.ReturnCodeConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
@@ -10,19 +8,14 @@ import net.tool.WriteMessageServerSolver;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by xlo on 2015/8/21.
  * it's the user access manager
  */
-public class UserAccessManager {
-    protected RequestSolver requestSolver;
-    private static ReturnCodeConfig returnCodeConfig = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
+public class UserAccessManager extends Manager {
 
     public UserAccessManager(RequestSolver requestSolver) {
-        this.requestSolver = requestSolver;
+        super(requestSolver);
     }
 
     public void loginUser(String username, String password) {
@@ -46,17 +39,12 @@ public class UserAccessManager {
             @Override
             public boolean run() {
                 UserCollection userCollection = new UserCollection();
-
+                userCollection.lockUser(username);
                 DBClient.DBData past = userCollection.getUserData(username);
                 if (past != null) {
                     return false;
                 }
-                userCollection.lockCollection();
-                userCollection.lockUser(username);
-                Map<String, Object> data = new HashMap<>();
-                data.put("username", username);
-                data.put("password", password);
-                userCollection.insert(new Document(data));
+                userCollection.addUser(username, password);
                 return true;
             }
         };

@@ -51,7 +51,7 @@ public class ConfigManager implements ConfigInterface {
             for (Object now : node) {
                 Element element = (Element) now;
                 try {
-                    ConfigInterface configInterface = (ConfigInterface) Class.forName("config." + element.getText()).newInstance();
+                    ConfigInterface configInterface = (ConfigInterface) Class.forName(element.getText()).newInstance();
                     configInterface.init();
                     this.configInterfaces.add(configInterface);
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {

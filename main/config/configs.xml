@@ -1,5 +1,6 @@
 <config>
-    <type>ShowFileTypeConfig</type>
-    <type>ReturnCodeConfig</type>
-    <type>DBConfig</type>
+    <type>config.DBConfig</type>
+    <type>config.ReturnCodeConfig</type>
+    <type>config.PostConfig</type>
+    <type>config.ShowFileTypeConfig</type>
 </config>

@@ -1,6 +1,7 @@
 package net.tool;
 
 import log.LogManager;
+import server.serverSolver.RequestSolver;
 import tool.connection.event.ConnectionEvent;
 import tool.connection.event.ConnectionEventManager;
 import tool.ioAble.NormalStringIO;
@@ -21,7 +22,7 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
     public LengthLimitReadServerSolver() {
         ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
                 (event, solver) -> {
-                    solveMessage();
+                    trySolveMessage();
                     if (stringIO != null) stringIO.close();
                 });
     }
@@ -72,6 +73,19 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
         }
 
         LogManager.getLogManager().writeLog("blog read", this.message);
+    }
+
+    public LengthLimitReadServerSolver setRequestSolver(RequestSolver requestSolver) {
+        this.requestSolver = requestSolver;
+        return this;
+    }
+
+    protected void trySolveMessage() {
+        try {
+            solveMessage();
+        } catch (Exception e) {
+            closeSocket();
+        }
     }
 
     public abstract void solveMessage();

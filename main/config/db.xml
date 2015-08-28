@@ -1,3 +1,6 @@
-<db>
-    <collection type="model.db.UserCollection">user</collection>
-</db>
+<dbs>
+    <db name="blog">
+        <collection type="model.db.UserCollection">user</collection>
+        <collection type="model.db.BlogCollection">blog</collection>
+    </db>
+</dbs>

@@ -2,6 +2,7 @@ package model.db;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import config.ConfigManager;
 import config.DBConfig;
 import model.lock.NameLockImpl;
@@ -17,13 +18,19 @@ import java.util.*;
 public abstract class DBClient {
     protected static MongoClient mongoClient;
     protected volatile static Map<Thread, Set<DBClient>> usingDB;
+    private volatile static Map<String, MongoDatabase> databaseMap;
     protected static DBConfig dbConfig
             = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
+    protected static MongoDatabase blog;
 
     public synchronized static void loadClient() {
         if (mongoClient != null) return;
         DBConfig dbConfig = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
         mongoClient = new MongoClient(dbConfig.getHost(), dbConfig.getPort());
+        databaseMap = new HashMap<>();
+        for (String now : dbConfig.getDbs()) {
+            databaseMap.put(now, mongoClient.getDatabase(now));
+        }
         usingDB = new HashMap<>();
     }
 
@@ -41,24 +48,33 @@ public abstract class DBClient {
         }
     }
 
+    private static MongoDatabase getDatabase(String name) {
+        return databaseMap.get(name);
+    }
+
     protected MongoCollection<Document> collection;
     protected String lockName;
 
     public DBClient() {
-        this.collection = mongoClient.getDatabase("blog").getCollection(dbConfig.getCollectionName(this.getClass()));
-        this.lockName = "blog" + "." + dbConfig.getCollectionName(this.getClass());
+        String collectionName = dbConfig.getCollectionName(this.getClass());
+        String dbName = dbConfig.getDBofCollection(collectionName);
+
+        this.lockName = dbName + "." + collectionName;
+        lockCollection();
+        unlockCollection();
+
+        this.collection = getDatabase(dbName).getCollection(collectionName);
         usingDB.put(Thread.currentThread(), new HashSet<>());
         usingDB.get(Thread.currentThread()).add(this);
     }
 
-    public static class DBData {
+    public class DBData {
         public Document object;
         protected Document past;
         protected ObjectId id;
     }
 
-    public void insert(Document document) {
-        lock(this.lockName);
+    protected void insert(Document document) {
         this.insert.add(document);
     }
 
@@ -86,6 +102,11 @@ public abstract class DBClient {
     public void lockCollection() {
         NameLockImpl.getNameLock().lock(this.lockName);
         this.locks.add(this.lockName);
+    }
+
+    public void unlockCollection() {
+        this.locks.remove(this.locks.lastIndexOf(this.lockName));
+        NameLockImpl.getNameLock().unlock(this.lockName);
     }
 
     protected void lock(String name) {

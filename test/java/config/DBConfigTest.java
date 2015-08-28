@@ -16,5 +16,6 @@ public class DBConfigTest extends TestClass {
         DBConfig dbConfig = new DBConfig();
         dbConfig.init();
         assertEquals("user", dbConfig.getCollectionName(UserCollection.class));
+        assertEquals("blog", dbConfig.getDBofCollection("user"));
     }
 }

@@ -1,8 +1,9 @@
 package net.post;
 
+import config.ConfigManager;
+import config.PostConfig;
 import net.AimSolverChooser;
-import net.post.user.LoginServerSolverReader;
-import net.post.user.RegisterServerSolverRead;
+import net.tool.LengthLimitReadServerSolver;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.AbstractServerSolver;
 import server.serverSolver.normalServer.DynamicServerSolver;
@@ -17,41 +18,29 @@ import java.util.Map;
  */
 public class PostServerSolver extends DynamicServerSolver {
     public static Map<String, AimSolverChooser> chooserMap = new HashMap<>();
+    protected static PostConfig postConfig = (PostConfig) ConfigManager.getConfigManager().getConfig(PostConfig.class);
 
     public PostServerSolver() {
-        chooserMap.put("login", new AimSolverChooser() {
-            @Override
-            public boolean isThisSolver(RequestSolver requestSolver) {
-                return requestSolver.getRequestHeadReader().getUrl().getFile().equals("/login");
-            }
+        for (PostConfig.PostInfo postInfo : postConfig.getPostInfo()) {
+            chooserMap.put(postInfo.getName(), new AimSolverChooser() {
+                @Override
+                public boolean isThisSolver(RequestSolver requestSolver) {
+                    return requestSolver.getRequestHeadReader().getUrl().getFile().equals(postInfo.getUrl());
+                }
 
-            @Override
-            public AbstractServerSolver getSolver(RequestSolver requestSolver) {
-                return new LoginServerSolverReader() {
-                    public LoginServerSolverReader set(RequestSolver requestSolver) {
-                        this.requestSolver = requestSolver;
-                        return this;
+                @Override
+                public AbstractServerSolver getSolver(RequestSolver requestSolver) {
+                    try {
+                        LengthLimitReadServerSolver lengthLimitReadServerSolver =
+                                (LengthLimitReadServerSolver) Class.forName(postInfo.getClassName()).newInstance();
+                        return lengthLimitReadServerSolver.setRequestSolver(requestSolver);
+                    } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
-                }.set(requestSolver);
-            }
-        });
-
-        chooserMap.put("register", new AimSolverChooser() {
-            @Override
-            public boolean isThisSolver(RequestSolver requestSolver) {
-                return requestSolver.getRequestHeadReader().getUrl().getFile().equals("/register");
-            }
-
-            @Override
-            public AbstractServerSolver getSolver(RequestSolver requestSolver) {
-                return new RegisterServerSolverRead() {
-                    public RegisterServerSolverRead set(RequestSolver requestSolver) {
-                        this.requestSolver = requestSolver;
-                        return this;
-                    }
-                }.set(requestSolver);
-            }
-        });
+                    return null;
+                }
+            });
+        }
     }
 
     @Override
