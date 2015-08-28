@@ -5,6 +5,19 @@
   <artifactId>xloBlog</artifactId>
   <version>0.1</version>
   <build>
+    <sourceDirectory>main/java</sourceDirectory>
+    <testSourceDirectory>test/java</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>clojure</directory>
+      </resource>
+      <resource>
+        <directory>main/config</directory>
+      </resource>
+      <resource>
+        <directory>resource</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>

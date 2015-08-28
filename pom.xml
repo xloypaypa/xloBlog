@@ -50,6 +50,22 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>main/java</sourceDirectory>
+        <testSourceDirectory>test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>clojure</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>main/config</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>resource</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
