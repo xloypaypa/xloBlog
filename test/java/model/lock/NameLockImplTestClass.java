@@ -7,12 +7,12 @@ import java.util.Vector;
  * it's the test class of name lock impl
  */
 public class NameLockImplTestClass extends NameLockImpl {
-    protected Vector<Long> order = new Vector<>();
+    protected volatile Vector<Long> order = new Vector<>();
 
     @Override
     protected void changeOwner(String name, Thread currentThread) {
-        super.changeOwner(name, currentThread);
         order.add(Thread.currentThread().getId());
+        super.changeOwner(name, currentThread);
     }
 
     @Override

@@ -4,25 +4,22 @@ import org.junit.After;
 import org.junit.Test;
 import testTool.Counter;
 
-import java.util.HashSet;
-
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by xlo on 15-8-23.
  * it's test lock
  */
+@SuppressWarnings("RedundantStringConstructorCall")
 public class NameLockImplTest extends TestClass {
     @After
     public void tearDown() {
-        NameLockImplTestClass.getNameLock().order.clear();
+        clearLock();
     }
 
     @Test
     public void testLock() throws InterruptedException {
         NameLockImplTestClass nameLock = NameLockImplTestClass.getNameLock();
-        nameLock.owner.put("name", NameLockImpl.nullThread);
-        nameLock.waiter.put("name", new HashSet<>());
 
         int n = 10;
         Counter counter = new Counter(n);
@@ -30,9 +27,9 @@ public class NameLockImplTest extends TestClass {
             new Thread() {
                 @Override
                 public void run() {
-                    nameLock.lock("name");
+                    nameLock.lock(new String("name"));
 
-                    nameLock.unlock("name");
+                    nameLock.unlock("na" + "me");
                     counter.add(-1);
                 }
             }.start();
@@ -57,6 +54,7 @@ public class NameLockImplTest extends TestClass {
     public void testLockAgain() throws InterruptedException {
         int n = 500;
         for (int i = 0; i < n; i++) {
+            clearLock();
             testLock();
         }
     }
@@ -64,8 +62,6 @@ public class NameLockImplTest extends TestClass {
     @Test
     public void testReentrantLock() throws InterruptedException {
         NameLockImplTestClass nameLock = NameLockImplTestClass.getNameLock();
-        nameLock.owner.put("name", NameLockImpl.nullThread);
-        nameLock.waiter.put("name", new HashSet<>());
 
         int n = 10, m = 5;
         Counter counter = new Counter(n);
@@ -74,7 +70,8 @@ public class NameLockImplTest extends TestClass {
                 @Override
                 public void run() {
                     for (int j = 0; j < m; j++) {
-                        nameLock.lock("name");
+                        String value = new String("name");
+                        nameLock.lock(value);
                     }
 
                     for (int j = 0; j < m; j++) {
@@ -106,8 +103,17 @@ public class NameLockImplTest extends TestClass {
     public void testReentrantLockAgain() throws InterruptedException {
         int n = 500;
         for (int i = 0; i < n; i++) {
+            clearLock();
             testReentrantLock();
         }
+    }
+
+    private void clearLock() {
+        NameLockImplTestClass nameLock = NameLockImplTestClass.getNameLock();
+        nameLock.order.clear();
+        nameLock.owner.clear();
+        nameLock.waiter.clear();
+        nameLock.times.clear();
     }
 
 }

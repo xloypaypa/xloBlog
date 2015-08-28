@@ -5,6 +5,7 @@ import config.ReturnCodeConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
+import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
@@ -64,7 +65,11 @@ public class UserAccessManager {
     }
 
     protected void addSendMessage(Event event) {
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("accept")));
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, returnCodeConfig.getCode("forbidden")));
+        JSONObject object = new JSONObject();
+        object.put("return", returnCodeConfig.getCode("accept"));
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        object.clear();
+        object.put("return", returnCodeConfig.getCode("forbidden"));
+        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 }
