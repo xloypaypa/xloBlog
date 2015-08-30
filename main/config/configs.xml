@@ -3,4 +3,5 @@
     <type>config.ReturnCodeConfig</type>
     <type>config.PostConfig</type>
     <type>config.ShowFileTypeConfig</type>
+    <type>config.AccessConfig</type>
 </config>

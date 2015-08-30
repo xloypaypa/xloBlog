@@ -18,7 +18,7 @@ public class WriteMessageServerSolver extends WriteServerSolver {
 
     public WriteMessageServerSolver(RequestSolver requestSolver, Object... data) {
         super(requestSolver, data);
-        this.message = (String) data[0];
+        this.message = data[0].toString();
     }
 
     @Override

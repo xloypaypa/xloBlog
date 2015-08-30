@@ -21,10 +21,10 @@ public interface ShowResourcePage {
         replyHeadWriter.setReply(404);
         replyHeadWriter.setMessage("not found");
         replyHeadWriter.setVersion("HTTP/1.1");
-        if (html) {
+        if (!html) {
+            replyHeadWriter.sendHead();
+        } else if (replyHeadWriter.sendHead()) {
             replyHeadWriter.addMessage("Content-Type", "text/html;charset=utf-8");
-        }
-        if (replyHeadWriter.sendHead() && html) {
             StreamConnector streamConnector = new NormalStreamConnector();
             StreamIONode streamIONode = new NormalStreamIONode();
             streamIONode.setInputStream(ShowResourcePage.class.getResourceAsStream("/NotFoundPage.html"));
@@ -39,10 +39,10 @@ public interface ShowResourcePage {
         replyHeadWriter.setReply(403);
         replyHeadWriter.setMessage("You don't have purview for this file");
         replyHeadWriter.setVersion("HTTP/1.1");
-        if (html) {
+        if (!html) {
+            replyHeadWriter.sendHead();
+        } else if (replyHeadWriter.sendHead()) {
             replyHeadWriter.addMessage("Content-Type", "text/html;charset=utf-8");
-        }
-        if (replyHeadWriter.sendHead() && html) {
             StreamConnector streamConnector = new NormalStreamConnector();
             StreamIONode streamIONode = new NormalStreamIONode();
             streamIONode.setInputStream(ShowResourcePage.class.getResourceAsStream("/ForbiddenPage.html"));

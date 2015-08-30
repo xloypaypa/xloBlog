@@ -14,10 +14,11 @@ import java.util.Map;
  */
 public class UserCollection extends DBClient {
 
-    public void addUser(String username, String password) {
+    public void registerUser(String username, String password) {
         Map<String, Object> data = new HashMap<>();
         data.put("username", username);
         data.put("password", password);
+        data.put("access", 0);
         this.insert(new Document(data));
     }
 

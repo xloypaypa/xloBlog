@@ -44,12 +44,50 @@ public class UserAccessManager extends Manager {
                 if (past != null) {
                     return false;
                 }
-                userCollection.addUser(username, password);
+                userCollection.registerUser(username, password);
                 return true;
             }
         };
         addSendMessage(event);
         event.submit();
+    }
+
+    public void acceptUserRegister(String username, String password, String aimUsername, int access) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                if (username == null || password == null || aimUsername == null) return false;
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData user = userCollection.getUser(username);
+                if (!accessConfig.isAccept(user)) return false;
+                DBClient.DBData aimUser = userCollection.getUser(aimUsername);
+                if (aimUser == null) {
+                    return false;
+                }
+                aimUser.object.put("access", access);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void acceptUserRegister(String username, int access) {
+        new Event() {
+            @Override
+            public boolean run() {
+                if (username == null) {
+                    return false;
+                }
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData user = userCollection.getUser(username);
+                if (user == null) {
+                    return false;
+                }
+                user.object.put("access", access);
+                return true;
+            }
+        }.submit();
     }
 
     protected void addSendMessage(Event event) {

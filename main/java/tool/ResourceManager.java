@@ -65,14 +65,12 @@ public class ResourceManager {
                 return this.cache.get(path);
             }
             synchronized (waiting) {
-//                System.out.println("waiting");
                 thread.start();
                 buildWaitingSet(path);
                 waiting.get(path).add(thread);
             }
         }
         try {
-//            System.out.println("join");
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -98,7 +96,6 @@ public class ResourceManager {
                 cacheStateMap.put(path, CacheState.END);
                 synchronized (waiting) {
                     buildWaitingSet(path);
-//                    System.out.println("interrupt");
                     waiting.get(path).forEach(Thread::interrupt);
                 }
             }

@@ -20,12 +20,6 @@ public class EventRunner {
     }
 
     protected void submitAEvent(Event event) {
-//        executorService.execute(event::call);
-        new Thread(){
-            @Override
-            public void run() {
-                event.call();
-            }
-        }.start();
+        executorService.execute(event::call);
     }
 }

@@ -30,6 +30,7 @@ public class BlogManager extends Manager {
                 DBClient.DBData userData = userCollection.getUserData(username);
                 if (userData == null) return false;
                 if (!userData.object.get("password").equals(password)) return false;
+                if (!accessConfig.isAccept(userData)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
                 blogCollection.addDocument(username, title, body);
@@ -72,7 +73,7 @@ public class BlogManager extends Manager {
 
                 if (author == null) return false;
                 BlogCollection blogCollection = new BlogCollection();
-                List<ObjectId> list =blogCollection.getIDsByAuthor(author);
+                List<ObjectId> list = blogCollection.getIDsByAuthor(author);
 
                 JSONArray array = new JSONArray();
                 for (ObjectId id : list) {

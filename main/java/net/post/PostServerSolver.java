@@ -51,6 +51,9 @@ public class PostServerSolver extends DynamicServerSolver {
                 break;
             }
         }
+        if (this.aimSolver == null) {
+            this.aimSolver = new ErrorCommandWriter(this.requestSolver);
+        }
         ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
     }
 }

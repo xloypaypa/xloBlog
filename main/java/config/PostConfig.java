@@ -19,7 +19,7 @@ public class PostConfig implements ConfigInterface {
 
     @Override
     public void init() throws DocumentException {
-        Element root = ConfigInterface.getRootElement("/returnCode.xml");
+        Element root = ConfigInterface.getRootElement("/post.xml");
         List node = root.elements();
         for (Object now : node) {
             Element element = (Element) now;
@@ -47,7 +47,7 @@ public class PostConfig implements ConfigInterface {
         private String className;
 
         public String getClassName() {
-            return name;
+            return className;
         }
 
         public String getUrl() {

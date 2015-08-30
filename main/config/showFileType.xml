@@ -3,4 +3,7 @@
     <type>js</type>
     <type>css</type>
     <type>png</type>
+    <type>jpg</type>
+    <type>woff</type>
+    <type>ttf</type>
 </show>
