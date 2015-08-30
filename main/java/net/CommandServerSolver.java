@@ -1,6 +1,7 @@
 package net;
 
 import net.get.GetServerSolver;
+import net.post.ErrorCommandWriter;
 import net.post.PostServerSolver;
 import server.serverSolver.RequestSolver;
 import server.serverSolver.normalServer.AbstractServerSolver;
@@ -64,6 +65,9 @@ public class CommandServerSolver extends DynamicServerSolver {
                 this.aimSolver = now.getValue().getSolver(this.requestSolver);
                 break;
             }
+        }
+        if (this.aimSolver == null) {
+            this.aimSolver = new ErrorCommandWriter(this.requestSolver);
         }
         ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
     }

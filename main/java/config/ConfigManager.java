@@ -11,20 +11,28 @@ import java.util.Set;
  * it's the manager of config
  */
 public class ConfigManager implements ConfigInterface {
-    private volatile static ConfigManager configManager = new ConfigManager();
+    private volatile static ConfigManager configManager = null;
+    private volatile static boolean needInit = true;
 
     protected Set<ConfigInterface> configInterfaces;
 
     private ConfigManager() {
-        this.configInterfaces = new HashSet<>();
         init();
     }
 
     public static ConfigManager getConfigManager() {
+        if (configManager == null) {
+            synchronized (ConfigManager.class) {
+                if (configManager == null) {
+                    configManager = new ConfigManager();
+                }
+            }
+        }
         return configManager;
     }
 
     public ConfigInterface getConfig(Class<? extends ConfigInterface> config) {
+        if (needInit) init();
         for (ConfigInterface configInterface : this.configInterfaces) {
             if (configInterface.getClass().equals(config)) {
                 return configInterface;
@@ -34,6 +42,7 @@ public class ConfigManager implements ConfigInterface {
     }
 
     public void reloadConfig(Class<? extends ConfigInterface> config) {
+        if (needInit) init();
         for (ConfigInterface now : this.configInterfaces) {
             if (!now.getClass().equals(config)) continue;
             try {
@@ -45,6 +54,7 @@ public class ConfigManager implements ConfigInterface {
 
     @Override
     public void init() {
+        this.configInterfaces = new HashSet<>();
         try {
             Element root = ConfigInterface.getRootElement("/configs.xml");
             List node = root.elements();
@@ -58,6 +68,7 @@ public class ConfigManager implements ConfigInterface {
                     e.printStackTrace();
                 }
             }
+            needInit = false;
         } catch (Exception e) {
             e.printStackTrace();
         }

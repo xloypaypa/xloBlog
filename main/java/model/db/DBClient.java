@@ -19,11 +19,12 @@ public abstract class DBClient {
     protected static MongoClient mongoClient;
     protected volatile static Map<Thread, Set<DBClient>> usingDB;
     private volatile static Map<String, MongoDatabase> databaseMap;
+    private volatile static boolean needInit = true;
     protected static DBConfig dbConfig
             = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
     protected static MongoDatabase blog;
 
-    public synchronized static void loadClient() {
+    public synchronized static void init() {
         if (mongoClient != null) return;
         DBConfig dbConfig = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
         mongoClient = new MongoClient(dbConfig.getHost(), dbConfig.getPort());
@@ -32,6 +33,7 @@ public abstract class DBClient {
             databaseMap.put(now, mongoClient.getDatabase(now));
         }
         usingDB = new HashMap<>();
+        needInit = false;
     }
 
     public static void submitUsing() {
@@ -56,6 +58,7 @@ public abstract class DBClient {
     protected String lockName;
 
     public DBClient() {
+        if (needInit) init();
         String collectionName = dbConfig.getCollectionName(this.getClass());
         String dbName = dbConfig.getDBofCollection(collectionName);
 
@@ -84,7 +87,8 @@ public abstract class DBClient {
 
     public void submit() {
         using.stream().filter(now -> !now.object.equals(now.past)).forEach(now
-                -> collection.updateOne(new Document("_id", now.id), now.object));
+                -> collection.updateOne(new Document("_id", now.id),
+                new Document("$set", now.object)));
         insert.forEach(collection::insertOne);
         release();
     }
@@ -117,6 +121,25 @@ public abstract class DBClient {
     protected void unlock(String name) {
         this.locks.remove(this.locks.lastIndexOf(name));
         NameLockImpl.getNameLock().unlock(name);
+    }
+
+    protected DBData addDocumentToUsing(Document document) {
+        DBData ans = new DBData();
+        ans.object = document;
+        ans.past = new Document(document);
+        ans.id = (ObjectId) document.get("_id");
+        ans.object.remove("_id");
+        this.using.add(ans);
+        return ans;
+    }
+
+    protected DBData getDocumentNotUsing(Document document) {
+        DBData ans = new DBData();
+        ans.object = document;
+        ans.past = new Document(document);
+        ans.id = (ObjectId) document.get("_id");
+        ans.object.remove("_id");
+        return ans;
     }
 
 }

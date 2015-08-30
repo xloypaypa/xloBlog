@@ -31,12 +31,7 @@ public class BlogCollection extends DBClient {
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
-        DBData ans = new DBData();
-        ans.object = document;
-        ans.past = new Document(document);
-        ans.id = (ObjectId) document.get("_id");
-        this.using.add(ans);
-        return ans;
+        return addDocumentToUsing(document);
     }
 
     public DBData getDocumentData(String id) {
@@ -46,10 +41,7 @@ public class BlogCollection extends DBClient {
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
-        DBData ans = new DBData();
-        ans.object = document;
-        ans.past = new Document(document);
-        ans.id = (ObjectId) document.get("_id");
+        DBData ans = getDocumentNotUsing(document);
         unlockCollection();
         return ans;
     }

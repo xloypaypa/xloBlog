@@ -11,7 +11,7 @@ import tool.connection.event.ConnectionEventManager;
  * it's the write to post solver.
  * when can't find any solver, this solver would be run
  */
-public class ErrorCommandWriter extends NormalServerSolver {
+public class ErrorCommandWriter extends NormalServerSolver implements ShowResourcePage {
 
     public ErrorCommandWriter(RequestSolver requestSolver) {
         this.requestSolver = requestSolver;

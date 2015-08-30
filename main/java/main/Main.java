@@ -18,7 +18,7 @@ import java.io.File;
  */
 public class Main {
     public static void main(String[] args) {
-        DBClient.loadClient();
+        DBClient.init();
 
         NormalLog normalLog = new NormalLog();
         File file = new File("./log.txt");

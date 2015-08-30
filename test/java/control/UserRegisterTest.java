@@ -25,7 +25,7 @@ public class UserRegisterTest extends TestClass {
 
     @Test
     public void testRegister() throws InterruptedException {
-        DBClient.loadClient();
+        DBClient.init();
 
         int n = 10;
         Counter counter = new Counter(n);

@@ -3,7 +3,6 @@ package model.db;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,12 +28,7 @@ public class UserCollection extends DBClient {
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
-        DBData ans = new DBData();
-        ans.object = document;
-        ans.past = new Document(document);
-        ans.id = (ObjectId) document.get("_id");
-        this.using.add(ans);
-        return ans;
+        return addDocumentToUsing(document);
     }
 
     public DBData getUserData(String username) {
@@ -44,10 +38,7 @@ public class UserCollection extends DBClient {
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
-        DBData ans = new DBData();
-        ans.object = new Document(document);
-        ans.past = new Document(document);
-        ans.id = (ObjectId) document.get("_id");
+        DBData ans = getDocumentNotUsing(document);
         unlockUser(username);
         return ans;
     }
