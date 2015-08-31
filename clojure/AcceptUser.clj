@@ -5,7 +5,7 @@
 
 (defn giveAccess [username access]
   (let [user (new UserAccessManager nil)]
-    (. user acceptUserRegister admim adminPassword username access)))
+    (. user acceptUserRegister admim adminPassword username accessType accessValue)))
 
 (giveAccess "123" 2)
 

@@ -24,7 +24,7 @@ public class LengthLimitConfig implements ConfigInterface {
 
     @Override
     public void init() throws DocumentException {
-        Element root = ConfigInterface.getRootElement("/returnCode.xml");
+        Element root = ConfigInterface.getRootElement("/lengthLimit.xml");
         List node = root.elements();
         for (Object now : node) {
             Element element = (Element) now;

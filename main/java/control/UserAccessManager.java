@@ -56,7 +56,7 @@ public class UserAccessManager extends Manager {
         event.submit();
     }
 
-    public void acceptUserRegister(String username, String password, String aimUsername, int access) {
+    public void acceptUserRegister(String username, String password, String aimUsername, String accessType, int access) {
         Event event = new Event() {
             @Override
             public boolean run() {
@@ -67,7 +67,7 @@ public class UserAccessManager extends Manager {
                 if (aimUser == null) {
                     return false;
                 }
-                aimUser.object.put("access", access);
+                aimUser.object.put(accessType, access);
                 return true;
             }
         };
