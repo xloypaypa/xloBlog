@@ -26,9 +26,11 @@ function ajaxHeader(url,data,callback){
     $.ajax({
         url:url,
         type:'POST',
+        dataType:'json',
+        data:JSON.stringify(data),
         beforeSend:function(XML){
-            XML.setRequestHeader('username',$('input[name=username]').val());
-            XML.setRequestHeader('password',$('input[name=password]').val());
+            XML.setRequestHeader('username',window.username);
+            XML.setRequestHeader('password',window.password);
         },
         success:function(response){
             console.log(arguments);
