@@ -14,11 +14,13 @@ import java.util.Map;
 public class UserCollection extends DBClient {
 
     public void registerUser(String username, String password) {
+        lockUser(username);
         Map<String, Object> data = new HashMap<>();
         data.put("username", username);
         data.put("password", password);
         data.put("access", 0);
         this.insert(new Document(data));
+        unlockUser(username);
     }
 
     public DBData getUser(String username) {
