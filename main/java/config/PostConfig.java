@@ -17,6 +17,10 @@ public class PostConfig implements ConfigInterface {
         this.postInfo = new LinkedList<>();
     }
 
+    public static PostConfig getConfig() {
+        return (PostConfig) ConfigManager.getConfigManager().getConfig(PostConfig.class);
+    }
+
     @Override
     public void init() throws DocumentException {
         Element root = ConfigInterface.getRootElement("/post.xml");

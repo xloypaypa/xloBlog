@@ -13,7 +13,7 @@ public class AccessConfigTest {
     public void testLoad() throws Exception {
         AccessConfig accessConfig = new AccessConfig();
         accessConfig.init();
-        int value = accessConfig.checkClassAndMethod("control.BlogManager", "addBlog").getValue();
+        int value = accessConfig.checkClassAndMethod("control.BlogManager", "addDocument").getValue();
         assertEquals(1, value);
     }
 }

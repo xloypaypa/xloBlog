@@ -1,5 +1,7 @@
 package control;
 
+import com.mongodb.BasicDBList;
+import config.LengthLimitConfig;
 import model.db.BlogCollection;
 import model.db.DBClient;
 import model.db.UserCollection;
@@ -7,8 +9,10 @@ import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
+import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,11 +24,14 @@ public class BlogManager extends Manager {
         super(requestSolver);
     }
 
-    public void addBlog(String username, String password, String title, String body) {
+    public void addDocument(String username, String password, String title, String body) {
         Event event = new Event() {
             @Override
             public boolean run() {
+                LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
                 if (username == null || password == null || title == null || body == null) return false;
+                if (title.length() > lengthLimitConfig.getLimit("documentTitle") || body.length() > lengthLimitConfig.getLimit("documentBody"))
+                    return false;
                 UserCollection userCollection = new UserCollection();
                 DBClient.DBData userData = userCollection.getUserData(username);
                 if (userData == null) return false;
@@ -33,6 +40,41 @@ public class BlogManager extends Manager {
 
                 BlogCollection blogCollection = new BlogCollection();
                 blogCollection.addDocument(username, title, body);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void addReply(String username, String password, String documentID, String reply) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
+                if (username == null || password == null || reply == null) return false;
+                if (reply.length() > lengthLimitConfig.getLimit("documentBody"))
+                    return false;
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData userData = userCollection.getUserData(username);
+                if (userData == null) return false;
+                if (!userData.object.get("password").equals(password)) return false;
+                if (!accessConfig.isAccept(userData)) return false;
+
+                BlogCollection blogCollection = new BlogCollection();
+                DBClient.DBData document = blogCollection.getDocument(documentID);
+                BasicDBList dbList; //TODO test this update
+                if (document.object.containsKey("reply")) {
+                    dbList = (BasicDBList) document.object.get("reply");
+                } else {
+                    dbList = new BasicDBList();
+                }
+                Document replyMap = new Document();
+                replyMap.put("author", username);
+                replyMap.put("data", new Date());
+                replyMap.put("reply", reply);
+                dbList.add(replyMap);
+                document.object.put("reply", dbList);
                 return true;
             }
         };
@@ -54,8 +96,7 @@ public class BlogManager extends Manager {
                 DBClient.DBData data = blogCollection.getDocumentData(id);
                 if (data == null) return false;
 
-                object.clear();
-                object.putAll(data.object);
+                object = JSONObject.fromObject(data.object.toJson());
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
                 return true;
             }
@@ -80,6 +121,7 @@ public class BlogManager extends Manager {
                     message.put("id", now.object.get("_id"));
                     message.put("title", now.object.get("title"));
                     message.put("author", now.object.get("author"));
+                    message.put("time", now.object.get("time"));
                     message.put("preview", now.object.getString("body").substring(0, 100));
                     array.add(message);
                 }

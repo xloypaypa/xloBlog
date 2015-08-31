@@ -21,6 +21,10 @@ public class DBConfig implements ConfigInterface {
         this.dbs = new HashSet<>();
     }
 
+    public static DBConfig getConfig() {
+        return (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
+    }
+
     @Override
     public void init() throws Exception {
         Element root = ConfigInterface.getRootElement("/db.xml");

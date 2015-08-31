@@ -1,5 +1,6 @@
 package control;
 
+import config.LengthLimitConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
@@ -38,6 +39,10 @@ public class UserAccessManager extends Manager {
         Event event = new Event() {
             @Override
             public boolean run() {
+                LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
+                if (username == null || password == null) return false;
+                if (username.length() > lengthLimitConfig.getLimit("username") || password.length() > lengthLimitConfig.getLimit("password")) return false;
+
                 UserCollection userCollection = new UserCollection();
                 userCollection.lockUser(username);
                 DBClient.DBData past = userCollection.getUserData(username);

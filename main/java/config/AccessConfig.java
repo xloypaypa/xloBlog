@@ -18,6 +18,10 @@ public class AccessConfig implements ConfigInterface {
         this.access = new HashMap<>();
     }
 
+    public static AccessConfig getConfig() {
+        return (AccessConfig) ConfigManager.getConfigManager().getConfig(AccessConfig.class);
+    }
+
     @Override
     public void init() throws Exception {
         Element root = ConfigInterface.getRootElement("/access.xml");

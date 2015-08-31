@@ -18,6 +18,10 @@ public class ShowFileTypeConfig implements ConfigInterface {
 
     }
 
+    public static ShowFileTypeConfig getConfig() {
+        return (ShowFileTypeConfig) ConfigManager.getConfigManager().getConfig(ShowFileTypeConfig.class);
+    }
+
     @Override
     public void init() throws DocumentException {
         Element root = ConfigInterface.getRootElement("/showFileType.xml");

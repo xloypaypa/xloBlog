@@ -4,4 +4,5 @@
     <type>config.PostConfig</type>
     <type>config.ShowFileTypeConfig</type>
     <type>config.AccessConfig</type>
+    <type>config.LengthLimitConfig</type>
 </config>

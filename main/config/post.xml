@@ -4,4 +4,5 @@
     <solver name="add document" url="/addDocument">net.post.blog.AddDocumentReader</solver>
     <solver name="get document" url="/getDocument">net.post.blog.GetDocumentReader</solver>
     <solver name="get document list by author" url="/getDocumentListByAuthor">net.post.blog.GetDocumentListOfAuthorReader</solver>
+    <solver name="add reply" url="/reply">net.post.blog.AddReplyReader</solver>
 </post>

@@ -5,19 +5,19 @@ import net.sf.json.JSONObject;
 import net.tool.LengthLimitReadServerSolver;
 
 /**
- * Created by xlo on 2015/8/28.
- * it's the solver of add blog
+ * Created by xlo on 2015/8/31.
+ * it's the reader for reply document
  */
-public class AddDocumentReader extends LengthLimitReadServerSolver {
+public class AddReplyReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
         String username = this.requestSolver.getRequestHeadReader().getMessage("username");
         String password = this.requestSolver.getRequestHeadReader().getMessage("password");
         JSONObject jsonObject = JSONObject.fromObject(this.message);
-        String title = jsonObject.getString("title");
-        String body = jsonObject.getString("body");
+        String id = jsonObject.getString("id");
+        String reply = jsonObject.getString("reply");
 
         BlogManager blogManager = new BlogManager(this.requestSolver);
-        blogManager.addDocument(username, password, title, body);
+        blogManager.addReply(username, password, id, reply);
     }
 }

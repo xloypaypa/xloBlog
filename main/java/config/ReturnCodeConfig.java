@@ -19,6 +19,10 @@ public class ReturnCodeConfig implements ConfigInterface {
         this.codes = new HashMap<>();
     }
 
+    public static ReturnCodeConfig getConfig() {
+        return (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
+    }
+
     @Override
     public void init() throws DocumentException {
         Element root = ConfigInterface.getRootElement("/returnCode.xml");
