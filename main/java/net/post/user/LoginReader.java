@@ -11,8 +11,8 @@ public class LoginReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
         UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
-        String username = this.requestSolver.getRequestHeadReader().getMessage("username");
-        String password = this.requestSolver.getRequestHeadReader().getMessage("password");
+        String username = this.requestSolver.getRequestHeadReader().getMessage("Username");
+        String password = this.requestSolver.getRequestHeadReader().getMessage("Password");
         userAccessManager.loginUser(username, password);
     }
 }

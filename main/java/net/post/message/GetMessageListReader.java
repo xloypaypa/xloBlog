@@ -10,8 +10,8 @@ import net.tool.LengthLimitReadServerSolver;
 public class GetMessageListReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
-        String username = this.requestSolver.getRequestHeadReader().getMessage("username");
-        String password = this.requestSolver.getRequestHeadReader().getMessage("password");
+        String username = this.requestSolver.getRequestHeadReader().getMessage("Username");
+        String password = this.requestSolver.getRequestHeadReader().getMessage("Password");
 
         MessageManager messageManager = new MessageManager(requestSolver);
         messageManager.getAllMessage(username, password);
