@@ -45,7 +45,16 @@ function ajaxRequest(url,data,callback){
         dataType:'json',
         data:JSON.stringify(data),
         success:function(response){
+            console.log(response);
             callback(response);
         }
     });
+}
+
+//获取url中的数据
+function getQueryString(name){
+    var str=document.location.search.substr(1).match(reg);
+    var reg=new RegExp("(^|&)"+name+"=([^&]*)($|&)","i");
+    if(!str) return unescape(str[2]);
+    return null;
 }
