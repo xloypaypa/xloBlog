@@ -1,0 +1,36 @@
+.main{
+height:100%;
+background:#eee;
+}
+.article-content{
+    padding:30px 4% !important;
+}
+.date{
+    font-size:32px;
+    padding:10px 0;
+}
+/*********相关文章**************/
+.relatedPosts{
+    margin-top:30px;
+    border-top:1px solid #ddd;
+    padding:20px 0;
+}
+.relatedPosts ol{
+    padding-left:20px;
+}
+.relatedPosts li{
+    list-style-type:decimal;
+}
+/*********发表评论**************/
+.comments{
+    border-bottom:1px solid #ddd;
+}
+.comments .comments-header{
+    border-bottom:1px solid #ddd;
+}
+.comments .comments-list{
+    border:1px solid #ddd;
+    border-radius:3px;
+    margin:50px 0;
+    padding:20px;
+}

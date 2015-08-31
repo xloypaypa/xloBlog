@@ -1,0 +1,48 @@
+.content{
+    padding:20px 50px;
+}
+.content h3{
+    font-weight:bold;
+    font-size:16px;
+    border-bottom:1px solid #ddd;
+}
+.content-header>img{
+    width:60px;
+    height:60px;
+    float:left;
+
+}
+.content-header>h1{
+    font-size:24px;
+    margin-left:80px;
+    padding-top:35px;
+}
+.blogEdit{
+    padding:20px;
+}
+
+.blog-title{
+    padding:10px 0;
+}
+.blog-title select{
+     display:block;
+     height:30px;
+     width:80px;
+     padding-left:10px;
+     float:left;
+}
+.blog-title>input{
+    display:block;
+    width:50%;
+    min-width:200px;
+    height:30px;
+    margin-left:90px;
+}
+.blog-content textarea{
+    width:80%;
+    height:400px;
+}
+
+.submit{
+    margin:20px 0;
+}
