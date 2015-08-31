@@ -20,3 +20,32 @@ function checkNull(_this){
         }
     });
 };
+
+//头部需要加username的ajax
+function ajaxHeader(url,data,callback){
+    $.ajax({
+        url:url,
+        type:'POST',
+        beforeSend:function(XML){
+            XML.setRequestHeader('username',$('input[name=username]').val());
+            XML.setRequestHeader('password',$('input[name=password]').val());
+        },
+        success:function(response){
+            console.log(arguments);
+            callback(response);
+        }
+    });
+}
+
+//不需要加头部的ajax
+function ajaxRequest(url,data,callback){
+    $.ajax({
+        url:url,
+        type:'POST',
+        dataType:'json',
+        data:JSON.stringify(data),
+        success:function(response){
+            callback(response);
+        }
+    });
+}

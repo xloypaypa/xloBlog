@@ -3,13 +3,16 @@
     padding:0;
 }
 body{
-    background:#FFF8DC;
+    color:#666;
 }
 li{
     list-style:none;
 }
 img{
     display:block;
+}
+p{
+    text-indent:2em;
 }
 /*************导航条************/
 nav{
@@ -21,13 +24,16 @@ nav .container-fluid{
 nav .pull-right{
     padding-top:8px;
 }
+i{
+    padding:0 5px;
+}
 /**********主要内容***************/
 .content{
-    width:80%;
-    margin:0 auto;
+    background:#fff;
     margin-top:50px;
     overflow:hidden;
 }
+
 /*******表单**********/
 #login,#reg{
     width:400px;
@@ -35,6 +41,8 @@ nav .pull-right{
     padding:30px 50px;
     margin:0 auto;
     margin-top:120px;
+    border:1px solid #ccc;
+    border-radius:5px;
 }
 #login h2,#reg h2{
     font-size:24px;
@@ -47,4 +55,19 @@ nav .pull-right{
     display:block;
     width:80%;
     margin:30px auto;
+}
+/************脚部****************/
+footer{
+    width:100%;
+    height:100px;
+    border-top:1px solid #ddd;
+    background:#fff;
+}
+#copyright{
+    text-align:center;
+}
+#copyright li{
+    display:inline;
+    line-height:100px;
+    text-align:center;
 }

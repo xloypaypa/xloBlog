@@ -1,43 +1,15 @@
-*{
-    margin:0;
-    padding:0;
-}
-body{
-    background:#FFF8DC;
-}
-li{
-    list-style:none;
-}
-
-/*************������************/
-nav{
-    background:#006633;
-}
-nav .container-fluid{
-    width:80%;
-}
-nav .pull-right{
-    padding-top:8px;
-}
-/**************ͷ��************/
+/**************头部************/
 .header{
-    padding:60px 10%;
+    color:#fff;
+    padding:40px 10%;
+    background:url('../images/header_bg.jpg') no-repeat left top;
+    background-size:100% 200px ;
 }
-
-/**********��Ҫ����***************/
-.content{
-    width:80%;
-    margin:20px auto;
-    padding:20px;
-    border:1px solid #ddd;
-    border-radius:5px;
-    overflow:hidden;
-    background:#fff;
-}
-/******����************/
+/******侧栏************/
 .content .aside{
-    width:25%;
+    width:20%;
     float:left;
+    background:#F9F9F9;
 }
 .aside h2{
     font-size:18px;
@@ -47,14 +19,7 @@ nav .pull-right{
     color:#fff;
     margin:0;
 }
-.aside .myInfo,.aside .search,.aside .classify,.aside .read-rank,.aside .latestComment{
-
-    border:1px solid #ddd;
-}
-.aside .search,.aside .classify,.aside .read-rank,.aside .latestComment{
-     margin-top:20px;
-}
-/**********��������*************/
+/**********个人资料*************/
 
 .myInfo .myInfo-content{
     padding:20px;
@@ -89,45 +54,52 @@ nav .pull-right{
 .myInfo-statistics{
     padding:10px;
 }
-/********��������*************/
-.aside .search{
 
-}
-.search .input-group{
-    padding:15px;
-}
-/**************��Ҫ����******************/
+/**************博客列表******************/
 .content .main{
-    width:70%;
-    padding:20px;
-    float:right;
-    background:#fff;
-    border:1px solid #ddd;
+    width:80%;
+    float:left;
 }
 .main .article{
-   border-bottom:1px dashed #333;
-   overflow:hidden;
+    background:#eee;
+    border-bottom:1px solid #aaa;
+    overflow:hidden;
 }
+.main .article-tag{
+
+    width:250px;
+    padding-top:25px;
+    padding-right:20px;
+    line-height:32px;
+    text-align:right;
+    float:left;
+}
+.main .article-content{
+    background:#fff;
+    padding:20px;
+    overflow:hidden;
+    margin-left:250px;
+    border-left:1px solid #ddd;
+}
+
 .article p{
-    text-indent:2em;
+    padding:10px 0;
 }
+.main .article-tag a{
+    color:rgb(119, 119, 119);
+}
+
+
 .article h2 a:hover{
     text-decoration:none;
 }
-.article .article-message{
+.main .article-footer{
     float:right;
 }
-/*********��ҳ***********/
+/*********博客列表***********/
 .content .main nav{
     background:#fff;
 }
 nav .pagination{
     margin-left:100px;
-}
-/************�Ų�****************/
-footer{
-    width:100%;
-    height:200px;
-    border-top:1px solid #ddd;
-    background:#fff;
 }

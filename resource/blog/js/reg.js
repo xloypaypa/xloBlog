@@ -9,14 +9,8 @@ $(function(){
             "username":username,
             "password":password
         };
-        $.ajax({
-            url:'/register',
-            type:'POST',
-            dataType:'json',
-            data:JSON.stringify(data),
-            success:function(response){
-                console.log(response);
-            }
+        ajaxRequest('/register',data,function(response){
+            console.log(response);
         });
     });
 

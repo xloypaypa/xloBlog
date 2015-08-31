@@ -5,16 +5,8 @@ $(function(){
         console.log($('input[name=password]').val());
         window.sessionStorage.setItem('username',$('input[name=username]').val());
         window.sessionStorage.setItem('password',$('input[name=password]').val());
-        $.ajax({
-            url:'/login',
-            type:'POST',
-            beforeSend:function(XML){
-                XML.setRequestHeader('username',$('input[name=username]').val());
-                XML.setRequestHeader('password',$('input[name=password]').val());
-            },
-            success:function(response){
-                console.log(response);
-            }
+        ajaxHeader('/login',function(response){
+            console.log(response);
         });
     });
 });
