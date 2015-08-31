@@ -15,13 +15,15 @@ import java.util.List;
  */
 public class BlogCollection extends DBClient {
 
-    public void addDocument(String author, String title, String body) {
+    public void addDocument(String author, String title, String body, Date date) {
+        lockCollection();
         Document document = new Document();
         document.put("author", author);
         document.put("title", title);
         document.put("body", body);
-        document.put("time", new Date());
+        document.put("time", date);
         this.insert(document);
+        unlockCollection();
     }
 
     public DBData getDocument(String id) {

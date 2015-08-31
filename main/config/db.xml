@@ -2,5 +2,6 @@
     <db name="blog">
         <collection type="model.db.UserCollection">user</collection>
         <collection type="model.db.BlogCollection">blog</collection>
+        <collection type="model.db.MessageCollection">msg</collection>
     </db>
 </dbs>

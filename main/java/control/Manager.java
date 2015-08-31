@@ -3,6 +3,9 @@ package control;
 import config.AccessConfig;
 import config.ConfigManager;
 import config.ReturnCodeConfig;
+import model.event.Event;
+import net.sf.json.JSONObject;
+import net.tool.WriteMessageServerSolver;
 import server.serverSolver.RequestSolver;
 
 /**
@@ -16,5 +19,22 @@ public abstract class Manager {
 
     public Manager(RequestSolver requestSolver) {
         this.requestSolver = requestSolver;
+    }
+
+    protected void addSendMessage(Event event) {
+        addSuccessMessage(event);
+        addFailMessage(event);
+    }
+
+    protected void addSuccessMessage(Event event) {
+        JSONObject object = new JSONObject();
+        object.put("return", returnCodeConfig.getCode("accept"));
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+    }
+
+    protected void addFailMessage(Event event) {
+        JSONObject object = new JSONObject();
+        object.put("return", returnCodeConfig.getCode("forbidden"));
+        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 }

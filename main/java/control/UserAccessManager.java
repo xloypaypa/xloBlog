@@ -4,8 +4,6 @@ import config.LengthLimitConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
-import net.sf.json.JSONObject;
-import net.tool.WriteMessageServerSolver;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
@@ -41,7 +39,8 @@ public class UserAccessManager extends Manager {
             public boolean run() {
                 LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
                 if (username == null || password == null) return false;
-                if (username.length() > lengthLimitConfig.getLimit("username") || password.length() > lengthLimitConfig.getLimit("password")) return false;
+                if (username.length() > lengthLimitConfig.getLimit("username") || password.length() > lengthLimitConfig.getLimit("password"))
+                    return false;
 
                 UserCollection userCollection = new UserCollection();
                 userCollection.lockUser(username);
@@ -61,10 +60,9 @@ public class UserAccessManager extends Manager {
         Event event = new Event() {
             @Override
             public boolean run() {
-                if (username == null || password == null || aimUsername == null) return false;
+                if (aimUsername == null) return false;
                 UserCollection userCollection = new UserCollection();
-                DBClient.DBData user = userCollection.getUser(username);
-                if (!accessConfig.isAccept(user)) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
                 DBClient.DBData aimUser = userCollection.getUser(aimUsername);
                 if (aimUser == null) {
                     return false;
@@ -75,32 +73,5 @@ public class UserAccessManager extends Manager {
         };
         addSendMessage(event);
         event.submit();
-    }
-
-    public void acceptUserRegister(String username, int access) {
-        new Event() {
-            @Override
-            public boolean run() {
-                if (username == null) {
-                    return false;
-                }
-                UserCollection userCollection = new UserCollection();
-                DBClient.DBData user = userCollection.getUser(username);
-                if (user == null) {
-                    return false;
-                }
-                user.object.put("access", access);
-                return true;
-            }
-        }.submit();
-    }
-
-    protected void addSendMessage(Event event) {
-        JSONObject object = new JSONObject();
-        object.put("return", returnCodeConfig.getCode("accept"));
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
-        object.clear();
-        object.put("return", returnCodeConfig.getCode("forbidden"));
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 }

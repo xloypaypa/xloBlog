@@ -32,14 +32,10 @@ public class BlogManager extends Manager {
                 if (username == null || password == null || title == null || body == null) return false;
                 if (title.length() > lengthLimitConfig.getLimit("documentTitle") || body.length() > lengthLimitConfig.getLimit("documentBody"))
                     return false;
-                UserCollection userCollection = new UserCollection();
-                DBClient.DBData userData = userCollection.getUserData(username);
-                if (userData == null) return false;
-                if (!userData.object.get("password").equals(password)) return false;
-                if (!accessConfig.isAccept(userData)) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
-                blogCollection.addDocument(username, title, body);
+                blogCollection.addDocument(username, title, body, new Date());
                 return true;
             }
         };
@@ -55,11 +51,7 @@ public class BlogManager extends Manager {
                 if (username == null || password == null || reply == null) return false;
                 if (reply.length() > lengthLimitConfig.getLimit("documentBody"))
                     return false;
-                UserCollection userCollection = new UserCollection();
-                DBClient.DBData userData = userCollection.getUserData(username);
-                if (userData == null) return false;
-                if (!userData.object.get("password").equals(password)) return false;
-                if (!accessConfig.isAccept(userData)) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
                 DBClient.DBData document = blogCollection.getDocument(documentID);
@@ -130,14 +122,5 @@ public class BlogManager extends Manager {
                 return true;
             }
         }.submit();
-    }
-
-    protected void addSendMessage(Event event) {
-        JSONObject object = new JSONObject();
-        object.put("return", returnCodeConfig.getCode("accept"));
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
-        object.clear();
-        object.put("return", returnCodeConfig.getCode("forbidden"));
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 }

@@ -5,4 +5,8 @@
     <solver name="get document" url="/getDocument">net.post.blog.GetDocumentReader</solver>
     <solver name="get document list by author" url="/getDocumentListByAuthor">net.post.blog.GetDocumentListOfAuthorReader</solver>
     <solver name="add reply" url="/reply">net.post.blog.AddReplyReader</solver>
+    <solver name="get message list" url="/getMessageList">net.post.message.GetMessageListReader</solver>
+    <solver name="get message" url="/getMessage">net.post.message.GetMessageReader</solver>
+    <solver name="read message" url="/readMessage">net.post.message.ReadMessageReader</solver>
+    <solver name="send message" url="/sendMessage">net.post.message.SendMessageReader</solver>
 </post>
