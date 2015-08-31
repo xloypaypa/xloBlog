@@ -11,8 +11,8 @@ import net.tool.LengthLimitReadServerSolver;
 public class ReadMessageReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
-        String username = this.requestSolver.getRequestHeadReader().getMessage("username");
-        String password = this.requestSolver.getRequestHeadReader().getMessage("password");
+        String username = this.requestSolver.getRequestHeadReader().getMessage("Username");
+        String password = this.requestSolver.getRequestHeadReader().getMessage("Password");
         JSONObject jsonObject = JSONObject.fromObject(this.message);
         String id = jsonObject.getString("id");
 
