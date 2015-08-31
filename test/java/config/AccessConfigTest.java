@@ -1,6 +1,9 @@
 package config;
 
+import javafx.util.Pair;
 import org.junit.Test;
+
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +16,12 @@ public class AccessConfigTest {
     public void testLoad() throws Exception {
         AccessConfig accessConfig = new AccessConfig();
         accessConfig.init();
-        int value = accessConfig.checkClassAndMethod("control.BlogManager", "addDocument").getValue();
-        assertEquals(1, value);
+        Set<Pair<String, Integer>> value = accessConfig.checkClassAndMethod("control.BlogManager", "addDocument");
+        for (Pair<String, Integer> now : value) {
+            if (now.getKey().equals("access")) {
+                int ans = now.getValue();
+                assertEquals(1, ans);
+            }
+        }
     }
 }
