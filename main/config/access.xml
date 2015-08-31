@@ -1,5 +1,5 @@
 <access>
     <class name="control.BlogManager">
-        <method name="addBlog">1</method>
+        <method name="addBlog" filed="access">1</method>
     </class>
 </access>

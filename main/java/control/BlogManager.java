@@ -7,7 +7,6 @@ import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
-import org.bson.types.ObjectId;
 import server.serverSolver.RequestSolver;
 
 import java.util.List;
@@ -52,7 +51,7 @@ public class BlogManager extends Manager {
                 if (id == null) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
-                DBClient.DBData data = blogCollection.getDocument(id);
+                DBClient.DBData data = blogCollection.getDocumentData(id);
                 if (data == null) return false;
 
                 object.clear();
@@ -73,12 +72,15 @@ public class BlogManager extends Manager {
 
                 if (author == null) return false;
                 BlogCollection blogCollection = new BlogCollection();
-                List<ObjectId> list = blogCollection.getIDsByAuthor(author);
+                List<DBClient.DBData> list = blogCollection.getDocumentDataByAuthor(author);
 
                 JSONArray array = new JSONArray();
-                for (ObjectId id : list) {
+                for (DBClient.DBData now : list) {
                     JSONObject message = new JSONObject();
-                    message.put("id", id.toHexString());
+                    message.put("id", now.object.get("_id"));
+                    message.put("title", now.object.get("title"));
+                    message.put("author", now.object.get("author"));
+                    message.put("preview", now.object.getString("body").substring(0, 100));
                     array.add(message);
                 }
 

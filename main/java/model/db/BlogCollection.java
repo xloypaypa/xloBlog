@@ -46,19 +46,19 @@ public class BlogCollection extends DBClient {
         return ans;
     }
 
-    public List<ObjectId> getIDsByAuthor(String author) {
+    public List<DBData> getDocumentDataByAuthor(String author) {
         lockCollection();
         FindIterable<Document> iterable = collection.find(new Document("author", author));
         MongoCursor<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        List<ObjectId> ids = new LinkedList<>();
+        List<DBData> ans = new LinkedList<>();
         while (cursor.hasNext()) {
             Document document = cursor.next();
-            ids.add((ObjectId) document.get("_id"));
+            ans.add(getDocumentNotUsing(document));
         }
         unlockCollection();
-        return ids;
+        return ans;
     }
 
     public void lockItem(String id) {

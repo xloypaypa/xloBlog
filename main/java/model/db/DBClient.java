@@ -138,7 +138,6 @@ public abstract class DBClient {
         ans.object = document;
         ans.past = new Document(document);
         ans.id = (ObjectId) document.get("_id");
-        ans.object.remove("_id");
         return ans;
     }
 
