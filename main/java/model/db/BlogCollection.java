@@ -1,11 +1,10 @@
 package model.db;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,8 +27,8 @@ public class BlogCollection extends DBClient {
 
     public DBData getDocument(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
@@ -38,8 +37,8 @@ public class BlogCollection extends DBClient {
 
     public DBData getDocumentData(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
@@ -50,8 +49,8 @@ public class BlogCollection extends DBClient {
 
     public List<DBData> getDocumentDataByAuthor(String author) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("author", author));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("author", author));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         List<DBData> ans = new LinkedList<>();

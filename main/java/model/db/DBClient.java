@@ -1,10 +1,11 @@
 package model.db;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import config.ConfigManager;
 import config.DBConfig;
+import model.db.virtual.VirtualCollection;
+import model.db.virtual.VirtualDB;
 import model.lock.NameLockImpl;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -18,19 +19,21 @@ import java.util.*;
 public abstract class DBClient {
     protected static MongoClient mongoClient;
     protected volatile static Map<Thread, Set<DBClient>> usingDB;
-    private volatile static Map<String, MongoDatabase> databaseMap;
+    private volatile static Map<String, VirtualDB> databaseMap;
     private volatile static boolean needInit = true;
     protected static DBConfig dbConfig
             = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
     protected static MongoDatabase blog;
 
     public synchronized static void init() {
-        if (mongoClient != null) return;
+        if (databaseMap != null) return ;
+//        if (mongoClient != null) return;
         DBConfig dbConfig = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
-        mongoClient = new MongoClient(dbConfig.getHost(), dbConfig.getPort());
+//        mongoClient = new MongoClient(dbConfig.getHost(), dbConfig.getPort());
         databaseMap = new HashMap<>();
         for (String now : dbConfig.getDbs()) {
-            databaseMap.put(now, mongoClient.getDatabase(now));
+//            databaseMap.put(now, mongoClient.getDatabase(now));
+            databaseMap.put(now, VirtualDB.getDB(now));
         }
         usingDB = new HashMap<>();
         needInit = false;
@@ -50,11 +53,11 @@ public abstract class DBClient {
         }
     }
 
-    private static MongoDatabase getDatabase(String name) {
+    private static VirtualDB getDatabase(String name) {
         return databaseMap.get(name);
     }
 
-    protected MongoCollection<Document> collection;
+    protected VirtualCollection collection;
     protected String lockName;
 
     public DBClient() {

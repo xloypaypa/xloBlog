@@ -1,10 +1,10 @@
 package model.db;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,8 +25,8 @@ public class UserCollection extends DBClient {
 
     public DBData getUser(String username) {
         lockUser(username);
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("username", username));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
@@ -35,8 +35,8 @@ public class UserCollection extends DBClient {
 
     public DBData getUserData(String username) {
         lockUser(username);
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("username", username));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
@@ -47,8 +47,8 @@ public class UserCollection extends DBClient {
 
     public void removeUser(String username) {
         lockUser(username);
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("username", username));
+        Iterator<Document> cursor = iterable.iterator();
 
         Document document = cursor.next();
         collection.deleteOne(document);

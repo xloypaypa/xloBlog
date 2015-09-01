@@ -4,7 +4,6 @@ import com.mongodb.BasicDBList;
 import config.LengthLimitConfig;
 import model.db.BlogCollection;
 import model.db.DBClient;
-import model.db.UserCollection;
 import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

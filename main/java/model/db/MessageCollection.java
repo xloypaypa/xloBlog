@@ -1,10 +1,9 @@
 package model.db;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,8 +30,8 @@ public class MessageCollection extends DBClient {
 
     public DBData getMessage(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", id));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("_id", id));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
@@ -41,8 +40,8 @@ public class MessageCollection extends DBClient {
 
     public DBData getMessageData(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", id));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("_id", id));
+        Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
@@ -54,8 +53,8 @@ public class MessageCollection extends DBClient {
     public List<DBData> getUserMessageData(String username) {
         lockCollection();
         lock(username);
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Document> iterable = collection.find(new Document("username", username));
+        Iterator<Document> cursor = iterable.iterator();
 
         List<DBData> ans = new LinkedList<>();
         while (cursor.hasNext()) {
