@@ -7,6 +7,7 @@ import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
+import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
 import java.util.Date;
@@ -80,7 +81,7 @@ public class MessageManager extends Manager {
                 if (!accessConfig.isAccept(username, password)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
-                List<DBClient.DBData> dataList = messageCollection.getUserMessageData(username);
+                List<DBClient.DBData> dataList = messageCollection.findMessageData(new Document("username", username));
                 JSONArray array = dataList.stream().map(data -> JSONObject.fromObject(data.object.toJson())).collect(Collectors.toCollection(JSONArray::new));
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
                 return true;
@@ -97,7 +98,7 @@ public class MessageManager extends Manager {
                 if (!accessConfig.isAccept(username, password)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
-                List<DBClient.DBData> dataList = messageCollection.getUserMessageData(aim);
+                List<DBClient.DBData> dataList = messageCollection.findMessageData(new Document("username", aim));
                 JSONArray array = dataList.stream().map(data -> JSONObject.fromObject(data.object.toJson())).collect(Collectors.toCollection(JSONArray::new));
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
                 return true;

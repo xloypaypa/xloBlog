@@ -43,7 +43,6 @@ public class UserAccessManager extends Manager {
                     return false;
 
                 UserCollection userCollection = new UserCollection();
-                userCollection.lockUser(username);
                 DBClient.DBData past = userCollection.getUserData(username);
                 if (past != null) {
                     return false;

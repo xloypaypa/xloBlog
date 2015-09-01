@@ -14,6 +14,6 @@ public class GetDocumentListOfAuthorReader extends LengthLimitReadServerSolver {
         JSONObject jsonObject = JSONObject.fromObject(this.message);
         String author = jsonObject.getString("author");
         BlogManager blogManager = new BlogManager(requestSolver);
-        blogManager.getDocumentList(author);
+        blogManager.getAuthorDocumentList(author);
     }
 }

@@ -14,15 +14,26 @@ import java.util.List;
  */
 public class BlogCollection extends DBClient {
 
-    public void addDocument(String author, String title, String body, Date date) {
+    public void addDocument(String author, String title, String body, Date date, String type) {
         lockCollection();
         Document document = new Document();
         document.put("author", author);
         document.put("title", title);
         document.put("body", body);
         document.put("time", date);
+        document.put("type", type);
         this.insert(document);
         unlockCollection();
+    }
+
+    public void removeDocument(String id) {
+        lockCollection();
+        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Document> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return ;
+
+        Document document = cursor.next();
+        this.remove((ObjectId) document.get("_id"));
     }
 
     public DBData getDocument(String id) {
@@ -47,9 +58,9 @@ public class BlogCollection extends DBClient {
         return ans;
     }
 
-    public List<DBData> getDocumentDataByAuthor(String author) {
+    public List<DBData> findDocumentListData(Document message) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("author", author));
+        List<Document> iterable = collection.find(message);
         Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
@@ -60,21 +71,5 @@ public class BlogCollection extends DBClient {
         }
         unlockCollection();
         return ans;
-    }
-
-    public void lockItem(String id) {
-        lockType("id", id);
-    }
-
-    public void unlockItem(String id) {
-        unlockType("id", id);
-    }
-
-    private void lockType(String type, String value) {
-        unlock(this.lockName + "." + type + "." + value);
-    }
-
-    private void unlockType(String type, String value) {
-        unlock(this.lockName + "." + type + "." + value);
     }
 }

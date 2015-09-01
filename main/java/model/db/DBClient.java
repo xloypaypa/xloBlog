@@ -83,9 +83,13 @@ public abstract class DBClient {
     protected void insert(Document document) {
         this.insert.add(document);
     }
+    protected void remove(ObjectId id) {
+        this.remove.add(new Document("_id", id));
+    }
 
     protected Set<DBData> using = new HashSet<>();
     protected Set<Document> insert = new HashSet<>();
+    protected Set<Document> remove = new HashSet<>();
     protected volatile Vector<String> locks = new Vector<>();
 
     public void submit() {
@@ -93,6 +97,7 @@ public abstract class DBClient {
                 -> collection.updateOne(new Document("_id", now.id),
                 new Document("$set", now.object)));
         insert.forEach(collection::insertOne);
+        remove.forEach(collection::deleteOne);
         release();
     }
 
