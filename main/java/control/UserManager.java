@@ -1,10 +1,11 @@
 package control;
 
-import com.mongodb.BasicDBList;
 import config.LengthLimitConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
+import org.bson.BsonArray;
+import org.bson.BsonString;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
@@ -66,13 +67,13 @@ public class UserManager extends Manager {
 
                 UserCollection userCollection = new UserCollection();
                 DBClient.DBData user = userCollection.getUser(username);
-                BasicDBList dbList; //TODO test this update
+                BsonArray dbList;
                 if (user.object.containsKey("mark")) {
-                    dbList = (BasicDBList) user.object.get("mark");
+                    dbList = (BsonArray) user.object.get("mark");
                 } else {
-                    dbList = new BasicDBList();
+                    dbList = new BsonArray();
                 }
-                dbList.add(aimUser);
+                dbList.add(new BsonString(aimUser));
                 user.object.put("mark", dbList);
                 return true;
             }
@@ -90,17 +91,14 @@ public class UserManager extends Manager {
 
                 UserCollection userCollection = new UserCollection();
                 DBClient.DBData user = userCollection.getUser(username);
-                BasicDBList dbList; //TODO test this update
+                BsonArray dbList;
                 if (user.object.containsKey("mark")) {
-                    dbList = (BasicDBList) user.object.get("mark");
+                    dbList = (BsonArray) user.object.get("mark");
                 } else {
-                    dbList = new BasicDBList();
+                    dbList = new BsonArray();
                 }
-                for (Object object : dbList) {
-                    if (object.equals(aimUser)) {
-                        dbList.remove(object);
-                    }
-                }
+                dbList.stream().filter(object -> object.asString().equals(new BsonString(aimUser)))
+                        .forEach(dbList::remove);
                 user.object.put("mark", dbList);
                 return true;
             }

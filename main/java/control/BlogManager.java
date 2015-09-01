@@ -1,6 +1,5 @@
 package control;
 
-import com.mongodb.BasicDBList;
 import config.LengthLimitConfig;
 import model.db.BlogCollection;
 import model.db.DBClient;
@@ -10,7 +9,7 @@ import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
-import org.bson.Document;
+import org.bson.*;
 import server.serverSolver.RequestSolver;
 
 import java.util.Date;
@@ -63,16 +62,16 @@ public class BlogManager extends Manager {
 
                 BlogCollection blogCollection = new BlogCollection();
                 DBClient.DBData document = blogCollection.getDocument(documentID);
-                BasicDBList dbList; //TODO test this update
+                BsonArray dbList;
                 if (document.object.containsKey("reply")) {
-                    dbList = (BasicDBList) document.object.get("reply");
+                    dbList = (BsonArray) document.object.get("reply");
                 } else {
-                    dbList = new BasicDBList();
+                    dbList = new BsonArray();
                 }
-                Document replyMap = new Document();
-                replyMap.put("author", username);
-                replyMap.put("data", new Date());
-                replyMap.put("reply", reply);
+                BsonDocument replyMap = new BsonDocument();
+                replyMap.put("author", new BsonString(username));
+                replyMap.put("data", new BsonDateTime(new Date().getTime()));
+                replyMap.put("reply", new BsonString(reply));
                 dbList.add(replyMap);
                 document.object.put("reply", dbList);
                 return true;

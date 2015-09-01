@@ -21,6 +21,7 @@ public class UserManagerTest extends TestClass {
     public void tearDown() throws Exception {
         UserCollection userCollection = new UserCollection();
         userCollection.removeUser("test user");
+        userCollection.submit();
     }
 
     @Test
