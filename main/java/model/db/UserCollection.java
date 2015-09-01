@@ -62,7 +62,7 @@ public class UserCollection extends DBClient {
     public List<DBData> findWhoMarkedUser(String username) {
         lockCollection();
         List<DBData> ans = new LinkedList<>();
-        List<Document> iterable = collection.find(new Document()); //TODO
+        List<Document> iterable = collection.find();
         for (Document anIterable : iterable) {
             BasicDBList dbList = (BasicDBList) anIterable.get("mark");
             if (dbList.contains(username)) {

@@ -3,6 +3,7 @@ package model.db.virtual;
 import org.bson.Document;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 2015/9/1.
@@ -13,6 +14,10 @@ public class VirtualCollection {
 
     public long count(Document filter) {
         return find(filter).size();
+    }
+
+    public List<Document> find() {
+        return value.stream().collect(Collectors.toCollection(LinkedList::new));
     }
 
     public List<Document> find(Document filter) {
