@@ -1,6 +1,6 @@
 package net.post.user;
 
-import control.UserAccessManager;
+import control.UserManager;
 import net.sf.json.JSONObject;
 import net.tool.LengthLimitReadServerSolver;
 
@@ -16,7 +16,7 @@ public class RegisterReader extends LengthLimitReadServerSolver {
         username = jsonObject.getString("username");
         password = jsonObject.getString("password");
 
-        UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
-        userAccessManager.register(username, password);
+        UserManager userManager = new UserManager(this.requestSolver);
+        userManager.register(username, password);
     }
 }

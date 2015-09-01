@@ -5,15 +5,15 @@ import net.sf.json.JSONObject;
 import net.tool.LengthLimitReadServerSolver;
 
 /**
- * Created by xlo on 2015/8/28.
- * it's get list of author's all document
+ * Created by xlo on 2015/9/1.
+ * it's the solver of add reader
  */
-public class GetDocumentListOfAuthorReader extends LengthLimitReadServerSolver {
+public class AddReaderReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
         JSONObject jsonObject = JSONObject.fromObject(this.message);
-        String author = jsonObject.getString("author");
+        String id = jsonObject.getString("id");
         BlogManager blogManager = new BlogManager(requestSolver);
-        blogManager.getAuthorDocumentList(author);
+        blogManager.addReader(id);
     }
 }

@@ -8,12 +8,12 @@ import net.tool.LengthLimitReadServerSolver;
  * Created by xlo on 2015/8/28.
  * it's get list of author's all document
  */
-public class GetDocumentListOfAuthorReader extends LengthLimitReadServerSolver {
+public class GetDocumentListOfTypeReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
         JSONObject jsonObject = JSONObject.fromObject(this.message);
-        String author = jsonObject.getString("author");
+        String type = jsonObject.getString("type");
         BlogManager blogManager = new BlogManager(requestSolver);
-        blogManager.getAuthorDocumentList(author);
+        blogManager.getTypeDocumentList(type);
     }
 }

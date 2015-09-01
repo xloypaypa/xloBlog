@@ -1,6 +1,6 @@
 package net.post.user;
 
-import control.UserAccessManager;
+import control.UserManager;
 import net.tool.LengthLimitReadServerSolver;
 
 /**
@@ -10,9 +10,9 @@ import net.tool.LengthLimitReadServerSolver;
 public class LoginReader extends LengthLimitReadServerSolver {
     @Override
     public void solveMessage() {
-        UserAccessManager userAccessManager = new UserAccessManager(this.requestSolver);
+        UserManager userManager = new UserManager(this.requestSolver);
         String username = this.requestSolver.getRequestHeadReader().getMessage("Username");
         String password = this.requestSolver.getRequestHeadReader().getMessage("Password");
-        userAccessManager.loginUser(username, password);
+        userManager.loginUser(username, password);
     }
 }

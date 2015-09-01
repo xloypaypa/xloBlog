@@ -1,10 +1,14 @@
 package model.db;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,17 +18,17 @@ import java.util.Map;
 public class UserCollection extends DBClient {
 
     public void registerUser(String username, String password) {
-        lockUser(username);
+        lockCollection();
         Map<String, Object> data = new HashMap<>();
         data.put("username", username);
         data.put("password", password);
         data.put("access", 0);
         this.insert(new Document(data));
-        unlockUser(username);
+        unlockCollection();
     }
 
     public DBData getUser(String username) {
-        lockUser(username);
+        lockCollection();
         FindIterable<Document> iterable = collection.find(new Document("username", username));
         MongoCursor<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
@@ -34,32 +38,49 @@ public class UserCollection extends DBClient {
     }
 
     public DBData getUserData(String username) {
-        lockUser(username);
+        lockCollection();
         FindIterable<Document> iterable = collection.find(new Document("username", username));
         MongoCursor<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         Document document = cursor.next();
         DBData ans = getDocumentNotUsing(document);
-        unlockUser(username);
+        unlockCollection();
         return ans;
     }
 
     public void removeUser(String username) {
-        lockUser(username);
+        lockCollection();
         FindIterable<Document> iterable = collection.find(new Document("username", username));
         MongoCursor<Document> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return ;
 
         Document document = cursor.next();
-        collection.deleteOne(document);
-        unlockUser(username);
+        this.remove((ObjectId) document.get("_id"));
     }
 
-    public void lockUser(String username) {
-        lock(this.lockName + "." + username);
+    public List<DBData> findWhoMarkedUser(String username) {
+        lockCollection();
+        List<DBData> ans = new LinkedList<>();
+        FindIterable<Document> iterable = collection.find();
+        for (Document anIterable : iterable) {
+            BasicDBList dbList = (BasicDBList) anIterable.get("mark");
+            if (dbList.contains(username)) {
+                ans.add(getDocumentNotUsing(anIterable));
+            }
+        }
+        unlockCollection();
+        return ans;
     }
 
-    public void unlockUser(String username) {
-        unlock(this.lockName + "." + username);
+    public List<DBData> findUserData(Document document) {
+        lockCollection();
+        List<DBData> ans = new LinkedList<>();
+        FindIterable<Document> iterable = collection.find(document);
+        for (Document anIterable : iterable) {
+            ans.add(getDocumentNotUsing(anIterable));
+        }
+        unlockCollection();
+        return ans;
     }
 }

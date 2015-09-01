@@ -4,6 +4,7 @@ import com.mongodb.BasicDBList;
 import config.LengthLimitConfig;
 import model.db.BlogCollection;
 import model.db.DBClient;
+import model.db.MessageCollection;
 import model.db.UserCollection;
 import model.event.Event;
 import net.sf.json.JSONArray;
@@ -24,7 +25,7 @@ public class BlogManager extends Manager {
         super(requestSolver);
     }
 
-    public void addDocument(String username, String password, String title, String body) {
+    public void addDocument(String username, String password, String title, String body, String type) {
         Event event = new Event() {
             @Override
             public boolean run() {
@@ -35,7 +36,14 @@ public class BlogManager extends Manager {
                 if (!accessConfig.isAccept(username, password)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
-                blogCollection.addDocument(username, title, body, new Date());
+                blogCollection.addDocument(username, title, body, new Date(), type);
+
+                UserCollection userCollection = new UserCollection();
+                MessageCollection messageCollection = new MessageCollection();
+                List<DBClient.DBData> notifyUser = userCollection.findWhoMarkedUser(username);
+                for (DBClient.DBData now : notifyUser) {
+                    messageCollection.addMessage(now.object.getString("username"), username, title, new Date());
+                }
                 return true;
             }
         };
@@ -87,7 +95,6 @@ public class BlogManager extends Manager {
                 BlogCollection blogCollection = new BlogCollection();
                 DBClient.DBData data = blogCollection.getDocumentData(id);
                 if (data == null) return false;
-
                 object = JSONObject.fromObject(data.object.toJson());
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
                 return true;
@@ -95,7 +102,51 @@ public class BlogManager extends Manager {
         }.submit();
     }
 
-    public void getDocumentList(String author) {
+    public void addReader(String id) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                BlogCollection blogCollection = new BlogCollection();
+                DBClient.DBData data = blogCollection.getDocument(id);
+                data.object.put("reader", data.object.getInteger("reader", 0) + 1);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void getAuthorTypeDocumentList(String author, String type) {
+        new Event() {
+            @Override
+            public boolean run() {
+                JSONObject object = new JSONObject();
+                object.put("return", returnCodeConfig.getCode("not found"));
+                sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+
+                if (author == null || type == null) return false;
+                sendDocumentList(this, new Document().append("author", author).append("type", type));
+                return true;
+            }
+        }.submit();
+    }
+
+    public void getTypeDocumentList(String type) {
+        new Event() {
+            @Override
+            public boolean run() {
+                JSONObject object = new JSONObject();
+                object.put("return", returnCodeConfig.getCode("not found"));
+                sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+
+                if (type == null) return false;
+                sendDocumentList(this, new Document().append("type", type));
+                return true;
+            }
+        }.submit();
+    }
+
+    public void getAuthorDocumentList(String author) {
         new Event() {
             @Override
             public boolean run() {
@@ -104,23 +155,26 @@ public class BlogManager extends Manager {
                 sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
 
                 if (author == null) return false;
-                BlogCollection blogCollection = new BlogCollection();
-                List<DBClient.DBData> list = blogCollection.getDocumentDataByAuthor(author);
-
-                JSONArray array = new JSONArray();
-                for (DBClient.DBData now : list) {
-                    JSONObject message = new JSONObject();
-                    message.put("id", now.object.get("_id"));
-                    message.put("title", now.object.get("title"));
-                    message.put("author", now.object.get("author"));
-                    message.put("time", now.object.get("time"));
-                    message.put("preview", now.object.getString("body").substring(0, 100));
-                    array.add(message);
-                }
-
-                sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
+                sendDocumentList(this, new Document().append("author", author));
                 return true;
             }
         }.submit();
+    }
+
+    protected void sendDocumentList(Event event, Document message) {
+        BlogCollection blogCollection = new BlogCollection();
+        List<DBClient.DBData> list = blogCollection.findDocumentListData(message);
+
+        JSONArray array = new JSONArray();
+        for (DBClient.DBData now : list) {
+            JSONObject object = new JSONObject();
+            object.put("id", now.object.get("_id"));
+            object.put("title", now.object.get("title"));
+            object.put("author", now.object.get("author"));
+            object.put("time", now.object.get("time"));
+            object.put("preview", now.object.getString("body").substring(0, 100));
+            array.add(object);
+        }
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
     }
 }

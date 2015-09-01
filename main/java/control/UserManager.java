@@ -1,5 +1,6 @@
 package control;
 
+import com.mongodb.BasicDBList;
 import config.LengthLimitConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
@@ -11,9 +12,9 @@ import server.serverSolver.RequestSolver;
  * Created by xlo on 2015/8/21.
  * it's the user access manager
  */
-public class UserAccessManager extends Manager {
+public class UserManager extends Manager {
 
-    public UserAccessManager(RequestSolver requestSolver) {
+    public UserManager(RequestSolver requestSolver) {
         super(requestSolver);
     }
 
@@ -43,12 +44,64 @@ public class UserAccessManager extends Manager {
                     return false;
 
                 UserCollection userCollection = new UserCollection();
-                userCollection.lockUser(username);
+                userCollection.lockCollection();
                 DBClient.DBData past = userCollection.getUserData(username);
                 if (past != null) {
                     return false;
                 }
                 userCollection.registerUser(username, password);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void markUser(String username, String password, String aimUser) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                if (aimUser == null) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
+
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData user = userCollection.getUser(username);
+                BasicDBList dbList; //TODO test this update
+                if (user.object.containsKey("mark")) {
+                    dbList = (BasicDBList) user.object.get("mark");
+                } else {
+                    dbList = new BasicDBList();
+                }
+                dbList.add(aimUser);
+                user.object.put("mark", dbList);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void unMarkUser(String username, String password, String aimUser) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                if (aimUser == null) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
+
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData user = userCollection.getUser(username);
+                BasicDBList dbList; //TODO test this update
+                if (user.object.containsKey("mark")) {
+                    dbList = (BasicDBList) user.object.get("mark");
+                } else {
+                    dbList = new BasicDBList();
+                }
+                for (Object object : dbList) {
+                    if (object.equals(aimUser)) {
+                        dbList.remove(object);
+                    }
+                }
+                user.object.put("mark", dbList);
                 return true;
             }
         };

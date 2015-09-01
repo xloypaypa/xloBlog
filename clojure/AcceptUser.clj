@@ -1,6 +1,7 @@
 (ns
   ^{:author xlo}
   control.AcceptUser
+  (:import [control UserManager UserManager])
   (:import [control UserAccessManager]))
 
 (defn giveAccess [username access]
