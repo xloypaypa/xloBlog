@@ -15,12 +15,13 @@ import static org.junit.Assert.assertEquals;
  * Created by xlo on 2015/8/25.
  * it's the test code of user register
  */
-public class UserRegisterTest extends TestClass {
+public class UserManagerTest extends TestClass {
 
     @After
     public void tearDown() throws Exception {
         UserCollection userCollection = new UserCollection();
         userCollection.removeUser("test user");
+        userCollection.submit();
     }
 
     @Test
@@ -34,7 +35,7 @@ public class UserRegisterTest extends TestClass {
             new Thread() {
                 @Override
                 public void run() {
-                    UserAccessManagerNoSend userAccessManager = new UserAccessManagerNoSend(counter);
+                    UserManagerNoSend userAccessManager = new UserManagerNoSend(counter);
                     userAccessManager.register("test user", "pass " + finalI);
                 }
             }.start();

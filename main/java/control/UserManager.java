@@ -4,6 +4,8 @@ import config.LengthLimitConfig;
 import model.db.DBClient;
 import model.db.UserCollection;
 import model.event.Event;
+import org.bson.BsonArray;
+import org.bson.BsonString;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
@@ -11,9 +13,9 @@ import server.serverSolver.RequestSolver;
  * Created by xlo on 2015/8/21.
  * it's the user access manager
  */
-public class UserAccessManager extends Manager {
+public class UserManager extends Manager {
 
-    public UserAccessManager(RequestSolver requestSolver) {
+    public UserManager(RequestSolver requestSolver) {
         super(requestSolver);
     }
 
@@ -43,11 +45,61 @@ public class UserAccessManager extends Manager {
                     return false;
 
                 UserCollection userCollection = new UserCollection();
+                userCollection.lockCollection();
                 DBClient.DBData past = userCollection.getUserData(username);
                 if (past != null) {
                     return false;
                 }
                 userCollection.registerUser(username, password);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void markUser(String username, String password, String aimUser) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                if (aimUser == null) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
+
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData user = userCollection.getUser(username);
+                BsonArray dbList;
+                if (user.object.containsKey("mark")) {
+                    dbList = (BsonArray) user.object.get("mark");
+                } else {
+                    dbList = new BsonArray();
+                }
+                dbList.add(new BsonString(aimUser));
+                user.object.put("mark", dbList);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void unMarkUser(String username, String password, String aimUser) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                if (aimUser == null) return false;
+                if (!accessConfig.isAccept(username, password)) return false;
+
+                UserCollection userCollection = new UserCollection();
+                DBClient.DBData user = userCollection.getUser(username);
+                BsonArray dbList;
+                if (user.object.containsKey("mark")) {
+                    dbList = (BsonArray) user.object.get("mark");
+                } else {
+                    dbList = new BsonArray();
+                }
+                dbList.stream().filter(object -> object.asString().equals(new BsonString(aimUser)))
+                        .forEach(dbList::remove);
+                user.object.put("mark", dbList);
                 return true;
             }
         };
