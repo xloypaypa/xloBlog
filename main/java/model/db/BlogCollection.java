@@ -63,7 +63,6 @@ public class BlogCollection extends DBClient {
         lockCollection();
         FindIterable<Document> iterable = collection.find(message);
         MongoCursor<Document> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return null;
 
         List<DBData> ans = new LinkedList<>();
         while (cursor.hasNext()) {
