@@ -1,6 +1,7 @@
 package model.db.virtual;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,17 +24,15 @@ public class VirtualCollection {
     public List<Document> find(Document filter) {
         List<Document> ans = new LinkedList<>();
         for (Document now : value) {
-            for (Map.Entry<String, Object> item : filter.entrySet()) {
-                if (now.containsKey(item.getKey()) && now.get(item.getKey()).equals(item.getValue())) {
-                    ans.add(now);
-                    break;
-                }
-            }
+            ans.addAll(filter.entrySet().stream().filter(item ->
+                    now.containsKey(item.getKey()) && now.get(item.getKey()).equals(item.getValue())).map(item -> now)
+                    .collect(Collectors.toList()));
         }
         return ans;
     }
 
     public void insertOne(Document t) {
+        t.put("_id", new ObjectId());
         this.value.add(t);
     }
 
