@@ -32,7 +32,9 @@ public class VirtualCollection {
     }
 
     public void insertOne(Document t) {
-        t.put("_id", new ObjectId());
+        if (!t.containsKey("_id")) {
+            t.put("_id", new ObjectId());
+        }
         this.value.add(t);
     }
 
@@ -43,7 +45,9 @@ public class VirtualCollection {
 
     public void updateOne(Document filter, Document update) {
         List<Document> ans = find(filter);
-        ans.forEach(value::remove);
+        if (ans.size() == 0) return;
+        value.remove(ans.get(0));
+        update.put("_id", ans.get(0).get("_id"));
         value.add(update);
     }
 }

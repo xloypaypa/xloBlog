@@ -62,7 +62,6 @@ public class BlogCollection extends DBClient {
         lockCollection();
         List<Document> iterable = collection.find(message);
         Iterator<Document> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return null;
 
         List<DBData> ans = new LinkedList<>();
         while (cursor.hasNext()) {

@@ -4,6 +4,7 @@ import model.db.BlogCollection;
 import model.db.DBClient;
 import org.bson.BsonArray;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Test;
 import testTool.Counter;
@@ -11,6 +12,7 @@ import testTool.Counter;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Created by xlo on 2015/9/2.
@@ -31,8 +33,8 @@ public class BlogManagerTest {
     @Test
     public void testAddDocument() throws Exception {
         Counter counter = new Counter(1);
-        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
         UserManagerTest.register();
+        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
         blogManagerNoSend.addDocument("test user", "pass", "title", "body", "default");
 
         while (counter.get() != 0) {
@@ -55,7 +57,10 @@ public class BlogManagerTest {
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
             DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-            blogManagerNoSend.addReply("test user", "pass", data.object.getString("_id"), "reply");
+            if (data.object.get("_id") == null) {
+                fail();
+            }
+            blogManagerNoSend.addReply("test user", "pass", data.object.get("_id").toString(), "reply");
 
             while (counter.get() != 0) {
                 Thread.sleep(500);
