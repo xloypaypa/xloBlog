@@ -3,5 +3,6 @@
         <collection type="model.db.UserCollection">user</collection>
         <collection type="model.db.BlogCollection">blog</collection>
         <collection type="model.db.MessageCollection">msg</collection>
+        <collection type="model.db.MarkUserCollection">mark</collection>
     </db>
 </dbs>

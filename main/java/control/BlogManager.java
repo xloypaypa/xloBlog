@@ -1,10 +1,7 @@
 package control;
 
 import config.LengthLimitConfig;
-import model.db.BlogCollection;
-import model.db.DBClient;
-import model.db.MessageCollection;
-import model.db.UserCollection;
+import model.db.*;
 import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -37,11 +34,10 @@ public class BlogManager extends Manager {
                 BlogCollection blogCollection = new BlogCollection();
                 blogCollection.addDocument(username, title, body, new Date(), type);
 
-                UserCollection userCollection = new UserCollection();
+                MarkUserCollection markUserCollection = new MarkUserCollection();
                 MessageCollection messageCollection = new MessageCollection();
-                List<DBClient.DBData> notifyUser = userCollection.findWhoMarkedUser(username);
-                for (DBClient.DBData now : notifyUser) {
-                    messageCollection.addMessage(now.object.getString("username"), username, title, new Date());
+                for (DBClient.DBData now : markUserCollection.find(new Document().append("to", username))) {
+                    messageCollection.addMessage(now.object.getString("to"), username, title, new Date());
                 }
                 return true;
             }
