@@ -1,9 +1,7 @@
 package control;
 
 import config.LengthLimitConfig;
-import model.db.DBClient;
-import model.db.MarkUserCollection;
-import model.db.UserCollection;
+import model.db.*;
 import model.event.Event;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
@@ -50,6 +48,39 @@ public class UserManager extends Manager {
                     return false;
                 }
                 userCollection.registerUser(username, password);
+                return true;
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    public void removeUser(String username, String password) {
+        Event event = new Event() {
+            @Override
+            public boolean run() {
+                if (accessConfig.isAccept(username, password, this)) return false;
+
+                UserCollection userCollection = new UserCollection();
+                userCollection.removeUser(username);
+
+                BlogCollection blogCollection = new BlogCollection();
+                for (DBClient.DBData now : blogCollection.findDocumentListData(new Document().append("author", username))) {
+                    blogCollection.removeDocument(now.object.getString("_id"));
+                }
+
+                MarkUserCollection markUserCollection = new MarkUserCollection();
+                for (DBClient.DBData now : markUserCollection.find(new Document().append("from", username))) {
+                    markUserCollection.removeMark(now.object.getString("from"), now.object.getString("to"));
+                }
+                for (DBClient.DBData now : markUserCollection.find(new Document().append("to", username))) {
+                    markUserCollection.removeMark(now.object.getString("from"), now.object.getString("to"));
+                }
+
+                MessageCollection messageCollection = new MessageCollection();
+                for (DBClient.DBData now : markUserCollection.find(new Document().append("username", username))) {
+                    messageCollection.removeMessage(now.object.getString("_id"));
+                }
                 return true;
             }
         };
