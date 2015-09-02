@@ -1,6 +1,5 @@
 package model.db;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
@@ -22,7 +21,6 @@ public class UserCollection extends DBClient {
         Map<String, Object> data = new HashMap<>();
         data.put("username", username);
         data.put("password", password);
-        data.put("access", 0);
         this.insert(new Document(data));
         unlockCollection();
     }
@@ -57,20 +55,6 @@ public class UserCollection extends DBClient {
 
         Document document = cursor.next();
         this.remove((ObjectId) document.get("_id"));
-    }
-
-    public List<DBData> findWhoMarkedUser(String username) {
-        lockCollection();
-        List<DBData> ans = new LinkedList<>();
-        FindIterable<Document> iterable = collection.find();
-        for (Document anIterable : iterable) {
-            BasicDBList dbList = (BasicDBList) anIterable.get("mark");
-            if (dbList.contains(username)) {
-                ans.add(getDocumentNotUsing(anIterable));
-            }
-        }
-        unlockCollection();
-        return ans;
     }
 
     public List<DBData> findUserData(Document document) {
