@@ -3,6 +3,7 @@ package config;
 import javafx.util.Pair;
 import model.db.DBClient;
 import model.db.UserCollection;
+import model.event.Event;
 import org.dom4j.Element;
 
 import java.util.HashMap;
@@ -54,14 +55,12 @@ public class AccessConfig implements ConfigInterface {
         init();
     }
 
-    public Set<Pair<String, Integer>> getAccessNeed() {
-        String name = Thread.currentThread().getStackTrace()[getAimPos()].getClassName();
-        String method = Thread.currentThread().getStackTrace()[getAimPos()].getMethodName();
-        return checkClassAndMethod(name, method);
+    public Set<Pair<String, Integer>> getAccessNeed(Event event) {
+        return checkClassAndMethod(event.getClassName(), event.getMethodName());
     }
 
-    public boolean isAccept(DBClient.DBData data) {
-        Set<Pair<String, Integer>> need = getAccessNeed();
+    public boolean isAccept(DBClient.DBData data, Event event) {
+        Set<Pair<String, Integer>> need = getAccessNeed(event);
         if (need == null) return true;
         for (Pair<String, Integer> now : need) {
             int have;
@@ -75,11 +74,11 @@ public class AccessConfig implements ConfigInterface {
         return false;
     }
 
-    public boolean isAccept(String username, String password) {
+    public boolean isAccept(String username, String password, Event event) {
         if (username == null || password == null) return false;
         UserCollection userCollection = new UserCollection();
         DBClient.DBData data = userCollection.getUserData(username);
-        return data != null && data.object.get("password").equals(password) && isAccept(data);
+        return data != null && data.object.get("password").equals(password) && isAccept(data, event);
     }
 
     protected Set<Pair<String, Integer>> checkClassAndMethod(String name, String method) {
@@ -90,14 +89,5 @@ public class AccessConfig implements ConfigInterface {
         } else {
             return this.access.get(name).get(method);
         }
-    }
-
-    private int getAimPos() {
-        for (int i = 0; i < Thread.currentThread().getStackTrace().length; i++) {
-            if (!Thread.currentThread().getStackTrace()[i].getClassName().equals(this.getClass().getName())) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

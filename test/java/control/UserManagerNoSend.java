@@ -1,6 +1,8 @@
 package control;
 
 import model.event.Event;
+import net.sf.json.JSONObject;
+import net.tool.WriteMessageServerSolver;
 import testTool.Counter;
 
 /**
@@ -21,6 +23,29 @@ public class UserManagerNoSend extends UserManager {
             @Override
             public boolean run() {
                 counter.add(-1);
+                return true;
+            }
+        });
+        super.addSendMessage(event);
+    }
+
+    @Override
+    protected void addSuccessMessage(Event event) {
+        event.actionWhileSuccess(new Event() {
+            @Override
+            public boolean run() {
+                counter.addSuccess(1);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void addFailMessage(Event event) {
+        event.actionWhileFail(new Event() {
+            @Override
+            public boolean run() {
+                counter.addFail(1);
                 return true;
             }
         });

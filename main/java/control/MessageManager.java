@@ -29,7 +29,7 @@ public class MessageManager extends Manager {
             public boolean run() {
                 if (username == null || password == null || message == null || aimUser == null) return false;
                 if (message.length() > LengthLimitConfig.getConfig().getLimit("message")) return false;
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
                 messageCollection.addMessage(aimUser, username, message, new Date());
@@ -45,7 +45,7 @@ public class MessageManager extends Manager {
             @Override
             public boolean run() {
                 if (id == null) return false;
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
                 DBClient.DBData data = messageCollection.getMessageData(id);
@@ -62,7 +62,7 @@ public class MessageManager extends Manager {
         Event event = new Event() {
             @Override
             public boolean run() {
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
                 DBClient.DBData data = messageCollection.getMessage(id);
@@ -78,7 +78,7 @@ public class MessageManager extends Manager {
         Event event = new Event() {
             @Override
             public boolean run() {
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
                 List<DBClient.DBData> dataList = messageCollection.findMessageData(new Document("username", username));
@@ -95,7 +95,7 @@ public class MessageManager extends Manager {
         Event event = new Event() {
             @Override
             public boolean run() {
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
                 List<DBClient.DBData> dataList = messageCollection.findMessageData(new Document("username", aim));

@@ -29,7 +29,7 @@ public class BlogManager extends Manager {
                 if (username == null || password == null || title == null || body == null) return false;
                 if (title.length() > lengthLimitConfig.getLimit("documentTitle") || body.length() > lengthLimitConfig.getLimit("documentBody"))
                     return false;
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
                 blogCollection.addDocument(username, title, body, new Date(), type);
@@ -54,7 +54,7 @@ public class BlogManager extends Manager {
                 if (username == null || password == null || reply == null) return false;
                 if (reply.length() > lengthLimitConfig.getLimit("documentBody"))
                     return false;
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
                 DBClient.DBData document = blogCollection.getDocument(documentID);
