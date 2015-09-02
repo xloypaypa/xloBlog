@@ -19,7 +19,7 @@ public class AccessConfigTest {
         Set<Pair<String, Integer>> value = accessConfig.checkClassAndMethod("control.BlogManager", "addDocument");
         value.stream().filter(now -> now.getKey().equals("access")).forEach(now -> {
             int ans = now.getValue();
-            assertEquals(1, ans);
+            assertEquals(-1, ans);
         });
     }
 }
