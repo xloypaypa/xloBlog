@@ -5,8 +5,6 @@ import model.db.DBClient;
 import model.db.MarkUserCollection;
 import model.db.UserCollection;
 import model.event.Event;
-import org.bson.BsonArray;
-import org.bson.BsonString;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
@@ -64,7 +62,7 @@ public class UserManager extends Manager {
             @Override
             public boolean run() {
                 if (aimUser == null) return false;
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MarkUserCollection markUserCollection = new MarkUserCollection();
                 if (markUserCollection.getMarkData(username, aimUser) != null) return false;
@@ -81,7 +79,7 @@ public class UserManager extends Manager {
             @Override
             public boolean run() {
                 if (aimUser == null) return false;
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MarkUserCollection markUserCollection = new MarkUserCollection();
                 if (markUserCollection.getMarkData(username, aimUser) == null) return false;
@@ -99,7 +97,7 @@ public class UserManager extends Manager {
             public boolean run() {
                 if (aimUsername == null) return false;
                 UserCollection userCollection = new UserCollection();
-                if (!accessConfig.isAccept(username, password)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
                 DBClient.DBData aimUser = userCollection.getUser(aimUsername);
                 if (aimUser == null) {
                     return false;

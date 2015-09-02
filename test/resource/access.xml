@@ -1,0 +1,5 @@
+<access>
+    <class name="control.BlogManager">
+        <method name="addDocument" filed="access">-1</method>
+    </class>
+</access>
