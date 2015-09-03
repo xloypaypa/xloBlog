@@ -67,7 +67,13 @@ public abstract class DBClient {
         unlockCollection();
 
         this.collection = getDatabase(dbName).getCollection(collectionName);
-        usingDB.put(Thread.currentThread(), new HashSet<>());
+        if (!usingDB.containsKey(Thread.currentThread())) {
+            synchronized (DBClient.class) {
+                if (!usingDB.containsKey(Thread.currentThread())) {
+                    usingDB.put(Thread.currentThread(), new HashSet<>());
+                }
+            }
+        }
         usingDB.get(Thread.currentThread()).add(this);
     }
 
