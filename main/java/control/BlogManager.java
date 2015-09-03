@@ -9,6 +9,7 @@ import net.tool.WriteMessageServerSolver;
 import org.bson.*;
 import server.serverSolver.RequestSolver;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class BlogManager extends Manager {
 
     public void addReply(String username, String password, String documentID, String reply) {
         Event event = new Event() {
+            @SuppressWarnings("unchecked")
             @Override
             public boolean run() {
                 LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
@@ -58,18 +60,18 @@ public class BlogManager extends Manager {
 
                 BlogCollection blogCollection = new BlogCollection();
                 DBClient.DBData document = blogCollection.getDocument(documentID);
-                BsonArray dbList;
-                if (document.object.containsKey("reply")) {
-                    dbList = (BsonArray) document.object.get("reply");
-                } else {
-                    dbList = new BsonArray();
+                BsonArray list;
+                if (document.object.containsKey("reply"))
+                    list = new BsonArray((List<? extends BsonValue>) document.object.get("reply"));
+                else {
+                    list = new BsonArray();
                 }
                 BsonDocument replyMap = new BsonDocument();
                 replyMap.put("author", new BsonString(username));
                 replyMap.put("data", new BsonDateTime(new Date().getTime()));
                 replyMap.put("reply", new BsonString(reply));
-                dbList.add(replyMap);
-                document.object.put("reply", dbList);
+                list.add(replyMap);
+                document.object.put("reply", list);
                 return true;
             }
         };
