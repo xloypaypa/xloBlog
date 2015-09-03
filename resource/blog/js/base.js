@@ -2,7 +2,7 @@
  window.password=window.localStorage.getItem('password');
 function checkNull(_this){
     $(_this).find('.input-group').append('<em>不得为空</em>');
-    $(_this).find('.input-group input').css('position','relative')
+    $(_this).find('.input-group input').css('position','relative');
     $(_this).find('em').css({
         'position':'absolute',
         'top':'5px',
@@ -19,7 +19,7 @@ function checkNull(_this){
             $(this).next().show();
         }
     });
-};
+}
 
 //头部需要加username的ajax
 function ajaxHeader(url,data,callback){
@@ -33,7 +33,8 @@ function ajaxHeader(url,data,callback){
             XML.setRequestHeader('password',window.password);
         },
         success:function(response){
-            console.log(arguments);
+            console.log(response.return);
+            console.log(arguments.length);
             callback(response);
         }
     });
@@ -47,7 +48,8 @@ function ajaxRequest(url,data,callback){
         dataType:'json',
         data:JSON.stringify(data),
         success:function(response){
-            console.log(response);
+            console.log(response.return);
+            console.log(arguments.length);
             callback(response);
         }
     });
@@ -55,8 +57,8 @@ function ajaxRequest(url,data,callback){
 
 //获取url中的数据
 function getQueryString(name){
-    var str=document.location.search.substr(1).match(reg);
     var reg=new RegExp("(^|&)"+name+"=([^&]*)($|&)","i");
+    var str=document.location.search.substr(1).match(reg);
     if(!str) return unescape(str[2]);
     return null;
 }

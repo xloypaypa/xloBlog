@@ -9,7 +9,12 @@ $(function(){
                 "password":password
             };
             ajaxRequest('/register',data,function(response){
-
+                if(response.return==200){
+                    alert('注册成功！');
+                    location.href='login.html';
+                }else{
+                    alert('系统出错：'+response.return);
+                }
             });
         }
     });
