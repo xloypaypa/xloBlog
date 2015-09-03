@@ -1,8 +1,6 @@
 package model.event;
 
-import control.BlogManager;
 import control.Manager;
-import control.UserManager;
 import model.db.DBClient;
 import net.tool.WriteServerSolver;
 

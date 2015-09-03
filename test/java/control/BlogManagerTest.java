@@ -2,7 +2,6 @@ package control;
 
 import model.db.BlogCollection;
 import model.db.DBClient;
-import org.bson.BsonValue;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
