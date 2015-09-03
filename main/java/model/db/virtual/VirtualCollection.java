@@ -24,9 +24,16 @@ public class VirtualCollection {
     public List<Document> find(Document filter) {
         List<Document> ans = new LinkedList<>();
         for (Document now : value) {
-            ans.addAll(filter.entrySet().stream().filter(item ->
-                    now.containsKey(item.getKey()) && now.get(item.getKey()).equals(item.getValue())).map(item -> now)
-                    .collect(Collectors.toList()));
+            boolean flag = true;
+            for (Map.Entry<String, Object> entry : filter.entrySet()) {
+                if (!now.containsKey(entry.getKey()) || !now.get(entry.getKey()).equals(entry.getValue())) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                ans.add(now);
+            }
         }
         return ans;
     }
@@ -40,15 +47,24 @@ public class VirtualCollection {
 
     public void deleteOne(Document filter) {
         List<Document> ans = find(filter);
-        ans.forEach(value::remove);
+        for (Document now : ans) {
+            System.out.println("+"+now.toJson());
+        }
+        for (Document now : value) {
+            System.out.println("-"+now.toJson());
+        }
+        for (Document now : ans) {
+            System.out.println(value.contains(now));
+        }
     }
 
     public void updateOne(Document filter, Document update) {
         List<Document> ans = find(filter);
         if (ans.size() == 0) return;
         update = (Document) update.get("$set");
-        update.put("_id", ans.get(0).get("_id"));
-        ans.get(0).clear();
-        ans.get(0).putAll(update);
+        Document document = ans.get(0);
+        for (Map.Entry<String, Object> entry : update.entrySet()) {
+            document.put(entry.getKey(), entry.getValue());
+        }
     }
 }

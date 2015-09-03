@@ -27,6 +27,8 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
+        System.out.println("tear down");
+        checkDocumentNum();
     }
 
     @Test
@@ -59,6 +61,7 @@ public class BlogManagerTest {
             if (data.object.get("_id") == null) {
                 fail();
             }
+
             blogManagerNoSend.addReply("test user", "pass", data.object.get("_id").toString(), "reply");
 
             while (counter.get() != 0) {
@@ -71,6 +74,12 @@ public class BlogManagerTest {
         assertEquals(1, listData.size());
         DBClient.DBData data = listData.get(0);
         assertEquals(10, ((BsonArray) data.object.get("reply")).size());
+    }
+
+    private void checkDocumentNum() {
+        BlogCollection collection = new BlogCollection();
+        List<DBClient.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        System.out.println(listData.size());
     }
 
     @Test

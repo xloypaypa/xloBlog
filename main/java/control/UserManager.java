@@ -6,6 +6,8 @@ import model.event.Event;
 import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
+import java.util.List;
+
 /**
  * Created by xlo on 2015/8/21.
  * it's the user access manager
@@ -65,7 +67,8 @@ public class UserManager extends Manager {
                 userCollection.removeUser(username);
 
                 BlogCollection blogCollection = new BlogCollection();
-                for (DBClient.DBData now : blogCollection.findDocumentListData(new Document().append("author", username))) {
+                List<DBClient.DBData> listData = blogCollection.findDocumentListData(new Document().append("author", username));
+                for (DBClient.DBData now : listData) {
                     blogCollection.removeDocument(now.object.get("_id").toString());
                 }
 
