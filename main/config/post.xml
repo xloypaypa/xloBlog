@@ -9,7 +9,7 @@
     <solver name="get document list by author" url="/getDocumentListByAuthor">net.post.blog.GetDocumentListOfAuthorReader</solver>
     <solver name="get document list by type" url="/getDocumentListByType">net.post.blog.GetDocumentListOfTypeReader</solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType">net.post.blog.GetDocumentListOfAuthorAndTypeReader</solver>
-    <solver name="add reader" url="/add document reader">net.post.blog.AddReaderReader</solver>
+    <solver name="add reader" url="/addDocumentReader">net.post.blog.AddReaderReader</solver>
 
     <solver name="add reply" url="/reply">net.post.blog.AddReplyReader</solver>
     <solver name="get message list" url="/getMessageList">net.post.message.GetMessageListReader</solver>

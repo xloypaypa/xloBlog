@@ -171,7 +171,11 @@ public class BlogManager extends Manager {
             object.put("title", now.object.get("title"));
             object.put("author", now.object.get("author"));
             object.put("time", now.object.get("time"));
-            object.put("preview", now.object.getString("body").substring(0, 100));
+            String body = now.object.getString("body");
+            if (body.length()>100) {
+                body = body.substring(0, 100);
+            }
+            object.put("preview", body);
             array.add(object);
         }
         event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
