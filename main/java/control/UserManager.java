@@ -59,14 +59,14 @@ public class UserManager extends Manager {
         Event event = new Event() {
             @Override
             public boolean run() {
-                if (accessConfig.isAccept(username, password, this)) return false;
+                if (!accessConfig.isAccept(username, password, this)) return false;
 
                 UserCollection userCollection = new UserCollection();
                 userCollection.removeUser(username);
 
                 BlogCollection blogCollection = new BlogCollection();
                 for (DBClient.DBData now : blogCollection.findDocumentListData(new Document().append("author", username))) {
-                    blogCollection.removeDocument(now.object.getString("_id"));
+                    blogCollection.removeDocument(now.object.get("_id").toString());
                 }
 
                 MarkUserCollection markUserCollection = new MarkUserCollection();

@@ -4,7 +4,6 @@ import model.db.BlogCollection;
 import model.db.DBClient;
 import org.bson.BsonArray;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Test;
 import testTool.Counter;
@@ -68,7 +67,9 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+        List<DBClient.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        assertEquals(1, listData.size());
+        DBClient.DBData data = listData.get(0);
         assertEquals(10, ((BsonArray) data.object.get("reply")).size());
     }
 
@@ -81,7 +82,7 @@ public class BlogManagerTest {
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
             DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-            blogManagerNoSend.addReader(data.object.getString("_id"));
+            blogManagerNoSend.addReader(data.object.get("_id").toString());
 
             while (counter.get() != 0) {
                 Thread.sleep(500);

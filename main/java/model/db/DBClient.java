@@ -71,7 +71,11 @@ public abstract class DBClient {
 
         this.collection = getDatabase(dbName).getCollection(collectionName);
         if (!usingDB.containsKey(Thread.currentThread())) {
-            usingDB.put(Thread.currentThread(), new HashSet<>());
+            synchronized (DBClient.class) {
+                if (!usingDB.containsKey(Thread.currentThread())) {
+                    usingDB.put(Thread.currentThread(), new HashSet<>());
+                }
+            }
         }
         usingDB.get(Thread.currentThread()).add(this);
     }
@@ -135,7 +139,7 @@ public abstract class DBClient {
 
     protected DBData addDocumentToUsing(Document document) {
         DBData ans = new DBData();
-        ans.object = document;
+        ans.object = new Document(document);
         ans.past = new Document(document);
         ans.id = (ObjectId) document.get("_id");
         ans.object.remove("_id");
@@ -145,7 +149,7 @@ public abstract class DBClient {
 
     protected DBData getDocumentNotUsing(Document document) {
         DBData ans = new DBData();
-        ans.object = document;
+        ans.object = new Document(document);
         ans.past = new Document(document);
         ans.id = (ObjectId) document.get("_id");
         return ans;

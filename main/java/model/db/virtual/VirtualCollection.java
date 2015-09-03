@@ -46,8 +46,9 @@ public class VirtualCollection {
     public void updateOne(Document filter, Document update) {
         List<Document> ans = find(filter);
         if (ans.size() == 0) return;
-        value.remove(ans.get(0));
+        update = (Document) update.get("$set");
         update.put("_id", ans.get(0).get("_id"));
-        value.add(update);
+        ans.get(0).clear();
+        ans.get(0).putAll(update);
     }
 }
