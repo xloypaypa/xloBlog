@@ -12,7 +12,12 @@ $(function(){
                     XML.setRequestHeader('password',$('input[name=password]').val());
                 },
                 success:function(response){
-                    console.log(response);
+                    if(response.return=200){
+                        alert('ç™»å½•æˆåŠŸ');
+                        location.href='index.html';
+                    }else{
+                        alert('ç³»ç»Ÿå‡ºé”™ï¼š'+response.return);
+                    }
                 }
             });
         }
@@ -20,15 +25,15 @@ $(function(){
 
     function check(){
         if(!$('input[name=username]').val()||!$('input[name=password]').val()){
-            alert('²»µÃÎª¿Õ');
+            alert('ä¸å¾—ä¸ºç©º');
             return false;
         }
         if(!/^[\w]*$/.test($('input[name=username]').val())){
-            alert('ÓÃ»§Ãû¸ñÊ½²»ÕıÈ·');
+            alert('ç”¨æˆ·åæ ¼å¼ä¸æ­£ç¡®');
             return false;
         }
         if(!/^[\w]*$/.test($('input[name=password]').val())){
-            alert('ÃÜÂë¸ñÊ½²»ÕıÈ·');
+            alert('å¯†ç æ ¼å¼ä¸æ­£ç¡®');
             return false;
         }
         return true;

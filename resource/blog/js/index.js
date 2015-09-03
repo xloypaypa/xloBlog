@@ -1,9 +1,12 @@
 $(function(){
+    console.log(window.username);
     var data={
         author:window.username
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
-        //for(var i=0;i<response.length;i++){
+        console.log(response.length);
+        for(var i=0;i<response.length;i++){
+            $('.main').prev("<div class='article'>"+$('#article').html()+"</div>");
             console.log(response[0].id);
             var data={
                 id:response[0].id
@@ -14,6 +17,6 @@ $(function(){
                 $('.content').html(response.body);
                 $('.date').html(response.time);
             });
-        //}
+        }
     });
 });
