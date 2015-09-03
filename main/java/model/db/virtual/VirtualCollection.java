@@ -3,7 +3,10 @@ package model.db.virtual;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -11,19 +14,20 @@ import java.util.stream.Collectors;
  * it's the virtual collection
  */
 public class VirtualCollection {
-    protected Set<Document> value = new HashSet<>();
+    protected Map<String, Document> value = new HashMap<>();
 
     public long count(Document filter) {
         return find(filter).size();
     }
 
     public List<Document> find() {
-        return value.stream().collect(Collectors.toCollection(LinkedList::new));
+        return value.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toCollection(LinkedList::new));
     }
 
     public List<Document> find(Document filter) {
         List<Document> ans = new LinkedList<>();
-        for (Document now : value) {
+        for (Map.Entry<String, Document> nowEntry : value.entrySet()) {
+            Document now = nowEntry.getValue();
             boolean flag = true;
             for (Map.Entry<String, Object> entry : filter.entrySet()) {
                 if (!now.containsKey(entry.getKey()) || !now.get(entry.getKey()).equals(entry.getValue())) {
@@ -42,20 +46,13 @@ public class VirtualCollection {
         if (!t.containsKey("_id")) {
             t.put("_id", new ObjectId());
         }
-        this.value.add(t);
+        this.value.put(t.getObjectId("_id").toString(), t);
     }
 
     public void deleteOne(Document filter) {
         List<Document> ans = find(filter);
-        for (Document now : ans) {
-            System.out.println("+"+now.toJson());
-        }
-        for (Document now : value) {
-            System.out.println("-"+now.toJson());
-        }
-        for (Document now : ans) {
-            System.out.println(value.contains(now));
-        }
+        if (ans.size() == 0) return;
+        this.value.remove(ans.get(0).getObjectId("_id").toString());
     }
 
     public void updateOne(Document filter, Document update) {

@@ -27,8 +27,6 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
-        System.out.println("tear down");
-        checkDocumentNum();
     }
 
     @Test
@@ -47,6 +45,7 @@ public class BlogManagerTest {
         BlogCollection collection = new BlogCollection();
         List<DBClient.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, data.size());
+        collection.submit();
     }
 
     @Test
@@ -74,12 +73,7 @@ public class BlogManagerTest {
         assertEquals(1, listData.size());
         DBClient.DBData data = listData.get(0);
         assertEquals(10, ((BsonArray) data.object.get("reply")).size());
-    }
-
-    private void checkDocumentNum() {
-        BlogCollection collection = new BlogCollection();
-        List<DBClient.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
-        System.out.println(listData.size());
+        collection.submit();
     }
 
     @Test
@@ -91,6 +85,7 @@ public class BlogManagerTest {
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
             DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+            collection.submit();
             blogManagerNoSend.addReader(data.object.get("_id").toString());
 
             while (counter.get() != 0) {
@@ -101,5 +96,6 @@ public class BlogManagerTest {
         BlogCollection collection = new BlogCollection();
         DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
         assertEquals(10, data.object.getInteger("reader", 0));
+        collection.submit();
     }
 }

@@ -18,7 +18,7 @@ import java.util.*;
  */
 public abstract class DBClient {
     protected static MongoClient mongoClient;
-    protected volatile static Map<Thread, Set<DBClient>> usingDB;
+    protected volatile static Map<Thread, List<DBClient>> usingDB;
     private volatile static Map<String, VirtualDB> databaseMap;
     private volatile static boolean needInit = true;
     protected static DBConfig dbConfig
@@ -73,7 +73,7 @@ public abstract class DBClient {
         if (!usingDB.containsKey(Thread.currentThread())) {
             synchronized (DBClient.class) {
                 if (!usingDB.containsKey(Thread.currentThread())) {
-                    usingDB.put(Thread.currentThread(), new HashSet<>());
+                    usingDB.put(Thread.currentThread(), new LinkedList<>());
                 }
             }
         }
