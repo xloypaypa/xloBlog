@@ -48,7 +48,6 @@ function ajaxRequest(url,data,callback){
         dataType:'json',
         data:JSON.stringify(data),
         success:function(response){
-            console.log(response.return);
             console.log(arguments.length);
             callback(response);
         }
@@ -62,3 +61,16 @@ function getQueryString(name){
     if(!str) return unescape(str[2]);
     return null;
 }
+
+ /*导航条搜索*/
+ $(function () {
+     $('.search button').click(function(){
+         var searchName=$('.search input').val();
+         console.log(searchName);
+         ajaxRequest('/getDocumentListByAuthor',data,function(response){
+
+         });
+
+     });
+
+ });
