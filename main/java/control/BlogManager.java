@@ -164,7 +164,7 @@ public class BlogManager extends Manager {
         JSONArray array = new JSONArray();
         for (DBClient.DBData now : list) {
             JSONObject object = new JSONObject();
-            object.put("id", now.object.get("_id"));
+            object.put("id", now.object.get("_id").toString());
             object.put("title", now.object.get("title"));
             object.put("author", now.object.get("author"));
             object.put("time", now.object.get("time"));
