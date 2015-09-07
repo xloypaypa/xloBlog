@@ -3,17 +3,20 @@ $(function(){
         author:window.username
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
-        //for(var i=0;i<response.length;i++){
-            console.log(response[0].id);
-            var data={
-                id:response[0].id
-            };
-            ajaxRequest('/getDocument',data,function(response){
-                $('.article-content h2 a').html(response.title);
-                $('.author').html(response.author);
-                $('.content').html(response.body);
-                $('.date').html(response.time);
-            });
-        //}
+        $('.article-list').empty();
+        for(var i=0;i<response.length;i++){
+            $('.article-list').append("<div class='article'>"+$('#article').html()+"</div>");
+            var articleNo=$('.article').eq(i);
+            var date=new Date(response[i].time.time);
+            var year=date.getFullYear();
+            var month=date.getMonth()+1;
+            var day=date.getDate();
+            articleNo.find('h2 a').attr('href','article.html?id='+response[i].id).html(response[i].title);
+            articleNo.find('.readMore').attr('href','article.html?id='+response[i].id);
+            articleNo.find('.author').html(response[i].author);
+            articleNo.find('.article-body').html(response[i].preview);
+            articleNo.find('.date').html(year+'-'+month+'-'+day);
+        }
     });
+
 });

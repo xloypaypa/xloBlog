@@ -9,6 +9,10 @@ background:#eee;
     font-size:32px;
     padding:10px 0;
 }
+.article-content h3{
+    font-weight:bold;
+    border-bottom:1px solid #ddd;
+}
 /*********оЮ╧ьндуб**************/
 .relatedPosts{
     margin-top:30px;
@@ -29,8 +33,14 @@ background:#eee;
     border-bottom:1px solid #ddd;
 }
 .comments .comments-list{
-    border:1px solid #ddd;
     border-radius:3px;
-    margin:50px 0;
-    padding:20px;
+    margin:20px 0;
+}
+.comments-list .top{
+    padding-bottom:10px;
+    color:#999;
+}
+
+.comments .myComment textarea{
+    width:100%;
 }

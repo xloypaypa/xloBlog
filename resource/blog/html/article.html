@@ -13,7 +13,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid" >
         <a href="#" class="navbar-brand">blog</a>
-        <form class="navbar-form navbar-left">
+        <form class="navbar-form navbar-left search">
             <div class="input-group input-group-lg">
                 <input type="text" />
             </div>
@@ -51,7 +51,7 @@
         <div class="article-content">
             <h2><a href="#">近期微博吐槽言论存档，涉及“性能优化”、C++陋习等</a></h2>
             <p>作者:<span class="author"></span></p>
-            <p class="content">写C++程序的几个陋习：class 名以大写 C 开头，例如 CDate；成员变量以 m_ 开头；变量采用匈牙利命名法；不知道何时禁用 copy-ctor/assign operator。有些人常常把“性能”挂在嘴边，而且其以“提高性能”为理由的“优化措施”往往不到点子上，只增加了复杂性和维护难度，降低了代码质量。这属于决策点找偏了。...
+            <p class="article-body">写C++程序的几个陋习：class 名以大写 C 开头，例如 CDate；成员变量以 m_ 开头；变量采用匈牙利命名法；不知道何时禁用 copy-ctor/assign operator。有些人常常把“性能”挂在嘴边，而且其以“提高性能”为理由的“优化措施”往往不到点子上，只增加了复杂性和维护难度，降低了代码质量。这属于决策点找偏了。...
             </p>
             <div class="relatedPosts">
                 <h3>Related Posts:</h3>
@@ -65,12 +65,17 @@
                 </ol>
             </div>
             <div class="comments">
-                <div class="comments-header">
-                    <span><i class="icon-comment"></i><a>发表评论</a></span>
-                    <span style="text-align:right;">评论（0）</span>
-                </div>
-                <div class="comments-list">
-                    暂无评论
+                <h3 class="comments-header">
+                    <span>查看评论</span>
+                    <span style="float:right;">评论（<span class="commentNum"></span>）</span>
+                </h3>
+                <ul class="comments-list list-group">
+
+                </ul>
+                <div class="myComment">
+                    <h3>发表评论</h3>
+                    <textarea></textarea>
+                    <input type="button" class="submit btn" value="提交"/>
                 </div>
             </div>
         </div>
@@ -79,7 +84,7 @@
         <div class="myInfo">
             <h2>个人资料</h2>
             <div class="myInfo-content">
-                <img src="../images/header.jpg">
+                <img src="../images/headImg.jpg">
                 <p class="nickName">昵称</p>
                 <div class="btn-group">
                     <div class="buttons">
@@ -123,6 +128,17 @@
         </div>
     </div>
 </div>
+
+<li class="list-group-item" id="comment-list" style="display:none;">
+    <div class="top">
+        <span class="observer">评论者：<a href="#">comment</a></span>
+        <span class="comment-date" style="float:right;">2015-9-1</span>
+    </div>
+    <div class="comment-content">
+        <p></p>
+    </div>
+</li>
+
 <footer>
     <ul id="copyright">
         <li>版权所有 &copy;&nbsp; <a href="http://ifeve.com/">并发编程网 &#8211; ifeve.com</a></li>

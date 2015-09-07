@@ -2,8 +2,10 @@ $(function(){
     checkNull($('#login'));
     $('.submit').click(function(){
         if(check()){
+            console.log(1);
             window.localStorage.setItem('username',$('input[name=username]').val());
             window.localStorage.setItem('password',$('input[name=password]').val());
+            console.log(1);
             $.ajax({
                 url:'/login',
                 type:'POST',
@@ -12,6 +14,16 @@ $(function(){
                     XML.setRequestHeader('password',$('input[name=password]').val());
                 },
                 success:function(response){
+                    console.log(1);
+                    if(response.return=200){
+                        console.log(1);
+                        alert('ç™»å½•æˆåŠŸ');
+                        location.href='index.html';
+                    }else{
+                        alert('ç³»ç»Ÿå‡ºé”™ï¼š'+response.return);
+                    }
+                },
+                error:function(response){
                     console.log(response);
                 }
             });
@@ -20,15 +32,15 @@ $(function(){
 
     function check(){
         if(!$('input[name=username]').val()||!$('input[name=password]').val()){
-            alert('²»µÃÎª¿Õ');
+            alert('ä¸å¾—ä¸ºç©º');
             return false;
         }
-        if(!/^[\w]*$/.test($('input[name=username]').val())){
-            alert('ÓÃ»§Ãû¸ñÊ½²»ÕıÈ·');
+        if(!/^[\w\u4e00-\u9fa5]*$/.test($('input[name=username]').val())){
+            alert('ç”¨æˆ·åæ ¼å¼ä¸æ­£ç¡®');
             return false;
         }
         if(!/^[\w]*$/.test($('input[name=password]').val())){
-            alert('ÃÜÂë¸ñÊ½²»ÕıÈ·');
+            alert('å¯†ç æ ¼å¼ä¸æ­£ç¡®');
             return false;
         }
         return true;
