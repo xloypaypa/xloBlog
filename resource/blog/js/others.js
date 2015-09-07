@@ -1,6 +1,6 @@
 $(function(){
     var data={
-        author:window.username
+        author:getQueryString('name')
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
         $('.article-list').empty();
@@ -18,5 +18,4 @@ $(function(){
             articleNo.find('.date').html(year+'-'+month+'-'+day);
         }
     });
-
 });

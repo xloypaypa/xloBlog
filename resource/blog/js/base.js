@@ -36,6 +36,9 @@ function ajaxHeader(url,data,callback){
             console.log(response.return);
             console.log(arguments.length);
             callback(response);
+        },
+        error:function(response){
+            console.log(response);
         }
     });
 }
@@ -50,6 +53,9 @@ function ajaxRequest(url,data,callback){
         success:function(response){
             console.log(arguments.length);
             callback(response);
+        },
+        error:function(response){
+            console.log(response);
         }
     });
 }
@@ -58,19 +64,14 @@ function ajaxRequest(url,data,callback){
 function getQueryString(name){
     var reg=new RegExp("(^|&)"+name+"=([^&]*)($|&)","i");
     var str=document.location.search.substr(1).match(reg);
-    if(!str) return unescape(str[2]);
-    return null;
+    return str[2];
 }
 
  /*导航条搜索*/
  $(function () {
      $('.search button').click(function(){
          var searchName=$('.search input').val();
-         console.log(searchName);
-         ajaxRequest('/getDocumentListByAuthor',data,function(response){
-
-         });
-
+         location.href='others.html?name='+searchName;
      });
 
  });

@@ -9,7 +9,7 @@ $(function(){
             if(response.return==200){
                 location.href='index.html';
             }else{
-                alert('ÏµÍ³³ö´í£º'+response.return);
+                alert('ç³»ç»Ÿå‡ºé”™ï¼š'+response.return);
             }
         });
     });
