@@ -66,6 +66,14 @@ function getQueryString(name){
     var str=document.location.search.substr(1).match(reg);
     return str[2];
 }
+ //转换时间
+ function transformDate(time){
+     var date=new Date(time);
+     var year=date.getFullYear();
+     var month=date.getMonth()+1;
+     var day=date.getDate();
+     return year+'-'+month+'-'+day;
+ }
 
  /*导航条搜索*/
  $(function () {
