@@ -33,7 +33,7 @@ public class AllDownloadServerSolver extends NormalServerSolver implements ShowR
     @Override
     protected boolean checkRequestExist() {
         try {
-            path = URLDecoder.decode(this.requestSolver.getRequestHeadReader().getUrl().getFile(), "UTF-8");
+            path = URLDecoder.decode(this.requestSolver.getRequestHeadReader().getUrl().getPath(), "UTF-8");
             this.file = new File("." + path);
             if (!this.file.exists() || !this.file.isFile()) {
                 ShowResourcePage.send404(this.file.getName().endsWith("html"), this.requestSolver);

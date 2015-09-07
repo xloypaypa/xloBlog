@@ -25,7 +25,7 @@ public class PostServerSolver extends DynamicServerSolver {
             chooserMap.put(postInfo.getName(), new AimSolverChooser() {
                 @Override
                 public boolean isThisSolver(RequestSolver requestSolver) {
-                    return requestSolver.getRequestHeadReader().getUrl().getFile().equals(postInfo.getUrl());
+                    return requestSolver.getRequestHeadReader().getUrl().getPath().equals(postInfo.getUrl());
                 }
 
                 @Override
