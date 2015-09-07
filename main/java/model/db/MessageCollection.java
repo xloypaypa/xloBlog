@@ -17,7 +17,6 @@ public class MessageCollection extends DBClient {
     public void addMessage(String username, String author, String message, Date date) {
         lockCollection();
         Document document = new Document();
-        document.put("_id", author + "." + username + "." + date.toString());
         document.put("username", username);
         document.put("author", author);
         document.put("time", date);

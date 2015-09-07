@@ -74,6 +74,9 @@ public class BlogManager extends Manager {
                 replyMap.put("reply", new BsonString(reply));
                 list.add(replyMap);
                 document.object.put("reply", list);
+
+                MessageCollection messageCollection = new MessageCollection();
+                messageCollection.addMessage(document.object.getString("author"), username, "reply: " + reply, new Date());
                 return true;
             }
         };
