@@ -37,7 +37,7 @@ public class ShowItemNormalServerSolver extends NormalServerSolver implements Sh
     @Override
     protected boolean checkRequestExist() {
         try {
-            path = URLDecoder.decode(this.requestSolver.getRequestHeadReader().getUrl().getFile(), "UTF-8");
+            path = URLDecoder.decode(this.requestSolver.getRequestHeadReader().getUrl().getPath(), "UTF-8");
             this.file = new File("."+ path);
             if (!this.file.exists() || !this.file.isFile()) {
                 if (ResourceManager.getResourceManager().haveResource(this.path)) {
