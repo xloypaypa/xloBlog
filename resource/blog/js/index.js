@@ -2,8 +2,10 @@ $(function(){
     if(getQueryString('name')){
         var author=getQueryString('name');
         $('.btn-others').hide();
-    }else{
+    }else if(window.username){
         author=window.username;
+    }else {
+        alert('非法登入');
     }
     console.log(author);
     var data={

@@ -83,5 +83,17 @@ function getQueryString(name){
          console.log(searchName);
          location.href='index.html?name='+searchName;
      });
-
+     $('.logout').click(function(){
+         localStorage.clear();
+         location.href='login.html';
+     });
+     if(window.username){
+         $('.login').hide();
+         $('.reg').hide();
+         $('.menu').show();
+     }else{
+         $('.login').show();
+         $('.reg').show();
+         $('.menu').hide();
+     }
  });
