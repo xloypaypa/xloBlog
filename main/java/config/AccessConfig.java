@@ -1,7 +1,7 @@
 package config;
 
 import javafx.util.Pair;
-import model.db.DBClient;
+import model.db.DBCollection;
 import model.db.UserCollection;
 import model.event.Event;
 import org.dom4j.Element;
@@ -59,7 +59,7 @@ public class AccessConfig implements ConfigInterface {
         return checkClassAndMethod(event.getClassName(), event.getMethodName());
     }
 
-    public boolean isAccept(DBClient.DBData data, Event event) {
+    public boolean isAccept(DBCollection.DBData data, Event event) {
         Set<Pair<String, Integer>> need = getAccessNeed(event);
         if (need == null) return true;
         for (Pair<String, Integer> now : need) {
@@ -77,7 +77,7 @@ public class AccessConfig implements ConfigInterface {
     public boolean isAccept(String username, String password, Event event) {
         if (username == null || password == null) return false;
         UserCollection userCollection = new UserCollection();
-        DBClient.DBData data = userCollection.getUserData(username);
+        DBCollection.DBData data = userCollection.getUserData(username);
         return data != null && data.object.get("password").equals(password) && isAccept(data, event);
     }
 

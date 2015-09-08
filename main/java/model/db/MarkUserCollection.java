@@ -12,7 +12,7 @@ import java.util.List;
  * Created by xlo on 2015/9/2.
  * it's the collection of user mark another user
  */
-public class MarkUserCollection extends DBClient {
+public class MarkUserCollection extends DBCollection {
 
     public void markUser(String username, String aimUser) {
         lockCollection();

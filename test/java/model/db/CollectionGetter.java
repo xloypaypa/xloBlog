@@ -8,13 +8,13 @@ import org.bson.Document;
  * it's the collection getter
  */
 public class CollectionGetter {
-    protected DBClient dbClient;
+    protected DBCollection dbCollection;
 
-    public CollectionGetter(DBClient dbClient) {
-        this.dbClient = dbClient;
+    public CollectionGetter(DBCollection dbCollection) {
+        this.dbCollection = dbCollection;
     }
 
     public MongoCollection<Document> getCollection() {
-        return this.dbClient.collection;
+        return this.dbCollection.collection;
     }
 }

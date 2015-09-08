@@ -2,6 +2,7 @@ package control;
 
 import model.db.CollectionGetter;
 import model.db.DBClient;
+import model.db.DBCollection;
 import model.db.UserCollection;
 import model.lock.TestClass;
 import org.bson.Document;
@@ -56,7 +57,7 @@ public class UserManagerTest extends TestClass {
 
     @Test
     public void testRegister() throws InterruptedException {
-        DBClient.init();
+        DBCollection.init();
 
         int n = 10;
         Counter counter = new Counter(n);

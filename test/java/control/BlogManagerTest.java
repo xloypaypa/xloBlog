@@ -1,7 +1,7 @@
 package control;
 
 import model.db.BlogCollection;
-import model.db.DBClient;
+import model.db.DBCollection;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class BlogManagerTest {
         assertEquals(1, counter.getSuccess());
 
         BlogCollection collection = new BlogCollection();
-        List<DBClient.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, data.size());
     }
 
@@ -54,7 +54,7 @@ public class BlogManagerTest {
             Counter counter = new Counter(1);
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
-            DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+            DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
             if (data.object.get("_id") == null) {
                 fail();
             }
@@ -66,9 +66,9 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        List<DBClient.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
-        DBClient.DBData data = listData.get(0);
+        DBCollection.DBData data = listData.get(0);
         assertEquals(10, ((List) data.object.get("reply")).size());
     }
 
@@ -80,7 +80,7 @@ public class BlogManagerTest {
             Counter counter = new Counter(1);
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
-            DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+            DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
             blogManagerNoSend.addReader(data.object.get("_id").toString());
 
             while (counter.get() != 0) {
@@ -89,7 +89,7 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+        DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
         assertEquals(10, data.object.getInteger("reader", 0));
     }
 }

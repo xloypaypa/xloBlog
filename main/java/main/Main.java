@@ -3,6 +3,7 @@ package main;
 import log.LogManager;
 import log.NormalLog;
 import model.db.DBClient;
+import model.db.DBCollection;
 import net.CommandServerSolver;
 import server.Server;
 import tool.connection.event.ConnectionEvent;
@@ -18,7 +19,7 @@ import java.io.File;
  */
 public class Main {
     public static void main(String[] args) {
-        DBClient.init();
+        DBCollection.init();
 
         NormalLog normalLog = new NormalLog();
         File file = new File("./log.txt");
