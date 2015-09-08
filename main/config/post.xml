@@ -10,10 +10,13 @@
     <solver name="get document list by type" url="/getDocumentListByType">net.post.blog.GetDocumentListOfTypeReader</solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType">net.post.blog.GetDocumentListOfAuthorAndTypeReader</solver>
     <solver name="add reader" url="/addDocumentReader">net.post.blog.AddReaderReader</solver>
-
     <solver name="add reply" url="/reply">net.post.blog.AddReplyReader</solver>
+
     <solver name="get message list" url="/getMessageList">net.post.message.GetMessageListReader</solver>
     <solver name="get message" url="/getMessage">net.post.message.GetMessageReader</solver>
     <solver name="read message" url="/readMessage">net.post.message.ReadMessageReader</solver>
     <solver name="send message" url="/sendMessage">net.post.message.SendMessageReader</solver>
+
+    <solver name="add image" url="/addImage">net.post.image.AddImageReader</solver>
+    <solver name="get image" url="/getImage">net.post.image.GetImageReader</solver>
 </post>
