@@ -2,21 +2,17 @@ $(function(){
     checkNull($('#login'));
     $('.submit').click(function(){
         if(check()){
-            console.log(1);
-            window.localStorage.setItem('username',$('input[name=username]').val());
-            window.localStorage.setItem('password',$('input[name=password]').val());
-            console.log(1);
+            window.localStorage.setItem('username',encodeURIComponent($('input[name=username]').val()));
+            window.localStorage.setItem('password',encodeURIComponent($('input[name=password]').val()));
             $.ajax({
                 url:'/login',
                 type:'POST',
                 beforeSend:function(XML){
-                    XML.setRequestHeader('username',$('input[name=username]').val());
-                    XML.setRequestHeader('password',$('input[name=password]').val());
+                    XML.setRequestHeader('username',encodeURIComponent($('input[name=username]').val()));
+                    XML.setRequestHeader('password',encodeURIComponent($('input[name=password]').val()));
                 },
                 success:function(response){
-                    console.log(1);
                     if(response.return=200){
-                        console.log(1);
                         alert('登录成功');
                         location.href='index.html';
                     }else{

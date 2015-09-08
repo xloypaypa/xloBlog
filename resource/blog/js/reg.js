@@ -2,8 +2,8 @@ $(function(){
     checkNull($('#reg'));
     $('.submit').click(function(){
         if(check()){
-            var username=$('input[name=username]').val();
-            var password=$('input[name=password]').val();
+            var username=encodeURIComponent($('input[name=username]').val());
+            var password=encodeURIComponent($('input[name=password]').val());
             var data={
                 "username":username,
                 "password":password
