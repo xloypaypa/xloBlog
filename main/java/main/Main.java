@@ -2,7 +2,6 @@ package main;
 
 import log.LogManager;
 import log.NormalLog;
-import model.db.DBClient;
 import model.db.DBCollection;
 import net.CommandServerSolver;
 import server.Server;

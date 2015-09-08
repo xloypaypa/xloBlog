@@ -1,7 +1,6 @@
 package config;
 
 import model.db.DBClient;
-import model.db.DBCollection;
 import org.dom4j.Element;
 
 import java.util.*;

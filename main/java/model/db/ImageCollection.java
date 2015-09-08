@@ -5,6 +5,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import org.bson.types.ObjectId;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -25,11 +26,21 @@ public class ImageCollection extends OtherDB {
         return filename;
     }
 
-    public byte[] getImage(String id, OutputStream outputStream) throws Exception {
+    public void getImage(String id, OutputStream outputStream) throws IOException {
+        lockCollection();
         GridFS gridFS = getGridFS();
         GridFSDBFile gridFSDBFile = gridFS.findOne(id);
         gridFSDBFile.writeTo(outputStream);
-        return null;
+        unlockCollection();
+    }
+
+    public long getLength(String id) {
+        lockCollection();
+        GridFS gridFS = getGridFS();
+        GridFSDBFile gridFSDBFile = gridFS.findOne(id);
+        long ans = gridFSDBFile.getLength();
+        unlockCollection();
+        return ans;
     }
 
     public void removeImage(String id) {
