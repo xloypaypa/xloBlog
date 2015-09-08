@@ -1,6 +1,13 @@
 $(function(){
+    if(getQueryString('name')){
+        var author=getQueryString('name');
+        $('.btn-others').hide();
+    }else{
+        author=window.username;
+    }
+    console.log(author);
     var data={
-        author:window.username
+        author:author
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
         $('.article-list').empty();
