@@ -88,40 +88,6 @@ public class UserManager extends Manager {
         event.submit();
     }
 
-    public void markUser(String username, String password, String aimUser) {
-        Event event = new Event() {
-            @Override
-            public boolean run() {
-                if (aimUser == null) return false;
-                if (!accessConfig.isAccept(username, password, this)) return false;
-
-                MarkUserCollection markUserCollection = new MarkUserCollection();
-                if (markUserCollection.getMarkData(username, aimUser) != null) return false;
-                markUserCollection.markUser(username, aimUser);
-                return true;
-            }
-        };
-        addSendMessage(event);
-        event.submit();
-    }
-
-    public void unMarkUser(String username, String password, String aimUser) {
-        Event event = new Event() {
-            @Override
-            public boolean run() {
-                if (aimUser == null) return false;
-                if (!accessConfig.isAccept(username, password, this)) return false;
-
-                MarkUserCollection markUserCollection = new MarkUserCollection();
-                if (markUserCollection.getMarkData(username, aimUser) == null) return false;
-                markUserCollection.removeMark(username, aimUser);
-                return true;
-            }
-        };
-        addSendMessage(event);
-        event.submit();
-    }
-
     public void acceptUserRegister(String username, String password, String aimUsername, String accessType, int access) {
         Event event = new Event() {
             @Override

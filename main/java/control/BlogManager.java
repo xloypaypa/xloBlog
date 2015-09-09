@@ -171,6 +171,7 @@ public class BlogManager extends Manager {
             object.put("title", now.object.get("title"));
             object.put("author", now.object.get("author"));
             object.put("time", now.object.get("time"));
+            object.put("reader", now.object.getInteger("reader", 0));
             String body = now.object.getString("body");
             if (body.length()>100) {
                 body = body.substring(0, 100);

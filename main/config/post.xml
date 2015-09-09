@@ -1,8 +1,11 @@
 <post>
     <solver name="login" url="/login">net.post.user.LoginReader</solver>
     <solver name="register" url="/register">net.post.user.RegisterReader</solver>
-    <solver name="mark" url="/mark">net.post.user.MarkUserReader</solver>
-    <solver name="unMark" url="/unMark">net.post.user.UnMarkUserReader</solver>
+
+    <solver name="mark" url="/mark">net.post.mark.MarkUserReader</solver>
+    <solver name="unMark" url="/unMark">net.post.mark.UnMarkUserReader</solver>
+    <solver name="is marked" url="/isMarked">net.post.mark.IsMarkedReader</solver>
+    <solver name="get marked list" url="/getMarkedList">net.post.mark.GetMarkListReader</solver>
 
     <solver name="add document" url="/addDocument">net.post.blog.AddDocumentReader</solver>
     <solver name="get document" url="/getDocument">net.post.blog.GetDocumentReader</solver>
