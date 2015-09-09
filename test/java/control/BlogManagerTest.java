@@ -62,6 +62,15 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
+
+        for (int i = 0; i < 10; i++) {
+            counter = new Counter(1);
+            userManager = new UserManagerNoSend(counter);
+            userManager.removeUser("test user " + i, "pass");
+            while (counter.get() != 0) {
+                Thread.sleep(500);
+            }
+        }
     }
 
     @Test
@@ -130,8 +139,8 @@ public class BlogManagerTest {
         testAddDocument();
         int n = 20;
         Counter counter = new Counter(n);
-        for (int i =0;i<n;i++) {
-            new Thread(){
+        for (int i = 0; i < n; i++) {
+            new Thread() {
                 @Override
                 public void run() {
                     try {
@@ -168,14 +177,13 @@ public class BlogManagerTest {
     }
 
 
-
     @Test
     public void testAddReaderAgain() throws Exception {
         testAddDocument();
         int n = 20;
         Counter counter = new Counter(n);
-        for (int i =0;i<n;i++) {
-            new Thread(){
+        for (int i = 0; i < n; i++) {
+            new Thread() {
                 @Override
                 public void run() {
                     try {
