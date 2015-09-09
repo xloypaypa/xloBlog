@@ -47,11 +47,14 @@ public class ImageManager extends Manager {
             public boolean run() {
                 if (!accessConfig.isAccept(username, password, this)) return false;
                 ImageCollection imageCollection = new ImageCollection();
-                imageCollection.insertImage(type, body);
+                String filename = imageCollection.insertImage(type, body);
+                JSONObject object = new JSONObject();
+                object.put("path", filename);
+                this.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
                 return true;
             }
         };
-        addSendMessage(event);
+        addFailMessage(event);
         event.submit();
     }
 
