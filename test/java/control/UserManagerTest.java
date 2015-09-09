@@ -22,17 +22,17 @@ public class UserManagerTest extends TestClass {
         removeUser();
     }
 
-    public static void register() throws InterruptedException {
+    public static void register(String username) throws InterruptedException {
         Counter counter = new Counter(1);
-        register(counter);
+        register(counter, username);
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
     }
 
-    public static void register(Counter counter) {
+    public static void register(Counter counter, String username) {
         UserManagerNoSend userAccessManager = new UserManagerNoSend(counter);
-        userAccessManager.register("test user", "pass");
+        userAccessManager.register(username, "pass");
     }
 
     public static void login() throws InterruptedException {
@@ -92,7 +92,7 @@ public class UserManagerTest extends TestClass {
     @Test
     public void testLogin() throws InterruptedException {
         Counter counter = new Counter(2);
-        register(counter);
+        register(counter, "test user");
 
         while (counter.get() != 1) {
             Thread.sleep(500);
