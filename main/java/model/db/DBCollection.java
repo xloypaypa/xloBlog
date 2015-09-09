@@ -84,7 +84,7 @@ public abstract class DBCollection extends DBClient {
 
     protected DBData addDocumentToUsing(Document document) {
         DBData ans = new DBData();
-        ans.object = document;
+        ans.object = new Document(document);
         ans.past = new Document(document);
         ans.id = (ObjectId) document.get("_id");
         ans.object.remove("_id");
@@ -94,7 +94,7 @@ public abstract class DBCollection extends DBClient {
 
     protected DBData getDocumentNotUsing(Document document) {
         DBData ans = new DBData();
-        ans.object = document;
+        ans.object = new Document(document);
         ans.past = new Document(document);
         ans.id = (ObjectId) document.get("_id");
         return ans;
