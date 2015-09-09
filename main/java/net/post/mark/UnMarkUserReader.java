@@ -1,6 +1,6 @@
-package net.post.user;
+package net.post.mark;
 
-import control.UserManager;
+import control.MarkManager;
 import net.sf.json.JSONObject;
 import net.tool.LengthLimitReadServerSolver;
 
@@ -15,7 +15,7 @@ public class UnMarkUserReader extends LengthLimitReadServerSolver {
         String password = this.requestSolver.getRequestHeadReader().getMessage("Password");
         JSONObject jsonObject = JSONObject.fromObject(this.message);
         String aimUser = jsonObject.getString("aimUser");
-        UserManager userManager = new UserManager(requestSolver);
-        userManager.unMarkUser(username, password, aimUser);
+        MarkManager markManager = new MarkManager(requestSolver);
+        markManager.unMarkUser(username, password, aimUser);
     }
 }

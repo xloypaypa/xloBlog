@@ -1,7 +1,7 @@
 package control;
 
 import config.LengthLimitConfig;
-import model.db.DBClient;
+import model.db.DBCollection;
 import model.db.MessageCollection;
 import model.event.Event;
 import net.sf.json.JSONArray;
@@ -48,7 +48,7 @@ public class MessageManager extends Manager {
                 if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
-                DBClient.DBData data = messageCollection.getMessageData(id);
+                DBCollection.DBData data = messageCollection.getMessageData(id);
                 JSONObject object = JSONObject.fromObject(data.object.toJson());
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
                 return true;
@@ -65,7 +65,7 @@ public class MessageManager extends Manager {
                 if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
-                DBClient.DBData data = messageCollection.getMessage(id);
+                DBCollection.DBData data = messageCollection.getMessage(id);
                 data.object.put("read", true);
                 return true;
             }
@@ -81,7 +81,7 @@ public class MessageManager extends Manager {
                 if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
-                List<DBClient.DBData> dataList = messageCollection.findMessageData(new Document("username", username));
+                List<DBCollection.DBData> dataList = messageCollection.findMessageData(new Document("username", username));
                 JSONArray array = dataList.stream().map(data -> JSONObject.fromObject(data.object.toJson())).collect(Collectors.toCollection(JSONArray::new));
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
                 return true;
@@ -98,7 +98,7 @@ public class MessageManager extends Manager {
                 if (!accessConfig.isAccept(username, password, this)) return false;
 
                 MessageCollection messageCollection = new MessageCollection();
-                List<DBClient.DBData> dataList = messageCollection.findMessageData(new Document("username", aim));
+                List<DBCollection.DBData> dataList = messageCollection.findMessageData(new Document("username", aim));
                 JSONArray array = dataList.stream().map(data -> JSONObject.fromObject(data.object.toJson())).collect(Collectors.toCollection(JSONArray::new));
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, array));
                 return true;

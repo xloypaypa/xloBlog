@@ -12,12 +12,13 @@ import java.util.*;
 public class DBConfig implements ConfigInterface {
     protected String host = "127.0.0.1";
     protected int port = 27017;
-    protected Map<String, String> collections, dbOfCollectoin;
+    protected Map<String, String> collections, dbOfCollection, dbType;
     protected Set<String> dbs;
 
     protected DBConfig() {
         this.collections = new HashMap<>();
-        this.dbOfCollectoin = new HashMap<>();
+        this.dbOfCollection = new HashMap<>();
+        this.dbType = new HashMap<>();
         this.dbs = new HashSet<>();
     }
 
@@ -35,6 +36,7 @@ public class DBConfig implements ConfigInterface {
             else {
                 String dbName = element.attributeValue("name");
                 dbs.add(dbName);
+                dbType.put(dbName, element.attributeValue("type"));
                 for (Object collection : element.elements()) {
                     initCollection((Element) collection, dbName);
                 }
@@ -45,7 +47,7 @@ public class DBConfig implements ConfigInterface {
     private void initCollection(Element element, String dbName) {
         String collectionType = element.attributeValue("type");
         String collectionName = element.getText();
-        this.dbOfCollectoin.put(collectionName, dbName);
+        this.dbOfCollection.put(collectionName, dbName);
         this.collections.put(collectionType, collectionName);
     }
 
@@ -67,7 +69,11 @@ public class DBConfig implements ConfigInterface {
     }
 
     public String getDBofCollection(String collectionName) {
-        return this.dbOfCollectoin.get(collectionName);
+        return this.dbOfCollection.get(collectionName);
+    }
+
+    public String getDBType(String name) {
+        return this.dbType.get(name);
     }
 
     public Set<String> getDbs() {

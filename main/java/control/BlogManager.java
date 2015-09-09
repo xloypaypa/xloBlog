@@ -1,10 +1,7 @@
 package control;
 
 import config.LengthLimitConfig;
-import model.db.BlogCollection;
-import model.db.DBClient;
-import model.db.MarkUserCollection;
-import model.db.MessageCollection;
+import model.db.*;
 import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -39,7 +36,7 @@ public class BlogManager extends Manager {
 
                 MarkUserCollection markUserCollection = new MarkUserCollection();
                 MessageCollection messageCollection = new MessageCollection();
-                for (DBClient.DBData now : markUserCollection.find(new Document().append("to", username))) {
+                for (DBCollection.DBData now : markUserCollection.find(new Document().append("to", username))) {
                     messageCollection.addMessage(now.object.getString("to"), username, title, new Date());
                 }
                 return true;
@@ -61,7 +58,7 @@ public class BlogManager extends Manager {
                 if (!accessConfig.isAccept(username, password, this)) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
-                DBClient.DBData document = blogCollection.getDocument(documentID);
+                DBCollection.DBData document = blogCollection.getDocument(documentID);
                 BsonArray list;
                 if (document.object.containsKey("reply"))
                     list = new BsonArray((List<? extends BsonValue>) document.object.get("reply"));
@@ -95,7 +92,7 @@ public class BlogManager extends Manager {
                 if (id == null) return false;
 
                 BlogCollection blogCollection = new BlogCollection();
-                DBClient.DBData data = blogCollection.getDocumentData(id);
+                DBCollection.DBData data = blogCollection.getDocumentData(id);
                 if (data == null) return false;
                 object = JSONObject.fromObject(data.object.toJson());
                 sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
@@ -109,7 +106,7 @@ public class BlogManager extends Manager {
             @Override
             public boolean run() {
                 BlogCollection blogCollection = new BlogCollection();
-                DBClient.DBData data = blogCollection.getDocument(id);
+                DBCollection.DBData data = blogCollection.getDocument(id);
                 data.object.put("reader", data.object.getInteger("reader", 0) + 1);
                 return true;
             }
@@ -165,15 +162,16 @@ public class BlogManager extends Manager {
 
     protected void sendDocumentList(Event event, Document message) {
         BlogCollection blogCollection = new BlogCollection();
-        List<DBClient.DBData> list = blogCollection.findDocumentListData(message);
+        List<DBCollection.DBData> list = blogCollection.findDocumentListData(message);
 
         JSONArray array = new JSONArray();
-        for (DBClient.DBData now : list) {
+        for (DBCollection.DBData now : list) {
             JSONObject object = new JSONObject();
             object.put("id", now.object.get("_id").toString());
             object.put("title", now.object.get("title"));
             object.put("author", now.object.get("author"));
             object.put("time", now.object.get("time"));
+            object.put("reader", now.object.getInteger("reader", 0));
             String body = now.object.getString("body");
             if (body.length()>100) {
                 body = body.substring(0, 100);

@@ -1,6 +1,15 @@
 $(function(){
+    if(getQueryString('name')){
+        var author=getQueryString('name');
+        $('.btn-others').hide();
+    }else if(window.username){
+        author=window.username;
+    }else {
+        alert('非法登入');
+    }
+    console.log(author);
     var data={
-        author:window.username
+        author:author
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
         $('.article-list').empty();

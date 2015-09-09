@@ -1,8 +1,11 @@
 <post>
     <solver name="login" url="/login">net.post.user.LoginReader</solver>
     <solver name="register" url="/register">net.post.user.RegisterReader</solver>
-    <solver name="mark" url="/mark">net.post.user.MarkUserReader</solver>
-    <solver name="unMark" url="/unMark">net.post.user.UnMarkUserReader</solver>
+
+    <solver name="mark" url="/mark">net.post.mark.MarkUserReader</solver>
+    <solver name="unMark" url="/unMark">net.post.mark.UnMarkUserReader</solver>
+    <solver name="is marked" url="/isMarked">net.post.mark.IsMarkedReader</solver>
+    <solver name="get marked list" url="/getMarkedList">net.post.mark.GetMarkListReader</solver>
 
     <solver name="add document" url="/addDocument">net.post.blog.AddDocumentReader</solver>
     <solver name="get document" url="/getDocument">net.post.blog.GetDocumentReader</solver>
@@ -10,10 +13,13 @@
     <solver name="get document list by type" url="/getDocumentListByType">net.post.blog.GetDocumentListOfTypeReader</solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType">net.post.blog.GetDocumentListOfAuthorAndTypeReader</solver>
     <solver name="add reader" url="/addDocumentReader">net.post.blog.AddReaderReader</solver>
-
     <solver name="add reply" url="/reply">net.post.blog.AddReplyReader</solver>
+
     <solver name="get message list" url="/getMessageList">net.post.message.GetMessageListReader</solver>
     <solver name="get message" url="/getMessage">net.post.message.GetMessageReader</solver>
     <solver name="read message" url="/readMessage">net.post.message.ReadMessageReader</solver>
     <solver name="send message" url="/sendMessage">net.post.message.SendMessageReader</solver>
+
+    <solver name="add image" url="/addImage">net.post.image.AddImageReader</solver>
+    <solver name="get image" url="/getImage">net.post.image.GetImageReader</solver>
 </post>

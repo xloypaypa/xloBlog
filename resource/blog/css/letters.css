@@ -1,0 +1,16 @@
+.letters h3{
+    font-weight:bold;
+    margin-left:20px;
+}
+.chatContent{
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    padding:20px;
+}
+.chatContent textarea{
+    width:100%;
+    min-height:150px;
+}
+.letters .submit,.letters .cancel{
+    margin:10px 0 0 20px;
+}

@@ -1,19 +1,20 @@
 package model.db;
 
-import model.db.virtual.VirtualCollection;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 
 /**
  * Created by xlo on 2015/8/25.
  * it's the collection getter
  */
 public class CollectionGetter {
-    protected DBClient dbClient;
+    protected DBCollection dbCollection;
 
-    public CollectionGetter(DBClient dbClient) {
-        this.dbClient = dbClient;
+    public CollectionGetter(DBCollection dbCollection) {
+        this.dbCollection = dbCollection;
     }
 
-    public VirtualCollection getCollection() {
-        return this.dbClient.collection;
+    public MongoCollection<Document> getCollection() {
+        return this.dbCollection.collection;
     }
 }

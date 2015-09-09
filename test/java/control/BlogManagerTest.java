@@ -1,8 +1,7 @@
 package control;
 
 import model.db.BlogCollection;
-import model.db.DBClient;
-import org.bson.BsonArray;
+import model.db.DBCollection;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
@@ -32,8 +31,8 @@ public class BlogManagerTest {
     @Test
     public void testAddDocument() throws Exception {
         Counter counter = new Counter(1);
-        UserManagerTest.register();
         BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
+        UserManagerTest.register();
         blogManagerNoSend.addDocument("test user", "pass", "title", "body", "default");
 
         while (counter.get() != 0) {
@@ -43,9 +42,8 @@ public class BlogManagerTest {
         assertEquals(1, counter.getSuccess());
 
         BlogCollection collection = new BlogCollection();
-        List<DBClient.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, data.size());
-        collection.submit();
     }
 
     @Test
@@ -56,11 +54,10 @@ public class BlogManagerTest {
             Counter counter = new Counter(1);
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
-            DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+            DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
             if (data.object.get("_id") == null) {
                 fail();
             }
-
             blogManagerNoSend.addReply("test user", "pass", data.object.get("_id").toString(), "reply");
 
             while (counter.get() != 0) {
@@ -69,11 +66,10 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        List<DBClient.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
-        DBClient.DBData data = listData.get(0);
-        assertEquals(10, ((BsonArray) data.object.get("reply")).size());
-        collection.submit();
+        DBCollection.DBData data = listData.get(0);
+        assertEquals(10, ((List) data.object.get("reply")).size());
     }
 
     @Test
@@ -84,8 +80,7 @@ public class BlogManagerTest {
             Counter counter = new Counter(1);
             BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
             BlogCollection collection = new BlogCollection();
-            DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-            collection.submit();
+            DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
             blogManagerNoSend.addReader(data.object.get("_id").toString());
 
             while (counter.get() != 0) {
@@ -94,8 +89,7 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        DBClient.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+        DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
         assertEquals(10, data.object.getInteger("reader", 0));
-        collection.submit();
     }
 }

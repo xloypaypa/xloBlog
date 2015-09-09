@@ -3,6 +3,7 @@ $(function(){
         id:getQueryString('id')
     };
     ajaxRequest('/getDocument',data,function(response){
+        if(response.author!=window.username) $('.btn-others').hide();
         var date=transformDate(response.time.$date);
         var commentLen=response.reply?response.reply.length:0;
         var title=decodeURIComponent(response.title);
@@ -42,6 +43,5 @@ $(function(){
         }else{
             alert('不得为空');
         }
-
     });
 });

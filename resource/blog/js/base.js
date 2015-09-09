@@ -64,7 +64,8 @@ function ajaxRequest(url,data,callback){
 function getQueryString(name){
     var reg=new RegExp("(^|&)"+name+"=([^&]*)($|&)","i");
     var str=document.location.search.substr(1).match(reg);
-    return str[2];
+    if(str) return str[2];
+    return null;
 }
  //转换时间
  function transformDate(time){
@@ -78,8 +79,21 @@ function getQueryString(name){
  /*导航条搜索*/
  $(function () {
      $('.search button').click(function(){
-         var searchName=$('.search input').val();
-         location.href='others.html?name='+searchName;
+         var searchName=encodeURIComponent($('.search input').val());
+         console.log(searchName);
+         location.href='index.html?name='+searchName;
      });
-
+     $('.logout').click(function(){
+         localStorage.clear();
+         location.href='login.html';
+     });
+     if(window.username){
+         $('.login').hide();
+         $('.reg').hide();
+         $('.menu').show();
+     }else{
+         $('.login').show();
+         $('.reg').show();
+         $('.menu').hide();
+     }
  });

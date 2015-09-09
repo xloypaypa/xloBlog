@@ -4,7 +4,7 @@ import log.LogManager;
 import server.serverSolver.RequestSolver;
 import tool.connection.event.ConnectionEvent;
 import tool.connection.event.ConnectionEventManager;
-import tool.ioAble.NormalStringIO;
+import tool.ioAble.NormalByteIO;
 import tool.streamConnector.NormalStreamConnector;
 import tool.streamConnector.StreamConnector;
 import tool.streamConnector.io.LengthLimitStreamIONode;
@@ -16,14 +16,15 @@ import tool.streamConnector.io.StreamIONode;
  */
 public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
     protected String message;
-    protected NormalStringIO stringIO;
+    protected byte[] originalMessage;
+    protected NormalByteIO byteIO;
     protected long length;
 
     public LengthLimitReadServerSolver() {
         ConnectionEventManager.getConnectionEventManager().addEventHandlerToItem(ConnectionEvent.connectEnd, this,
                 (event, solver) -> {
                     trySolveMessage();
-                    if (stringIO != null) stringIO.close();
+                    if (byteIO != null) byteIO.close();
                 });
     }
 
@@ -50,9 +51,9 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
 
     @Override
     protected boolean afterSendHead() {
-        this.stringIO = new NormalStringIO();
-        this.stringIO.setInitValue("");
-        return this.stringIO.buildIO();
+        this.byteIO = new NormalByteIO();
+        this.byteIO.setInitValue(new byte[0]);
+        return this.byteIO.buildIO();
     }
 
     @Override
@@ -62,14 +63,14 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
         if (length > 0) {
             StreamIONode ioNode = new LengthLimitStreamIONode(length);
             ioNode.setInputStream(this.requestSolver.getSocketIoBuilder().getInputStream());
-            ioNode.addOutputStream(this.stringIO.getOutputStream());
+            ioNode.addOutputStream(this.byteIO.getOutputStream());
             connector.addMember(ioNode);
 
             connector.connect();
 
-            this.message = this.stringIO.getValue();
+            this.originalMessage = this.byteIO.getValue();
         } else {
-            this.message = "";
+            this.originalMessage = new byte[0];
         }
 
         LogManager.getLogManager().writeLog("blog read", this.message);
@@ -82,6 +83,7 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
 
     protected void trySolveMessage() {
         try {
+            this.message = new String(this.originalMessage);
             solveMessage();
         } catch (Exception e) {
             closeSocket();
