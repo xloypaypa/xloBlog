@@ -19,7 +19,4 @@
     <solver name="get message" url="/getMessage">net.post.message.GetMessageReader</solver>
     <solver name="read message" url="/readMessage">net.post.message.ReadMessageReader</solver>
     <solver name="send message" url="/sendMessage">net.post.message.SendMessageReader</solver>
-
-    <solver name="add image" url="/addImage">net.post.image.AddImageReader</solver>
-    <solver name="get image" url="/getImage">net.post.image.GetImageReader</solver>
 </post>

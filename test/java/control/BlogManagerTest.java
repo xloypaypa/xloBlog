@@ -2,6 +2,7 @@ package control;
 
 import model.db.BlogCollection;
 import model.db.DBCollection;
+import org.bson.BsonArray;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
@@ -58,6 +59,7 @@ public class BlogManagerTest {
             if (data.object.get("_id") == null) {
                 fail();
             }
+
             blogManagerNoSend.addReply("test user", "pass", data.object.get("_id").toString(), "reply");
 
             while (counter.get() != 0) {
@@ -69,7 +71,8 @@ public class BlogManagerTest {
         List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
         DBCollection.DBData data = listData.get(0);
-        assertEquals(10, ((List) data.object.get("reply")).size());
+        assertEquals(10, ((BsonArray) data.object.get("reply")).size());
+        collection.submit();
     }
 
     @Test

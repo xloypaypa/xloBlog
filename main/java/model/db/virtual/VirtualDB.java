@@ -17,7 +17,7 @@ public class VirtualDB {
 
     }
 
-    public synchronized static VirtualDB getDB(String name) {
+    public synchronized static VirtualDB getDatabase(String name) {
         if (!dbMap.containsKey(name)) {
             dbMap.put(name, new VirtualDB());
         }
