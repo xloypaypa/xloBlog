@@ -19,6 +19,41 @@ import static org.junit.Assert.fail;
  */
 public class BlogManagerTest {
 
+    public static void addDocument(String author, String title, String body, Counter counter) throws InterruptedException {
+        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
+        blogManagerNoSend.addDocument(author, "pass", title, body, "default");
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
+    public static void addReply(Document document, String author, String reply, Counter counter) throws InterruptedException {
+        BlogCollection collection = new BlogCollection();
+        DBCollection.DBData data = collection.findDocumentListData(document).get(0);
+        if (data.object.get("_id") == null) {
+            fail();
+        }
+
+        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
+        blogManagerNoSend.addReply(author, "pass", data.object.get("_id").toString(), reply);
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
+    public static void addReader(Document document, Counter counter) throws InterruptedException {
+        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
+        BlogCollection collection = new BlogCollection();
+        DBCollection.DBData data = collection.findDocumentListData(document).get(0);
+        blogManagerNoSend.addReader(data.object.get("_id").toString());
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
     @After
     public void tearDown() throws InterruptedException {
         Counter counter = new Counter(1);
@@ -31,16 +66,9 @@ public class BlogManagerTest {
 
     @Test
     public void testAddDocument() throws Exception {
-        Counter counter = new Counter(1);
-        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
-        UserManagerTest.register();
-        blogManagerNoSend.addDocument("test user", "pass", "title", "body", "default");
+        UserManagerTest.register("test user");
 
-        while (counter.get() != 0) {
-            Thread.sleep(500);
-        }
-
-        assertEquals(1, counter.getSuccess());
+        addDocument("test user", "title", "body", new Counter(1));
 
         BlogCollection collection = new BlogCollection();
         List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
@@ -48,31 +76,82 @@ public class BlogManagerTest {
     }
 
     @Test
+    public void testAddDocumentAgain() throws InterruptedException {
+        int n = 10;
+
+        for (int i = 0; i < n; i++) {
+            UserManagerTest.register("test user " + i);
+        }
+
+        Counter counter = new Counter(n);
+        for (int i = 0; i < n; i++) {
+            final int finalI = i;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        addDocument("test user " + finalI, "title " + finalI, "body " + finalI, counter);
+                    } catch (Exception e) {
+                        fail();
+                    }
+                }
+            }.start();
+        }
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        for (int i = 0; i < n; i++) {
+            BlogCollection collection = new BlogCollection();
+            List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user " + i));
+            assertEquals(1, data.size());
+        }
+    }
+
+    @Test
     public void testAddReply() throws Exception {
         testAddDocument();
         int n = 10;
         for (int i = 0; i < n; i++) {
-            Counter counter = new Counter(1);
-            BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
-            BlogCollection collection = new BlogCollection();
-            DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-            if (data.object.get("_id") == null) {
-                fail();
-            }
-
-            blogManagerNoSend.addReply("test user", "pass", data.object.get("_id").toString(), "reply");
-
-            while (counter.get() != 0) {
-                Thread.sleep(500);
-            }
+            addReply(new Document().append("author", "test user"), "test user", "reply", new Counter(1));
         }
 
         BlogCollection collection = new BlogCollection();
         List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
         DBCollection.DBData data = listData.get(0);
-        assertEquals(10, ((BsonArray) data.object.get("reply")).size());
+        assertEquals(n, ((BsonArray) data.object.get("reply")).size());
         collection.submit();
+    }
+
+    @Test
+    public void testReplyAgain() throws Exception {
+        testAddDocument();
+        int n = 20;
+        Counter counter = new Counter(n);
+        for (int i =0;i<n;i++) {
+            new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        addReply(new Document().append("author", "test user"), "test user", "reply", counter);
+                    } catch (InterruptedException e) {
+                        fail();
+                    }
+                }
+            }.start();
+        }
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        BlogCollection collection = new BlogCollection();
+        List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        assertEquals(1, listData.size());
+        DBCollection.DBData data = listData.get(0);
+        assertEquals(n, ((BsonArray) data.object.get("reply")).size());
     }
 
     @Test
@@ -80,19 +159,40 @@ public class BlogManagerTest {
         testAddDocument();
         int n = 10;
         for (int i = 0; i < n; i++) {
-            Counter counter = new Counter(1);
-            BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
-            BlogCollection collection = new BlogCollection();
-            DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-            blogManagerNoSend.addReader(data.object.get("_id").toString());
-
-            while (counter.get() != 0) {
-                Thread.sleep(500);
-            }
+            addReader(new Document().append("author", "test user"), new Counter(1));
         }
 
         BlogCollection collection = new BlogCollection();
         DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-        assertEquals(10, data.object.getInteger("reader", 0));
+        assertEquals(n, data.object.getInteger("reader", 0));
+    }
+
+
+
+    @Test
+    public void testAddReaderAgain() throws Exception {
+        testAddDocument();
+        int n = 20;
+        Counter counter = new Counter(n);
+        for (int i =0;i<n;i++) {
+            new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        addReader(new Document().append("author", "test user"), counter);
+                    } catch (InterruptedException e) {
+                        fail();
+                    }
+                }
+            }.start();
+        }
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        BlogCollection collection = new BlogCollection();
+        DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+        assertEquals(n, data.object.getInteger("reader", 0));
     }
 }
