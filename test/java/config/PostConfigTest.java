@@ -14,10 +14,14 @@ public class PostConfigTest {
     public void testLoad() throws DocumentException {
         PostConfig postConfig = new PostConfig();
         postConfig.init();
-        for (PostConfig.PostInfo postInfo : postConfig.getPostInfo()) {
-            assertNotNull(postInfo.getClassName());
-            assertNotNull(postInfo.getName());
-            assertNotNull(postInfo.getUrl());
-        }
+        PostConfig.PostInfo postInfo = postConfig.getPostInfo().get(1);
+        assertNotNull(postInfo);
+        assertEquals("/register", postInfo.getUrl());
+        assertEquals("control.UserManager", postInfo.getManager());
+        assertFalse(postInfo.getAccess());
+        assertEquals("password", postInfo.getData().get(1));
+        assertEquals("register", postInfo.getMethod());
+        assertEquals("default", postInfo.getMethodDataType().get(0));
+        assertEquals("username", postInfo.getMethodData().get(0));
     }
 }
