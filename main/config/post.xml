@@ -33,7 +33,7 @@
         <method name="addDocument">
             <data>title</data>
             <data>body</data>
-            <data>type</data>
+            <data default="default">type</data>
         </method>
     </solver>
     <solver name="get document" url="/getDocument" manager="control.BlogManager" access="false">

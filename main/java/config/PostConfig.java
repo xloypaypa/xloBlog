@@ -4,6 +4,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class PostConfig implements ConfigInterface {
             PostInfo post = new PostInfo();
 
             post.methodData = new ArrayList<>();
+            post.defaultValue = new ArrayList<>();
 
             post.name = element.attributeValue("name");
             post.url = element.attributeValue("url");
@@ -41,6 +43,8 @@ public class PostConfig implements ConfigInterface {
                 post.method = data.attributeValue("name");
                 for (Object methodKid : data.elements()) {
                     Element methodData = (Element) methodKid;
+                    String defaultValue = methodData.attributeValue("default");
+                    post.defaultValue.add(defaultValue);
                     post.methodData.add(methodData.getText());
                 }
             }
@@ -65,7 +69,7 @@ public class PostConfig implements ConfigInterface {
         private boolean access;
         private String method;
         private List<String> methodData;
-
+        private List<String> defaultValue;
 
         public String getName() {
             return name;
@@ -89,6 +93,10 @@ public class PostConfig implements ConfigInterface {
 
         public List<String> getMethodData() {
             return new ArrayList<>(methodData);
+        }
+
+        public List<String> getDefaultValue() {
+            return new ArrayList<>(defaultValue);
         }
     }
 }

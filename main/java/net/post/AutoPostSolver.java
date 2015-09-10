@@ -50,9 +50,18 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
             data.add(password);
         }
         List<String> need = this.postInfo.getMethodData();
+        List<String> defaultValue = this.postInfo.getDefaultValue();
         if (need.size() != 0) {
             JSONObject object = JSONObject.fromObject(this.message);
-            data.addAll(need.stream().map(object::getString).collect(Collectors.toList()));
+            for (int i=0;i<need.size();i++) {
+                if (object.containsKey(need.get(i))) {
+                    data.add(object.getString(need.get(i)));
+                } else if (defaultValue.get(i) != null) {
+                    data.add(defaultValue.get(i));
+                } else {
+                    throw new NullPointerException();
+                }
+            }
         }
         return data;
     }
