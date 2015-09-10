@@ -46,7 +46,7 @@ $(function(){
                 $(this).html('已关注');
             });
         }else{
-            ajaxHeader('/unmark',data,function(response){
+            ajaxHeader('/unMark',data,function(response){
                 $(this).html('加关注');
             });
         }
