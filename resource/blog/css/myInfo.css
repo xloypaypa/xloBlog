@@ -1,0 +1,16 @@
+.content{
+    padding:20px 50px;
+}
+.content-header>img{
+    width:60px;
+    height:60px;
+    float:left;
+}
+.content-header>h1{
+    font-size:24px;
+    margin-left:80px;
+    padding-top:35px;
+}
+.focus-list{
+    padding:20px;
+}
