@@ -23,24 +23,45 @@ function checkNull(_this){
 
 //头部需要加username的ajax
 function ajaxHeader(url,data,callback){
-    $.ajax({
-        url:url,
-        type:'POST',
-        dataType:'json',
-        data:JSON.stringify(data),
-        beforeSend:function(XML){
-            XML.setRequestHeader('username',window.username);
-            XML.setRequestHeader('password',window.password);
-        },
-        success:function(response){
-            console.log(response.return);
-            console.log(arguments.length);
-            callback(response);
-        },
-        error:function(response){
-            console.log(response);
-        }
-    });
+    if(arguments.length==2){
+        $.ajax({
+            url:url,
+            type:'POST',
+            dataType:'json',
+            beforeSend:function(XML){
+                XML.setRequestHeader('username',window.username);
+                XML.setRequestHeader('password',window.password);
+            },
+            success:function(response){
+                console.log(response.return);
+                console.log(arguments.length);
+                callback(response);
+            },
+            error:function(response){
+                console.log(response);
+            }
+        });
+    }else{
+        $.ajax({
+            url:url,
+            type:'POST',
+            dataType:'json',
+            data:JSON.stringify(data),
+            beforeSend:function(XML){
+                XML.setRequestHeader('username',window.username);
+                XML.setRequestHeader('password',window.password);
+            },
+            success:function(response){
+                console.log(response.return);
+                console.log(arguments.length);
+                callback(response);
+            },
+            error:function(response){
+                console.log(response);
+            }
+        });
+    }
+
 }
 
 //不需要加头部的ajax
@@ -80,7 +101,6 @@ function getQueryString(name){
  $(function () {
      $('.search button').click(function(){
          var searchName=encodeURIComponent($('.search input').val());
-         console.log(searchName);
          location.href='index.html?name='+searchName;
      });
      $('.logout').click(function(){

@@ -1,13 +1,13 @@
 $(function(){
     if(getQueryString('name')){
         var author=getQueryString('name');
-        $('.btn-others').hide();
     }else if(window.username){
         author=window.username;
+        $('.btn-others').hide();
     }else {
-        alert('非法登入');
+        location.href='login.html';
     }
-    console.log(author);
+    $('.nickName').html(decodeURIComponent(author));
     var data={
         author:author
     };
@@ -20,8 +20,13 @@ $(function(){
             var title=decodeURIComponent(response[i].title);
             var preview=decodeURIComponent(response[i].preview);
             var author=decodeURIComponent(response[i].author);
-            articleNo.find('h2 a').attr('href','article.html?id='+response[i].id).html(title);
-            articleNo.find('.readMore').attr('href','article.html?id='+response[i].id);
+            if(getQueryString('name')){
+                articleNo.find('h2 a').html(title).attr('href','article.html?id='+response[i].id+'&name='+author);
+                articleNo.find('.readMore').attr('href','article.html?id='+response[i].id+'&name='+author);
+            }else{
+                articleNo.find('h2 a').html(title).attr('href','article.html?id='+response[i].id);
+                articleNo.find('.readMore').attr('href','article.html?id='+response[i].id);
+            }
             articleNo.find('.author').html(author);
             articleNo.find('.article-body').html(preview);
             articleNo.find('.date').html(date);
