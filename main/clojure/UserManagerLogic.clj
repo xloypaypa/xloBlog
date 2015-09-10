@@ -2,7 +2,7 @@
   ^{:author xlo}
   control.UserManagerLogic
   (:import [model.db UserCollection]
-           [control Manager]
+           [control ManagerLogic]
            [config LengthLimitConfig]))
 
 (defn loginUser [username password]
@@ -27,5 +27,5 @@
   (let [method (. (. object getClass) getMethod "invoke" Object Object)]
     ))
 
-(. Manager put "control.UserManager$loginUser" loginUser 2)
-(. Manager put "control.UserManager$register" register 2)
+(. ManagerLogic put "control.UserManager$loginUser" loginUser 2)
+(. ManagerLogic put "control.UserManager$register" register 2)
