@@ -9,4 +9,83 @@
             <data>password</data>
         </method>
     </solver>
+
+    <solver name="mark" url="/mark" manager="control.MarkManager" access="true">
+        <method name="markUser">
+            <data>aimUser</data>
+        </method>
+    </solver>
+    <solver name="unMark" url="/unMark" manager="control.MarkManager" access="true">
+        <method name="unMarkUser">
+            <data>aimUser</data>
+        </method>
+    </solver>
+    <solver name="is marked" url="/isMarked" manager="control.MarkManager" access="true">
+        <method name="isMarked">
+            <data>aimUser</data>
+        </method>
+    </solver>
+    <solver name="get marked list" url="/getMarkedList" manager="control.MarkManager" access="true">
+        <method name="getMarkedList"/>
+    </solver>
+
+    <solver name="add document" url="/addDocument" manager="control.BlogManager" access="true">
+        <method name="addDocument">
+            <data>title</data>
+            <data>body</data>
+            <data>type</data>
+        </method>
+    </solver>
+    <solver name="get document" url="/getDocument" manager="control.BlogManager" access="false">
+        <method name="getDocument">
+            <data>id</data>
+        </method>
+    </solver>
+    <solver name="get document list by author" url="/getDocumentListByAuthor" manager="control.BlogManager" access="false">
+        <method name="getAuthorDocumentList">
+            <data>author</data>
+        </method>
+    </solver>
+    <solver name="get document list by type" url="/getDocumentListByType" manager="control.BlogManager" access="false">
+        <method name="getTypeDocumentList">
+            <data>type</data>
+        </method>
+    </solver>
+    <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType" manager="control.BlogManager" access="false">
+        <method name="getAuthorTypeDocumentList">
+            <data>author</data>
+            <data>type</data>
+        </method>
+    </solver>
+    <solver name="add reader" url="/addDocumentReader" manager="control.BlogManager" access="false">
+        <method name="addReader">
+            <data>id</data>
+        </method>
+    </solver>
+    <solver name="add reply" url="/reply" manager="control.BlogManager" access="true">
+        <method name="addReply">
+            <data>id</data>
+            <data>reply</data>
+        </method>
+    </solver>
+
+    <solver name="get message list" url="/getMessageList" manager="control.MessageManager" access="true">
+        <method name="getAllMessage"/>
+    </solver>
+    <solver name="get message" url="/getMessage" manager="control.MessageManager" access="true">
+        <method name="getMessage">
+            <data>id</data>
+        </method>
+    </solver>
+    <solver name="read message" url="/readMessage" manager="control.MessageManager" access="true">
+        <method name="readMessage">
+            <data>id</data>
+        </method>
+    </solver>
+    <solver name="send message" url="/sendMessage" manager="control.MessageManager" access="true">
+        <method name="addMessage">
+            <data>message</data>
+            <data>aim</data>
+        </method>
+    </solver>
 </post>
