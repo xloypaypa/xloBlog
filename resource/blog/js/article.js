@@ -1,20 +1,67 @@
 $(function(){
     if(getQueryString('name')){
         var author=getQueryString('name');
-        $('.myInfo .buttons').css('display','block');
+        $('.myInfo .buttons').show();
     }else if(window.username){
-        console.log(0);
         author=window.username;
-        $('.btn-others').hide();
+        $('.myInfo .buttons').hide();
     }else {
         location.href='login.html';
     }
     $('.nickName').html(decodeURIComponent(author));
+
+    //获取文章信息
+    getDocument();
+
+    //是否关注
+    //isMarked();
+
+    //评论
+    $('.myComment .submit').click(function(){
+        var comment=encodeURIComponent($('.myComment textarea').val());
+        if(comment){
+            var data={
+                id:getQueryString('id'),
+                reply:comment
+            };
+            ajaxHeader('/reply',data,function(response){
+                if(response.return==200){
+                    location.reload();
+                }else{
+                    alert('评论失败');
+                }
+            });
+        }else{
+            alert('不得为空');
+        }
+    });
+
+    //关注
+    $('.focus').click(function(){
+        var data={
+            aimUser:author
+        };
+        if($(this).html()=='加关注'){
+            ajaxHeader('/mark',data,function(response){
+                $(this).html('已关注');
+            });
+        }else{
+            ajaxHeader('/unmark',data,function(response){
+                $(this).html('加关注');
+            });
+        }
+    });
+
+    //私信
+    $('.chat').click(function(){
+        location.href='letters.html?receiver='+author;
+    });
+});
+function getDocument(){
     var data={
         id:getQueryString('id')
     };
     ajaxRequest('/getDocument',data,function(response){
-        if(response.author!=window.username) $('.btn-others').hide();
         var date=transformDate(response.time.$date);
         var commentLen=response.reply?response.reply.length:0;
         var title=decodeURIComponent(response.title);
@@ -37,22 +84,13 @@ $(function(){
             commentNo.find('.comment-content p').html(commentContent);
         }
     });
-    $('.myComment .submit').click(function(){
-        var comment=encodeURIComponent($('.myComment textarea').val());
-        if(comment){
-            var data={
-                id:getQueryString('id'),
-                reply:comment
-            };
-            ajaxHeader('/reply',data,function(response){
-                if(response.return==200){
-                    location.reload();
-                }else{
-                    alert('评论失败');
-                }
-            });
-        }else{
-            alert('不得为空');
-        }
+}
+function isMarked(){
+    console.log(author);
+    var data={
+        aimUser:author
+    };
+    ajaxHeader('/isMarked',data,function(response){
+
     });
-});
+}
