@@ -1,5 +1,5 @@
 $(function(){
-    if(getQueryString('name')){
+    if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
     }else if(window.username){
         author=window.username;
@@ -8,6 +8,32 @@ $(function(){
         location.href='login.html';
     }
     $('.nickName').html(decodeURIComponent(author));
+
+    //获取文章列表
+    getDocumentList(author);
+
+    //关注
+    $('.focus').click(function(){
+        var data={
+            aimUser:author
+        };
+        if($(this).html()=='加关注'){
+            ajaxHeader('/mark',data,function(response){
+                $('.focus').html('已关注');
+            });
+        }else{
+            ajaxHeader('/unMark',data,function(response){
+                $('.focus').html('加关注');
+            });
+        }
+    });
+
+    //私信
+    $('.chat').click(function(){
+        location.href='letters.html?receiver='+author;
+    });
+});
+function getDocumentList(author){
     var data={
         author:author
     };
@@ -32,25 +58,4 @@ $(function(){
             articleNo.find('.date').html(date);
         }
     });
-
-    //关注
-    $('.focus').click(function(){
-        var data={
-            aimUser:author
-        };
-        if($(this).html()=='加关注'){
-            ajaxHeader('/mark',data,function(response){
-                $(this).html('已关注');
-            });
-        }else{
-            ajaxHeader('/unMark',data,function(response){
-                $(this).html('加关注');
-            });
-        }
-    });
-
-    //私信
-    $('.chat').click(function(){
-        location.href='letters.html?receiver='+author;
-    });
-});
+}

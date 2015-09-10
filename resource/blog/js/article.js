@@ -1,7 +1,6 @@
 $(function(){
-    if(getQueryString('name')){
+    if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
-        $('.myInfo .buttons').show();
     }else if(window.username){
         author=window.username;
         $('.myInfo .buttons').hide();
@@ -43,11 +42,11 @@ $(function(){
         };
         if($(this).html()=='加关注'){
             ajaxHeader('/mark',data,function(response){
-                $(this).html('已关注');
+                $('.focus').html('已关注');
             });
         }else{
             ajaxHeader('/unMark',data,function(response){
-                $(this).html('加关注');
+                $('.focus').html('加关注');
             });
         }
     });
