@@ -80,7 +80,6 @@ function getQueryString(name){
  $(function () {
      $('.search button').click(function(){
          var searchName=encodeURIComponent($('.search input').val());
-         console.log(searchName);
          location.href='index.html?name='+searchName;
      });
      $('.logout').click(function(){

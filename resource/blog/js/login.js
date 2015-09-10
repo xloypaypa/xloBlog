@@ -14,7 +14,6 @@ $(function(){
                 },
                 success:function(response){
                     if(response.return==200){
-                        alert('登录成功');
                         location.href='index.html';
                     }else{
                         alert('系统出错：'+response.return);

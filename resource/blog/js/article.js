@@ -1,4 +1,15 @@
 $(function(){
+    if(getQueryString('name')){
+        var author=getQueryString('name');
+        $('.myInfo .buttons').css('display','block');
+    }else if(window.username){
+        console.log(0);
+        author=window.username;
+        $('.btn-others').hide();
+    }else {
+        location.href='login.html';
+    }
+    $('.nickName').html(decodeURIComponent(author));
     var data={
         id:getQueryString('id')
     };
@@ -9,7 +20,7 @@ $(function(){
         var title=decodeURIComponent(response.title);
         var body=decodeURIComponent(response.body);
         var author=decodeURIComponent(response.author);
-        $('.article-content h2 a').html(title);
+        $('.article-content h2').html(title);
         $('.author').html(author);
         $('.article-body').html(body);
         $('.date').html(date);

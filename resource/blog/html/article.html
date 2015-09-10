@@ -20,16 +20,16 @@
             <button class="btn btn-default" type="button">search</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="login.html">登陆</a></li>
-            <li><a href="reg.html">注册</a></li>
-            <li class="btn-group pull-right">
+            <li class="login"><a href="login.html">登陆</a></li>
+            <li class="reg"><a href="reg.html">注册</a></li>
+            <li class="btn-group pull-right menu">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
                     菜单<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a href="edit.html">写博客</a></li>
                     <li><a href="#">1</a></li>
-                    <li><a href="#">1</a></li>
+                    <li class="logout"><a>退出</a></li>
                 </ul>
             </li>
         </ul>
@@ -49,7 +49,7 @@
             <li><a href="#">发表评论</a><i class="icon-comment"></i></li>
         </ul>
         <div class="article-content">
-            <h2><a href="#">近期微博吐槽言论存档，涉及“性能优化”、C++陋习等</a></h2>
+            <h2>近期微博吐槽言论存档，涉及“性能优化”、C++陋习等</h2>
             <p>作者:<span class="author"></span></p>
             <p class="article-body">写C++程序的几个陋习：class 名以大写 C 开头，例如 CDate；成员变量以 m_ 开头；变量采用匈牙利命名法；不知道何时禁用 copy-ctor/assign operator。有些人常常把“性能”挂在嘴边，而且其以“提高性能”为理由的“优化措施”往往不到点子上，只增加了复杂性和维护难度，降低了代码质量。这属于决策点找偏了。...
             </p>
@@ -86,7 +86,7 @@
             <div class="myInfo-content">
                 <img src="../images/headImg.jpg">
                 <p class="nickName">昵称</p>
-                <div class="btn-group btn-others">
+                <div class="btn-group">
                     <div class="buttons">
                         <button class="btn btn-sm btn-success" type="button">加关注</button>
                         <button class="btn btn-sm btn-success" type="button">发私信</button>
