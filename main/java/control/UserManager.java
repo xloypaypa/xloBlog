@@ -1,8 +1,8 @@
 package control;
 
-import model.db.*;
+import model.db.DBCollection;
+import model.db.UserCollection;
 import model.event.Event;
-import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
 /**
@@ -40,30 +40,9 @@ public class UserManager extends Manager {
     public void removeUser(String username, String password) {
         Event event = new Event() {
             @Override
-            public boolean run() {
-                if (!accessConfig.isAccept(username, password, this)) return false;
-
-                UserCollection userCollection = new UserCollection();
-                userCollection.removeUser(username);
-
-                BlogCollection blogCollection = new BlogCollection();
-                for (DBCollection.DBData now : blogCollection.findDocumentListData(new Document().append("author", username))) {
-                    blogCollection.removeDocument(now.object.get("_id").toString());
-                }
-
-                MarkUserCollection markUserCollection = new MarkUserCollection();
-                for (DBCollection.DBData now : markUserCollection.find(new Document().append("from", username))) {
-                    markUserCollection.removeMark(now.object.getString("from"), now.object.getString("to"));
-                }
-                for (DBCollection.DBData now : markUserCollection.find(new Document().append("to", username))) {
-                    markUserCollection.removeMark(now.object.getString("from"), now.object.getString("to"));
-                }
-
-                MessageCollection messageCollection = new MessageCollection();
-                for (DBCollection.DBData now : markUserCollection.find(new Document().append("username", username))) {
-                    messageCollection.removeMessage(now.object.getString("_id"));
-                }
-                return true;
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password);
             }
         };
         addSendMessage(event);
