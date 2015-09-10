@@ -1,15 +1,14 @@
 package control;
 
-import config.LengthLimitConfig;
-import model.db.*;
+import model.db.BlogCollection;
+import model.db.DBCollection;
 import model.event.Event;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
-import org.bson.*;
+import org.bson.Document;
 import server.serverSolver.RequestSolver;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,22 +23,9 @@ public class BlogManager extends Manager {
     public void addDocument(String username, String password, String title, String body, String type) {
         Event event = new Event() {
             @Override
-            public boolean run() {
-                LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
-                if (username == null || password == null || title == null || body == null) return false;
-                if (title.length() > lengthLimitConfig.getLimit("documentTitle") || body.length() > lengthLimitConfig.getLimit("documentBody"))
-                    return false;
-                if (!accessConfig.isAccept(username, password, this)) return false;
-
-                BlogCollection blogCollection = new BlogCollection();
-                blogCollection.addDocument(username, title, body, new Date(), type);
-
-                MarkUserCollection markUserCollection = new MarkUserCollection();
-                MessageCollection messageCollection = new MessageCollection();
-                for (DBCollection.DBData now : markUserCollection.find(new Document().append("to", username))) {
-                    messageCollection.addMessage(now.object.getString("to"), username, title, new Date());
-                }
-                return true;
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, title, body, type);
             }
         };
         addSendMessage(event);
@@ -50,31 +36,9 @@ public class BlogManager extends Manager {
         Event event = new Event() {
             @SuppressWarnings("unchecked")
             @Override
-            public boolean run() {
-                LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
-                if (username == null || password == null || reply == null) return false;
-                if (reply.length() > lengthLimitConfig.getLimit("documentBody"))
-                    return false;
-                if (!accessConfig.isAccept(username, password, this)) return false;
-
-                BlogCollection blogCollection = new BlogCollection();
-                DBCollection.DBData document = blogCollection.getDocument(documentID);
-                BsonArray list;
-                if (document.object.containsKey("reply"))
-                    list = new BsonArray((List<? extends BsonValue>) document.object.get("reply"));
-                else {
-                    list = new BsonArray();
-                }
-                BsonDocument replyMap = new BsonDocument();
-                replyMap.put("author", new BsonString(username));
-                replyMap.put("data", new BsonDateTime(new Date().getTime()));
-                replyMap.put("reply", new BsonString(reply));
-                list.add(replyMap);
-                document.object.put("reply", list);
-
-                MessageCollection messageCollection = new MessageCollection();
-                messageCollection.addMessage(document.object.getString("author"), username, "reply: " + reply, new Date());
-                return true;
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, documentID, reply);
             }
         };
         addSendMessage(event);
@@ -173,7 +137,7 @@ public class BlogManager extends Manager {
             object.put("time", now.object.get("time"));
             object.put("reader", now.object.getInteger("reader", 0));
             String body = now.object.getString("body");
-            if (body.length()>100) {
+            if (body.length() > 100) {
                 body = body.substring(0, 100);
             }
             object.put("preview", body);
