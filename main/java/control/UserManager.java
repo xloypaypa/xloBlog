@@ -21,6 +21,7 @@ public class UserManager extends Manager {
             @Override
             public boolean run() {
                 if (username == null || password == null) return false;
+
                 UserCollection userCollection = new UserCollection();
                 DBCollection.DBData data = userCollection.getUserData(username);
                 if (data == null) return false;
