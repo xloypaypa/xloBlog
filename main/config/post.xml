@@ -1,15 +1,12 @@
 <post>
     <solver name="login" url="/login" manager="control.UserManager" access="true">
         <method name="loginUser">
-            <data type="access">access</data>
         </method>
     </solver>
     <solver name="register" url="/register" manager="control.UserManager" access="false">
-        <data>username</data>
-        <data>password</data>
         <method name="register">
-            <data type="default">username</data>
-            <data type="default">password</data>
+            <data>username</data>
+            <data>password</data>
         </method>
     </solver>
 </post>

@@ -30,8 +30,6 @@ public class PostConfig implements ConfigInterface {
             Element element = (Element) now;
             PostInfo post = new PostInfo();
 
-            post.data = new ArrayList<>();
-            post.methodDataType = new ArrayList<>();
             post.methodData = new ArrayList<>();
 
             post.name = element.attributeValue("name");
@@ -40,15 +38,10 @@ public class PostConfig implements ConfigInterface {
             post.access = element.attributeValue("access").equals("true");
             for (Object kid : element.elements()) {
                 Element data = (Element) kid;
-                if (data.getName().equals("data")) {
-                    post.data.add(data.getText());
-                } else {
-                    post.method = data.attributeValue("name");
-                    for (Object methodKid : data.elements()) {
-                        Element methodData = (Element) methodKid;
-                        post.methodDataType.add(methodData.attributeValue("type"));
-                        post.methodData.add(methodData.getText());
-                    }
+                post.method = data.attributeValue("name");
+                for (Object methodKid : data.elements()) {
+                    Element methodData = (Element) methodKid;
+                    post.methodData.add(methodData.getText());
                 }
             }
             postInfo.add(post);
@@ -70,9 +63,7 @@ public class PostConfig implements ConfigInterface {
         private String url;
         private String manager;
         private boolean access;
-        private List<String> data;
         private String method;
-        private List<String> methodDataType;
         private List<String> methodData;
 
 
@@ -92,16 +83,8 @@ public class PostConfig implements ConfigInterface {
             return access;
         }
 
-        public List<String> getData() {
-            return new ArrayList<>(data);
-        }
-
         public String getMethod() {
             return method;
-        }
-
-        public List<String> getMethodDataType() {
-            return new ArrayList<>(methodDataType);
         }
 
         public List<String> getMethodData() {
