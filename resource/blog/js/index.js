@@ -33,4 +33,24 @@ $(function(){
         }
     });
 
+    //关注
+    $('.focus').click(function(){
+        var data={
+            aimUser:author
+        };
+        if($(this).html()=='加关注'){
+            ajaxHeader('/mark',data,function(response){
+                $(this).html('已关注');
+            });
+        }else{
+            ajaxHeader('/unMark',data,function(response){
+                $(this).html('加关注');
+            });
+        }
+    });
+
+    //私信
+    $('.chat').click(function(){
+        location.href='letters.html?receiver='+author;
+    });
 });
