@@ -7,12 +7,13 @@ $(function(){
             $.ajax({
                 url:'/login',
                 type:'POST',
+                dataType:'json',
                 beforeSend:function(XML){
                     XML.setRequestHeader('username',encodeURIComponent($('input[name=username]').val()));
                     XML.setRequestHeader('password',encodeURIComponent($('input[name=password]').val()));
                 },
                 success:function(response){
-                    if(response.return=200){
+                    if(response.return==200){
                         alert('登录成功');
                         location.href='index.html';
                     }else{
