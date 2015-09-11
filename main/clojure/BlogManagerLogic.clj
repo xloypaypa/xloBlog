@@ -52,7 +52,7 @@
               (. nowReply put "author" (new BsonString username))
               (. nowReply put "data" (new BsonDateTime (. (new Date) getTime)))
               (. nowReply put "reply" (new BsonString reply))
-              (dotimes [i (count pastList)] (. replyList add (nth pastList i)))
+              (dotimes [i (count pastList)] (. replyList add (. BsonDocument parse (. (nth pastList i) toJson))))
               (. replyList add nowReply)
               (. (. document object) put "reply" replyList)
               (let [messageCollection (new MessageCollection)]
