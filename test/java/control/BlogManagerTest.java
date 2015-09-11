@@ -130,7 +130,7 @@ public class BlogManagerTest {
         List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
         DBCollection.DBData data = listData.get(0);
-        assertEquals(n, ((BsonArray) data.object.get("reply")).size());
+        assertEquals(n, ((List) data.object.get("reply")).size());
         collection.submit();
     }
 
@@ -160,7 +160,7 @@ public class BlogManagerTest {
         List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
         DBCollection.DBData data = listData.get(0);
-        assertEquals(n, ((BsonArray) data.object.get("reply")).size());
+        assertEquals(n, ((List) data.object.get("reply")).size());
     }
 
     @Test
