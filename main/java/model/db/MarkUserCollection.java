@@ -1,12 +1,12 @@
 package model.db;
 
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 2015/9/2.
@@ -23,8 +23,8 @@ public class MarkUserCollection extends DBCollection {
 
     public void removeMark(String username, String aimUser) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
-        Iterator<Document> cursor = iterable.iterator();
+        FindIterable<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
+        MongoCursor<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return ;
 
         Document document = cursor.next();
@@ -33,8 +33,8 @@ public class MarkUserCollection extends DBCollection {
 
     public DBData getMark(String username, String aimUser) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
-        Iterator<Document> cursor = iterable.iterator();
+        FindIterable<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
+        MongoCursor<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         return addDocumentToUsing(cursor.next());
@@ -42,8 +42,8 @@ public class MarkUserCollection extends DBCollection {
 
     public DBData getMarkData(String username, String aimUser) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
-        Iterator<Document> cursor = iterable.iterator();
+        FindIterable<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
+        MongoCursor<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         DBData ans = getDocumentNotUsing(cursor.next());
@@ -54,9 +54,11 @@ public class MarkUserCollection extends DBCollection {
     public List<DBData> find(Document document) {
         lockCollection();
         List<DBData> ans = new LinkedList<>();
-        List<Document> iterable = collection.find(document);
+        FindIterable<Document> iterable = collection.find(document);
 
-        ans.addAll(iterable.stream().map(this::getDocumentNotUsing).collect(Collectors.toList()));
+        for (Document anIterable : iterable) {
+            ans.add(getDocumentNotUsing(anIterable));
+        }
         unlockCollection();
         return ans;
     }

@@ -1,7 +1,8 @@
 package model.db;
 
-import model.db.virtual.VirtualCollection;
-import model.db.virtual.VirtualDB;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -13,20 +14,22 @@ import java.util.*;
  */
 public abstract class DBCollection extends DBClient {
 
-    private volatile static Map<String, VirtualDB> databaseMap;
+    private volatile static Map<String, MongoDatabase> databaseMap;
 
     public synchronized static void init() {
+        if (mongoClient != null) return;
+        mongoClient = new MongoClient(dbConfig.getHost(), dbConfig.getPort());
         databaseMap = new HashMap<>();
         dbConfig.getDbs().stream().filter(now -> dbConfig.getDBType(now).equals("default"))
-                .forEach(now -> databaseMap.put(now, VirtualDB.getDatabase(now)));
+                .forEach(now -> databaseMap.put(now, mongoClient.getDatabase(now)));
         usingDB = new HashMap<>();
     }
 
-    private static VirtualDB getDatabase(String name) {
+    private static MongoDatabase getDatabase(String name) {
         return databaseMap.get(name);
     }
 
-    protected VirtualCollection collection;
+    protected MongoCollection<Document> collection;
 
     public DBCollection() {
         super();

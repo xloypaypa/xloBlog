@@ -1,6 +1,7 @@
 package model.db;
 
-import model.db.virtual.VirtualCollection;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 
 /**
  * Created by xlo on 2015/8/25.
@@ -13,7 +14,7 @@ public class CollectionGetter {
         this.dbCollection = dbCollection;
     }
 
-    public VirtualCollection getCollection() {
+    public MongoCollection<Document> getCollection() {
         return this.dbCollection.collection;
     }
 }

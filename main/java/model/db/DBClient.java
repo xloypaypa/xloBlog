@@ -1,5 +1,6 @@
 package model.db;
 
+import com.mongodb.MongoClient;
 import config.ConfigManager;
 import config.DBConfig;
 import model.lock.NameLockImpl;
@@ -13,6 +14,7 @@ import java.util.Vector;
  * it's the db client
  */
 public abstract class DBClient {
+    protected static MongoClient mongoClient;
     protected static DBConfig dbConfig
             = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
     protected volatile static boolean needInit = true;
@@ -25,6 +27,7 @@ public abstract class DBClient {
             synchronized (DBClient.class) {
                 if (needInit) {
                     DBCollection.init();
+                    OtherDB.init();
                     needInit = false;
                 }
             }

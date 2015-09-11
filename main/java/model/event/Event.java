@@ -101,7 +101,7 @@ public abstract class Event {
     }
 
     public String getClojureName() {
-        return this.className+"$"+this.methodName;
+        return this.className + "$" + this.methodName;
     }
 
     public abstract boolean run() throws Exception;
