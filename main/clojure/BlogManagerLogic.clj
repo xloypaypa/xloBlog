@@ -4,8 +4,25 @@
   (:import [model.db BlogCollection MarkUserCollection MessageCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
            [config LengthLimitConfig ConfigManager ReturnCodeConfig]
-           [java.util Date]
+           [java.util Date LinkedList]
            [control ManagerLogic BlogManager]))
+
+(defn sendDocumentList [manager event message]
+  (let [aimList (vec (. (new BlogCollection) findDocumentListData message))
+        ans (new LinkedList)]
+    (dotimes [i (count aimList)]
+      (let [now (nth aimList i)
+            object (. now object)
+            body (. object get "body")
+            preview (if (> (count body) 100) (subs body 0 100) body)
+            nowMap {"id" (str (. object get "_id")),
+                    "title" (. object get "title"),
+                    "author" (. object get "author"),
+                    "time" (. object get "time"),
+                    "reader" (. object get "reader")
+                    "preview" preview}]
+        (. ans add nowMap)))
+    (. manager addSuccessMessage event ans)))
 
 (defn addDocument [username password title body type]
   (if (or (nil? title) (nil? body) (nil? type)) false
@@ -52,6 +69,41 @@
         (let [object (. (. data object) toJson)]
           (. manager addSuccessMessage event object) true)))))
 
+(defn addReader [id]
+  (let [data (. (new BlogCollection) getDocument id)]
+    (if (nil? data) false
+      (let [object (. data object)
+            val (+ (. object getInteger "reader" 0) 1)]
+        (. object put "reader" (int val)) true))))
+
+(defn getAuthorTypeDocumentList [author typeMessage manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object))
+  (if (or (nil? author) (nil? typeMessage)) false
+    (let [document (new Document)]
+      (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage))
+      true)))
+
+(defn getTypeDocumentList [typeMessage manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object))
+  (if (nil? typeMessage) false
+    (let [document (new Document)]
+      (sendDocumentList manager event (. document append "type" typeMessage))
+      true)))
+
+(defn getAuthorDocumentList [author manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object))
+  (if (nil? author) false
+    (let [document (new Document)]
+      (sendDocumentList manager event (. document append "author" author))
+      true)))
+
 (. ManagerLogic put "control.BlogManager$addDocument" addDocument 5)
 (. ManagerLogic put "control.BlogManager$addReply" addReply 4)
 (. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)
+(. ManagerLogic put "control.BlogManager$addReader" addReader 1)
+(. ManagerLogic put "control.BlogManager$getAuthorTypeDocumentList" getAuthorTypeDocumentList 5)
+(. ManagerLogic put "control.BlogManager$getTypeDocumentList" getTypeDocumentList 4)
+(. ManagerLogic put "control.BlogManager$getAuthorDocumentList" getAuthorDocumentList 4)

@@ -5,6 +5,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import testTool.Counter;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,6 +86,18 @@ public class BlogManagerNoSend extends BlogManager {
     }
 
     @Override
+    public void addSuccessMessage(Event event, List<Map<String, Object>> message) {
+        event.actionWhileSuccess(new Event() {
+            @Override
+            public boolean run() {
+                counter.addSuccess(1);
+                setArray(getJsonObject(message));
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void addFailMessage(Event event) {
         event.actionWhileFail(new Event() {
             @Override
@@ -124,7 +137,43 @@ public class BlogManagerNoSend extends BlogManager {
         Event event = new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke("control.BlogManager$getDocument", id, BlogManagerNoSend.this ,this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getDocument", id, BlogManagerNoSend.this, this, returnCodeConfig);
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    @Override
+    public void getAuthorTypeDocumentList(String author, String type) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getAuthorTypeDocumentList", author, type, BlogManagerNoSend.this, this, returnCodeConfig);
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    @Override
+    public void getTypeDocumentList(String type) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getTypeDocumentList", type, BlogManagerNoSend.this, this, returnCodeConfig);
+            }
+        };
+        addSendMessage(event);
+        event.submit();
+    }
+
+    @Override
+    public void getAuthorDocumentList(String author) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getAuthorDocumentList", author, BlogManagerNoSend.this, this, returnCodeConfig);
             }
         };
         addSendMessage(event);

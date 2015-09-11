@@ -4,11 +4,14 @@ import config.AccessConfig;
 import config.ConfigManager;
 import config.ReturnCodeConfig;
 import model.event.Event;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
 import server.serverSolver.RequestSolver;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 2015/8/28.
@@ -44,6 +47,11 @@ public abstract class Manager {
         event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
     }
 
+    public void addSuccessMessage(Event event, List<Map<String, Object>> message) {
+        JSONArray object = getJsonObject(message);
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+    }
+
     public void addFailMessage(Event event) {
         String forbidden = "forbidden";
         JSONObject object = getJsonObjectAsReturn(forbidden);
@@ -60,15 +68,24 @@ public abstract class Manager {
         event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    protected JSONObject getJsonObject(Map<String, Object> message) {
-        JSONObject object = new JSONObject();
-        object.putAll(message);
-        return object;
+    public void addFailMessage(Event event, List<Map<String, Object>> message) {
+        JSONArray object = getJsonObject(message);
+        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 
     protected JSONObject getJsonObjectAsReturn(String forbidden) {
         JSONObject object = new JSONObject();
         object.put("return", returnCodeConfig.getCode(forbidden));
         return object;
+    }
+
+    protected JSONObject getJsonObject(Map<String, Object> message) {
+        JSONObject object = new JSONObject();
+        object.putAll(message);
+        return object;
+    }
+
+    protected JSONArray getJsonObject(List<Map<String, Object>> message) {
+        return message.stream().map(this::getJsonObject).collect(Collectors.toCollection(JSONArray::new));
     }
 }
