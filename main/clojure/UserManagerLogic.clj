@@ -16,8 +16,7 @@
 (defn register [username password]
   (if (or (nil? username) (nil? password)) false
     (let [lengthLimitConfig (. LengthLimitConfig getConfig)]
-      (if
-        (or (> (count username) (. lengthLimitConfig getLimit "username"))
+      (if (or (> (count username) (. lengthLimitConfig getLimit "username"))
           (> (count password) (. lengthLimitConfig getLimit "password"))) false
         (let [userCollection (new UserCollection)]
           (. userCollection lockCollection)

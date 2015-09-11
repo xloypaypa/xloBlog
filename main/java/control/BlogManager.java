@@ -51,7 +51,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), id, BlogManager.this ,this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), id, BlogManager.this, this, returnCodeConfig);
             }
         }.submit();
     }
@@ -80,7 +80,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), type, BlogManager.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), "type", type, BlogManager.this, this, returnCodeConfig);
             }
         }.submit();
     }
@@ -89,7 +89,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), author, BlogManager.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), "author", author, BlogManager.this, this, returnCodeConfig);
             }
         }.submit();
     }

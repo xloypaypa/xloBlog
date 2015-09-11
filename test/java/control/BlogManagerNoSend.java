@@ -161,7 +161,7 @@ public class BlogManagerNoSend extends BlogManager {
         Event event = new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke("control.BlogManager$getTypeDocumentList", type, BlogManagerNoSend.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getTypeDocumentList", "type", type, BlogManagerNoSend.this, this, returnCodeConfig);
             }
         };
         addSendMessage(event);
@@ -173,7 +173,7 @@ public class BlogManagerNoSend extends BlogManager {
         Event event = new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke("control.BlogManager$getAuthorDocumentList", author, BlogManagerNoSend.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getAuthorDocumentList", "author", author, BlogManagerNoSend.this, this, returnCodeConfig);
             }
         };
         addSendMessage(event);

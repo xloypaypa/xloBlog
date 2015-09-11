@@ -84,20 +84,12 @@
       (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage))
       true)))
 
-(defn getTypeDocumentList [typeMessage manager event returnCodeConfig]
+(defn getTypeDocumentList [typeKey typeMessage manager event returnCodeConfig]
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
     (. manager addFailMessage event object))
   (if (nil? typeMessage) false
     (let [document (new Document)]
-      (sendDocumentList manager event (. document append "type" typeMessage))
-      true)))
-
-(defn getAuthorDocumentList [author manager event returnCodeConfig]
-  (let [object {"return" (. returnCodeConfig getCode "not found")}]
-    (. manager addFailMessage event object))
-  (if (nil? author) false
-    (let [document (new Document)]
-      (sendDocumentList manager event (. document append "author" author))
+      (sendDocumentList manager event (. document append typeKey typeMessage))
       true)))
 
 (. ManagerLogic put "control.BlogManager$addDocument" addDocument 5)
@@ -105,5 +97,5 @@
 (. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)
 (. ManagerLogic put "control.BlogManager$addReader" addReader 1)
 (. ManagerLogic put "control.BlogManager$getAuthorTypeDocumentList" getAuthorTypeDocumentList 5)
-(. ManagerLogic put "control.BlogManager$getTypeDocumentList" getTypeDocumentList 4)
-(. ManagerLogic put "control.BlogManager$getAuthorDocumentList" getAuthorDocumentList 4)
+(. ManagerLogic put "control.BlogManager$getTypeDocumentList" getTypeDocumentList 5)
+(. ManagerLogic put "control.BlogManager$getAuthorDocumentList" getTypeDocumentList 5)
