@@ -35,6 +35,15 @@ public class UserManagerTest extends TestClass {
         userAccessManager.register(username, "pass");
     }
 
+    public static void remove(String username) throws InterruptedException {
+        Counter counter = new Counter(1);
+        UserManager userManager = new UserManagerNoSend(counter);
+        userManager.removeUser(username, "pass");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
     public static void login() throws InterruptedException {
         Counter counter = new Counter(1);
         login(counter);

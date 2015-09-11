@@ -1,4 +1,5 @@
 <code>
     <path>/UserManagerLogic.clj</path>
     <path>/BlogManagerLogic.clj</path>
+    <path>/MessageManagerLogic.clj</path>
 </code>

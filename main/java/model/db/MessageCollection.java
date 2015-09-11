@@ -28,7 +28,7 @@ public class MessageCollection extends DBCollection {
 
     public void removeMessage(String id) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("_id", id));
+        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
         Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return ;
 
@@ -38,7 +38,7 @@ public class MessageCollection extends DBCollection {
 
     public DBData getMessage(String id) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("_id", id));
+        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
         Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
@@ -48,7 +48,7 @@ public class MessageCollection extends DBCollection {
 
     public DBData getMessageData(String id) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("_id", id));
+        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
         Iterator<Document> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 

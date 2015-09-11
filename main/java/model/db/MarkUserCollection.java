@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 2015/9/2.
@@ -55,9 +56,7 @@ public class MarkUserCollection extends DBCollection {
         List<DBData> ans = new LinkedList<>();
         List<Document> iterable = collection.find(document);
 
-        for (Document anIterable : iterable) {
-            ans.add(getDocumentNotUsing(anIterable));
-        }
+        ans.addAll(iterable.stream().map(this::getDocumentNotUsing).collect(Collectors.toList()));
         unlockCollection();
         return ans;
     }
