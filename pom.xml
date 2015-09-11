@@ -55,7 +55,7 @@
         <resources>
             <resource>
                 <filtering>false</filtering>
-                <directory>clojure</directory>
+                <directory>extraClojure</directory>
             </resource>
             <resource>
                 <filtering>false</filtering>
@@ -64,6 +64,10 @@
             <resource>
                 <filtering>false</filtering>
                 <directory>resource</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>main/clojure</directory>
             </resource>
         </resources>
         <testResources>

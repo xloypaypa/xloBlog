@@ -30,14 +30,8 @@ public class PostServerSolver extends DynamicServerSolver {
 
                 @Override
                 public AbstractServerSolver getSolver(RequestSolver requestSolver) {
-                    try {
-                        LengthLimitReadServerSolver lengthLimitReadServerSolver =
-                                (LengthLimitReadServerSolver) Class.forName(postInfo.getClassName()).newInstance();
-                        return lengthLimitReadServerSolver.setRequestSolver(requestSolver);
-                    } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
+                    LengthLimitReadServerSolver lengthLimitReadServerSolver = new AutoPostSolver(postInfo);
+                    return lengthLimitReadServerSolver.setRequestSolver(requestSolver);
                 }
             });
         }

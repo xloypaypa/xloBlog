@@ -4,6 +4,7 @@ import log.LogManager;
 import log.NormalLog;
 import model.db.DBCollection;
 import net.CommandServerSolver;
+import script.ForceCacheScriptManager;
 import server.Server;
 import tool.connection.event.ConnectionEvent;
 import tool.connection.event.ConnectionEventManager;
@@ -17,7 +18,9 @@ import java.io.File;
  * it's the main class
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        ForceCacheScriptManager.getForceCacheScriptManager();
+
         DBCollection.init();
 
         NormalLog normalLog = new NormalLog();

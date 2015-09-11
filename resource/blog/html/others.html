@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客</title>
+    <link rel="stylesheet" href="../libs/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="../libs/Font-Awesome-3.2.1/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid" >
+        <a href="#" class="navbar-brand">blog</a>
+        <form class="navbar-form navbar-left search">
+            <div class="input-group input-group-lg">
+                <input type="text" />
+            </div>
+            <button class="btn btn-default" type="button">search</button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="login.html">登陆</a></li>
+            <li><a href="reg.html">注册</a></li>
+            <li class="btn-group pull-right">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+                    菜单<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="edit.html">写博客</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">1</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="content">
+    <div class="header">
+        <h1>IT小牛的IT见解</h1>
+        <small>资深IT人士吐血打造IT专业博客，贡献给广大网民最干货的企业信息化建设方案和工具的分析、点评。</small>
+    </div>
+    <div class="main">
+        <div class="article-list"></div>
+        <nav>
+            <ul class="pagination">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">上一页</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">...</a></li>
+                <li><a href="#">下一页</a></li>
+                <li><a href="#">尾页</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="aside">
+        <div class="myInfo">
+            <h2>个人资料</h2>
+            <div class="myInfo-content">
+                <img src="../images/headImg.jpg" alt="用户头像"/>
+                <p class="nickName">昵称</p>
+                <div class="btn-group">
+                    <div class="buttons">
+                        <button class="btn btn-sm btn-success" type="button">加关注</button>
+                        <button class="btn btn-sm btn-success" type="button">发私信</button>
+                    </div>
+                </div>
+                <ul class="myInfo-rank">
+                    <li>访问：<span>9999</span></li>
+                    <li>积分：<span>9999</span></li>
+                    <li>等级：<span>9999</span></li>
+                    <li>排名：<span>9999</span></li>
+                </ul>
+                <ul class="myInfo-statistics">
+                    <li>原创：<span>9999</span></li>
+                    <li>转载：<span>9999</span></li>
+                    <li>译文：<span>9999</span></li>
+                    <li>评论：<span>9999</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="classify">
+            <h2>文章分类</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+            </ul>
+        </div>
+        <div class="latestComment">
+            <h2>最新评论</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+                <li class="list-group-item"><a href="#">1</a><span class="badge">99</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="article" style="display:none;">
+    <ul class="article-tag">
+        <li class="date" style="font-size:32px;padding:10px 0;">2015-8-28</li>
+        <li>24人阅读<i class="icon-user"></i></li>
+        <li><a href="#">魏勇</a><i class="icon-pencil"></i></li>
+        <li><a href="#">发表评论</a><i class="icon-comment"></i></li>
+    </ul>
+    <div class="article-content ">
+        <h2><a href="#">近期微博吐槽言论存档，涉及“性能优化”、C++陋习等</a></h2>
+        <p>作者:<span class="author"></span></p>
+        <p class="article-body">写C++程序的几个陋习：class 名以大写 C 开头，例如 CDate；成员变量以 m_ 开头；变量采用匈牙利命名法；不知道何时禁用 copy-ctor/assign operator。有些人常常把“性能”挂在嘴边，而且其以“提高性能”为理由的“优化措施”往往不到点子上，只增加了复杂性和维护难度，降低了代码质量。这属于决策点找偏了。...</p>
+        <p><a href="" class="readMore">阅读全文</a></p>
+        <div class="article-footer">
+            <span><i class="icon-tag" style="padding-right:10px;"></i>java</span>
+        </div>
+    </div>
+</div>
+<footer></footer>
+
+<script src="../libs/jquery-1.11.2.min.js"></script>
+<script src="../libs/bootstrap/bootstrap.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/others.js"></script>
+</body>
+</html>

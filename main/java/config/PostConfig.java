@@ -3,6 +3,7 @@ package config;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,9 +29,24 @@ public class PostConfig implements ConfigInterface {
         for (Object now : node) {
             Element element = (Element) now;
             PostInfo post = new PostInfo();
+
+            post.methodData = new ArrayList<>();
+            post.defaultValue = new ArrayList<>();
+
             post.name = element.attributeValue("name");
             post.url = element.attributeValue("url");
-            post.className = element.getText();
+            post.manager = element.attributeValue("manager");
+            post.access = element.attributeValue("access").equals("true");
+            for (Object kid : element.elements()) {
+                Element data = (Element) kid;
+                post.method = data.attributeValue("name");
+                for (Object methodKid : data.elements()) {
+                    Element methodData = (Element) methodKid;
+                    String defaultValue = methodData.attributeValue("default");
+                    post.defaultValue.add(defaultValue);
+                    post.methodData.add(methodData.getText());
+                }
+            }
             postInfo.add(post);
         }
     }
@@ -48,18 +64,38 @@ public class PostConfig implements ConfigInterface {
     public class PostInfo {
         private String name;
         private String url;
-        private String className;
+        private String manager;
+        private boolean access;
+        private String method;
+        private List<String> methodData;
+        private List<String> defaultValue;
 
-        public String getClassName() {
-            return className;
+        public String getName() {
+            return name;
         }
 
         public String getUrl() {
             return url;
         }
 
-        public String getName() {
-            return name;
+        public String getManager() {
+            return manager;
+        }
+
+        public boolean getAccess() {
+            return access;
+        }
+
+        public String getMethod() {
+            return method;
+        }
+
+        public List<String> getMethodData() {
+            return new ArrayList<>(methodData);
+        }
+
+        public List<String> getDefaultValue() {
+            return new ArrayList<>(defaultValue);
         }
     }
 }
