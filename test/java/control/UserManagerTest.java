@@ -117,4 +117,18 @@ public class UserManagerTest extends TestClass {
         }
         testLogin();
     }
+
+    @Test
+    public void testChangeUserAccess() throws InterruptedException {
+        register("test user");
+        Counter counter = new Counter(1);
+        UserManagerNoSend userManager = new UserManagerNoSend(counter);
+        userManager.changeUserAccess("test user", "pass", "test user", "test access", 2);
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+        UserCollection userCollection = new UserCollection();
+        assertEquals(2, userCollection.getUserData("test user").object.getInteger("test access", 0));
+    }
 }

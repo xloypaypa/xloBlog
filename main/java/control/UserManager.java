@@ -49,19 +49,12 @@ public class UserManager extends Manager {
         event.submit();
     }
 
-    public void acceptUserRegister(String username, String password, String aimUsername, String accessType, int access) {
+    public void changeUserAccess(String username, String password, String aimUsername, String accessType, int access) {
         Event event = new Event() {
             @Override
-            public boolean run() {
-                if (aimUsername == null) return false;
-                UserCollection userCollection = new UserCollection();
-                if (!accessConfig.isAccept(username, password, this)) return false;
-                DBCollection.DBData aimUser = userCollection.getUser(aimUsername);
-                if (aimUser == null) {
-                    return false;
-                }
-                aimUser.object.put(accessType, access);
-                return true;
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aimUsername, accessType, access);
             }
         };
         addSendMessage(event);

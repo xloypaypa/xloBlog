@@ -42,6 +42,13 @@
       (dotimes [i (count messages)] (. messageCollection removeMessage (. (. (. (nth messages i) object) get "_id") toString)))))
   true)
 
+(defn changeUserAccess[username password aimUser accessType val]
+  (if (nil? aimUser) false
+    (let [data (. (new UserCollection) getUser aimUser)]
+      (if (nil? data) false
+        (do (. (. data object) put accessType val) true)))))
+
 (. ManagerLogic put "control.UserManager$loginUser" loginUser 2)
 (. ManagerLogic put "control.UserManager$register" register 2)
 (. ManagerLogic put "control.UserManager$removeUser" removeUser 2)
+(. ManagerLogic put "control.UserManager$changeUserAccess" changeUserAccess 5)
