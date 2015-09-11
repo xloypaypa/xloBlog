@@ -1,7 +1,5 @@
 package control;
 
-import model.db.DBCollection;
-import model.db.UserCollection;
 import model.event.Event;
 import server.serverSolver.RequestSolver;
 
@@ -22,7 +20,7 @@ public class UserManager extends Manager {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), username, password);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -33,7 +31,7 @@ public class UserManager extends Manager {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), username, password);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -45,7 +43,7 @@ public class UserManager extends Manager {
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -57,7 +55,7 @@ public class UserManager extends Manager {
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aimUsername, accessType, access);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 }

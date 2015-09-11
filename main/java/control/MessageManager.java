@@ -1,18 +1,7 @@
 package control;
 
-import config.LengthLimitConfig;
-import model.db.DBCollection;
-import model.db.MessageCollection;
 import model.event.Event;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.tool.WriteMessageServerSolver;
-import org.bson.Document;
 import server.serverSolver.RequestSolver;
-
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 2015/8/31.
@@ -31,7 +20,7 @@ public class MessageManager extends Manager {
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, message, aimUser);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -40,10 +29,10 @@ public class MessageManager extends Manager {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
-                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id, MessageManager.this, this);
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id, sendManager, this);
             }
         };
-        addFailMessage(event);
+        sendManager.addFailMessage(event);
         event.submit();
     }
 
@@ -55,7 +44,7 @@ public class MessageManager extends Manager {
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -64,10 +53,10 @@ public class MessageManager extends Manager {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
-                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, username, MessageManager.this, this);
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, username, sendManager, this);
             }
         };
-        addFailMessage(event);
+        sendManager.addFailMessage(event);
         event.submit();
     }
 
@@ -76,10 +65,10 @@ public class MessageManager extends Manager {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
-                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aim, MessageManager.this, this);
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aim, sendManager, this);
             }
         };
-        addFailMessage(event);
+        sendManager.addFailMessage(event);
         event.submit();
     }
 }

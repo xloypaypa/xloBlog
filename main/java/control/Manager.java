@@ -21,6 +21,7 @@ public abstract class Manager {
     protected RequestSolver requestSolver;
     protected static ReturnCodeConfig returnCodeConfig = (ReturnCodeConfig) ConfigManager.getConfigManager().getConfig(ReturnCodeConfig.class);
     protected static AccessConfig accessConfig = (AccessConfig) ConfigManager.getConfigManager().getConfig(AccessConfig.class);
+    protected Manager sendManager = Manager.this;
 
     public Manager(RequestSolver requestSolver) {
         this.requestSolver = requestSolver;

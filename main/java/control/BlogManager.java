@@ -1,24 +1,14 @@
 package control;
 
-import model.db.BlogCollection;
-import model.db.DBCollection;
 import model.event.Event;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.tool.WriteMessageServerSolver;
-import org.bson.Document;
 import server.serverSolver.RequestSolver;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by xlo on 2015/8/28.
  * it's the manager of blog
  */
 public class BlogManager extends Manager {
+
     public BlogManager(RequestSolver requestSolver) {
         super(requestSolver);
     }
@@ -31,7 +21,7 @@ public class BlogManager extends Manager {
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, title, body, type);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -43,7 +33,7 @@ public class BlogManager extends Manager {
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, documentID, reply);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -51,7 +41,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), id, BlogManager.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), id, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }
@@ -63,7 +53,7 @@ public class BlogManager extends Manager {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), id);
             }
         };
-        addSendMessage(event);
+        sendManager.addSendMessage(event);
         event.submit();
     }
 
@@ -71,7 +61,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), author, type, BlogManager.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), author, type, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }
@@ -80,7 +70,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), "type", type, BlogManager.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), "type", type, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }
@@ -89,7 +79,7 @@ public class BlogManager extends Manager {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), "author", author, BlogManager.this, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), "author", author, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }

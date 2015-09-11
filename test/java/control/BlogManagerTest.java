@@ -218,7 +218,7 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
-        assertEquals("body", blogManager.getMessage().getString("body"));
+        assertEquals("body", blogManager.getManagerNoSend().getMessage().getString("body"));
     }
 
     @Test
@@ -233,7 +233,7 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
-        assertEquals(2, blogManager.getArray().size());
+        assertEquals(2, blogManager.getManagerNoSend().getArray().size());
     }
 
     @Test
@@ -249,7 +249,7 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
-        assertEquals(1, blogManager.getArray().size());
+        assertEquals(1, blogManager.getManagerNoSend().getArray().size());
     }
 
     @Test
@@ -266,6 +266,6 @@ public class BlogManagerTest {
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
-        assertEquals(2, blogManager.getArray().size());
+        assertEquals(2, blogManager.getManagerNoSend().getArray().size());
     }
 }

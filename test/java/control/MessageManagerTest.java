@@ -65,7 +65,7 @@ public class MessageManagerTest {
             Thread.sleep(500);
         }
 
-        assertEquals("message1", messageManager.getMessage().getString("message"));
+        assertEquals("message1", messageManager.getManagerNoSend().getMessage().getString("message"));
     }
 
     @Test
@@ -93,8 +93,8 @@ public class MessageManagerTest {
             Thread.sleep(500);
         }
 
-        assertEquals(2, messageManager.getArray().size());
-        JSONObject object = (JSONObject) messageManager.getArray().get(0);
+        assertEquals(2, messageManager.getManagerNoSend().getArray().size());
+        JSONObject object = (JSONObject) messageManager.getManagerNoSend().getArray().get(0);
         assertEquals("message12", object.getString("message"));
     }
 
@@ -112,8 +112,8 @@ public class MessageManagerTest {
             Thread.sleep(500);
         }
 
-        assertEquals(2, messageManager.getArray().size());
-        JSONObject object = (JSONObject) messageManager.getArray().get(0);
+        assertEquals(2, messageManager.getManagerNoSend().getArray().size());
+        JSONObject object = (JSONObject) messageManager.getManagerNoSend().getArray().get(0);
         assertEquals("message12", object.getString("message"));
     }
 }
