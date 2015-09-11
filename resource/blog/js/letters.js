@@ -5,7 +5,7 @@ $(function(){
     var receiver=getQueryString('receiver');
     $('.receiver').html(decodeURIComponent(receiver));
 
-    //������Ϣ
+    //发送消息
     $('.submit').click(function(){
         var message=encodeURIComponent($('.chatContent textarea').val());
         console.log(receiver);
@@ -15,7 +15,11 @@ $(function(){
             message:message
         };
         ajaxHeader('/sendMessage',data,function(response){
-
+            if(response.return==200){
+                alert('发送成功');
+            }else{
+                alert('系统出错：'+response.return);
+            }
         });
     });
 });

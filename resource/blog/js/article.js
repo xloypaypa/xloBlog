@@ -13,7 +13,7 @@ $(function(){
     getDocument();
 
     //是否关注
-    //isMarked();
+    isMarked(author);
 
     //评论
     $('.myComment .submit').click(function(){
@@ -84,12 +84,16 @@ function getDocument(){
         }
     });
 }
-function isMarked(){
+function isMarked(author){
     console.log(author);
     var data={
         aimUser:author
     };
     ajaxHeader('/isMarked',data,function(response){
-
+        if(response.return){
+            $('.focus').html('已关注');
+        }else{
+            $('.focus').html('加关注');
+        }
     });
 }
