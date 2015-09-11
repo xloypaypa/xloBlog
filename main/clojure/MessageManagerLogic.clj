@@ -36,7 +36,6 @@
         (. ans add object)))
     (. manager addSuccessMessage event ans) true))
 
-;(. ManagerLogic put "control.MessageManager$" addMessage 5)
 (. ManagerLogic put "control.MessageManager$addMessage" addMessage 4)
 (. ManagerLogic put "control.MessageManager$getMessage" getMessage 5)
 (. ManagerLogic put "control.MessageManager$readMessage" readMessage 3)
