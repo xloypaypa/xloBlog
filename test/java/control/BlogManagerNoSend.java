@@ -1,7 +1,11 @@
 package control;
 
 import model.event.Event;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import testTool.Counter;
+
+import java.util.Map;
 
 /**
  * Created by xlo on 2015/9/2.
@@ -9,14 +13,32 @@ import testTool.Counter;
  */
 public class BlogManagerNoSend extends BlogManager {
     protected Counter counter;
+    protected JSONObject message;
+    protected JSONArray array;
 
     public BlogManagerNoSend(Counter counter) {
         super(null);
         this.counter = counter;
     }
 
+    public JSONObject getMessage() {
+        return message;
+    }
+
+    public JSONArray getArray() {
+        return array;
+    }
+
+    private void setMessage(JSONObject message) {
+        this.message = message;
+    }
+
+    private void setArray(JSONArray array) {
+        this.array = array;
+    }
+
     @Override
-    protected void addSendMessage(Event event) {
+    public void addSendMessage(Event event) {
         event.actionWhileCommit(new Event() {
             @Override
             public boolean run() {
@@ -28,7 +50,7 @@ public class BlogManagerNoSend extends BlogManager {
     }
 
     @Override
-    protected void addSuccessMessage(Event event) {
+    public void addSuccessMessage(Event event) {
         event.actionWhileSuccess(new Event() {
             @Override
             public boolean run() {
@@ -39,7 +61,31 @@ public class BlogManagerNoSend extends BlogManager {
     }
 
     @Override
-    protected void addFailMessage(Event event) {
+    public void addSuccessMessage(Event event, Map<String, Object> message) {
+        event.actionWhileSuccess(new Event() {
+            @Override
+            public boolean run() {
+                counter.addSuccess(1);
+                setMessage(getJsonObject(message));
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void addSuccessMessage(Event event, String message) {
+        event.actionWhileSuccess(new Event() {
+            @Override
+            public boolean run() {
+                counter.addSuccess(1);
+                setMessage(JSONObject.fromObject(message));
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void addFailMessage(Event event) {
         event.actionWhileFail(new Event() {
             @Override
             public boolean run() {
@@ -47,5 +93,41 @@ public class BlogManagerNoSend extends BlogManager {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void addFailMessage(Event event, Map<String, Object> message) {
+        event.actionWhileFail(new Event() {
+            @Override
+            public boolean run() {
+                counter.addFail(1);
+                setMessage(getJsonObject(message));
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void addFailMessage(Event event, String message) {
+        event.actionWhileFail(new Event() {
+            @Override
+            public boolean run() {
+                counter.addFail(1);
+                setMessage(JSONObject.fromObject(message));
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void getDocument(String id) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke("control.BlogManager$getDocument", id, BlogManagerNoSend.this ,this, returnCodeConfig);
+            }
+        };
+        addSendMessage(event);
+        event.submit();
     }
 }

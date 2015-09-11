@@ -34,7 +34,6 @@ public class BlogManager extends Manager {
 
     public void addReply(String username, String password, String documentID, String reply) {
         Event event = new Event() {
-            @SuppressWarnings("unchecked")
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
@@ -48,19 +47,20 @@ public class BlogManager extends Manager {
     public void getDocument(String id) {
         new Event() {
             @Override
-            public boolean run() {
-                JSONObject object = new JSONObject();
-                object.put("return", returnCodeConfig.getCode("not found"));
-                sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
-
-                if (id == null) return false;
-
-                BlogCollection blogCollection = new BlogCollection();
-                DBCollection.DBData data = blogCollection.getDocumentData(id);
-                if (data == null) return false;
-                object = JSONObject.fromObject(data.object.toJson());
-                sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
-                return true;
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), id, BlogManager.this ,this, returnCodeConfig);
+//                JSONObject object = new JSONObject();
+//                object.put("return", returnCodeConfig.getCode("not found"));
+//                sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+//
+//                if (id == null) return false;
+//
+//                BlogCollection blogCollection = new BlogCollection();
+//                DBCollection.DBData data = blogCollection.getDocumentData(id);
+//                if (data == null) return false;
+//                object = JSONObject.fromObject(data.object.toJson());
+//                sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+//                return true;
             }
         }.submit();
     }

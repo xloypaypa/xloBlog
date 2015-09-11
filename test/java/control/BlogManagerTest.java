@@ -203,4 +203,22 @@ public class BlogManagerTest {
         DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
         assertEquals(n, data.object.getInteger("reader", 0));
     }
+
+    @Test
+    public void testGetDocument() throws Exception {
+        testAddDocument();
+        BlogCollection collection = new BlogCollection();
+        List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
+        String id = data.get(0).object.get("_id").toString();
+
+        Counter counter = new Counter(1);
+        BlogManagerNoSend blogManager = new BlogManagerNoSend(counter);
+        blogManager.getDocument(id);
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        assertEquals("body", blogManager.getMessage().getString("body"));
+    }
 }

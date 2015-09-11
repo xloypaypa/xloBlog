@@ -19,7 +19,7 @@ public class UserManagerNoSend extends UserManager {
     }
 
     @Override
-    protected void addSendMessage(Event event) {
+    public void addSendMessage(Event event) {
         event.actionWhileCommit(new Event() {
             @Override
             public boolean run() {
@@ -31,7 +31,7 @@ public class UserManagerNoSend extends UserManager {
     }
 
     @Override
-    protected void addSuccessMessage(Event event) {
+    public void addSuccessMessage(Event event) {
         event.actionWhileSuccess(new Event() {
             @Override
             public boolean run() {
@@ -42,7 +42,7 @@ public class UserManagerNoSend extends UserManager {
     }
 
     @Override
-    protected void addFailMessage(Event event) {
+    public void addFailMessage(Event event) {
         event.actionWhileFail(new Event() {
             @Override
             public boolean run() {

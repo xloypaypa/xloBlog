@@ -3,9 +3,9 @@
   control.BlogManagerLogic
   (:import [model.db BlogCollection MarkUserCollection MessageCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
-           [config LengthLimitConfig]
+           [config LengthLimitConfig ConfigManager ReturnCodeConfig]
            [java.util Date]
-           [control ManagerLogic]))
+           [control ManagerLogic BlogManager]))
 
 (defn addDocument [username password title body type]
   (if (or (nil? title) (nil? body) (nil? type)) false
@@ -43,5 +43,15 @@
                   (. (. document object) getString "author") username (str "reply: " reply) (new Date)))
               true)))))))
 
+(defn getDocument [id manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object))
+  (if (nil? id) false
+    (let [data (. (new BlogCollection) getDocumentData id)]
+      (if (nil? data) false
+        (let [object (. (. data object) toJson)]
+          (. manager addSuccessMessage event object) true)))))
+
 (. ManagerLogic put "control.BlogManager$addDocument" addDocument 5)
 (. ManagerLogic put "control.BlogManager$addReply" addReply 4)
+(. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)

@@ -8,6 +8,8 @@ import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
 import server.serverSolver.RequestSolver;
 
+import java.util.Map;
+
 /**
  * Created by xlo on 2015/8/28.
  * it's the abstract manager
@@ -21,20 +23,52 @@ public abstract class Manager {
         this.requestSolver = requestSolver;
     }
 
-    protected void addSendMessage(Event event) {
+    public void addSendMessage(Event event) {
         addSuccessMessage(event);
         addFailMessage(event);
     }
 
-    protected void addSuccessMessage(Event event) {
-        JSONObject object = new JSONObject();
-        object.put("return", returnCodeConfig.getCode("accept"));
+    public void addSuccessMessage(Event event) {
+        String accept = "accept";
+        JSONObject object = getJsonObjectAsReturn(accept);
         event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    protected void addFailMessage(Event event) {
-        JSONObject object = new JSONObject();
-        object.put("return", returnCodeConfig.getCode("forbidden"));
+    public void addSuccessMessage(Event event, Map<String, Object> message) {
+        JSONObject object = getJsonObject(message);
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+    }
+
+    public void addSuccessMessage(Event event, String message) {
+        JSONObject object = JSONObject.fromObject(message);
+        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+    }
+
+    public void addFailMessage(Event event) {
+        String forbidden = "forbidden";
+        JSONObject object = getJsonObjectAsReturn(forbidden);
         event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+    }
+
+    public void addFailMessage(Event event, Map<String, Object> message) {
+        JSONObject object = getJsonObject(message);
+        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+    }
+
+    public void addFailMessage(Event event, String message) {
+        JSONObject object = JSONObject.fromObject(message);
+        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+    }
+
+    protected JSONObject getJsonObject(Map<String, Object> message) {
+        JSONObject object = new JSONObject();
+        object.putAll(message);
+        return object;
+    }
+
+    protected JSONObject getJsonObjectAsReturn(String forbidden) {
+        JSONObject object = new JSONObject();
+        object.put("return", returnCodeConfig.getCode(forbidden));
+        return object;
     }
 }
