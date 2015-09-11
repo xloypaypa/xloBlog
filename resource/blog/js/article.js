@@ -1,7 +1,6 @@
 $(function(){
-    if(getQueryString('name')){
+    if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
-        $('.myInfo .buttons').show();
     }else if(window.username){
         author=window.username;
         $('.myInfo .buttons').hide();
@@ -14,7 +13,7 @@ $(function(){
     getDocument();
 
     //是否关注
-    //isMarked();
+    isMarked(author);
 
     //评论
     $('.myComment .submit').click(function(){
@@ -43,11 +42,11 @@ $(function(){
         };
         if($(this).html()=='加关注'){
             ajaxHeader('/mark',data,function(response){
-                $(this).html('已关注');
+                $('.focus').html('已关注');
             });
         }else{
             ajaxHeader('/unMark',data,function(response){
-                $(this).html('加关注');
+                $('.focus').html('加关注');
             });
         }
     });
@@ -85,12 +84,16 @@ function getDocument(){
         }
     });
 }
-function isMarked(){
+function isMarked(author){
     console.log(author);
     var data={
         aimUser:author
     };
     ajaxHeader('/isMarked',data,function(response){
-
+        if(response.return){
+            $('.focus').html('已关注');
+        }else{
+            $('.focus').html('加关注');
+        }
     });
 }
