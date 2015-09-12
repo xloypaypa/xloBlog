@@ -18,7 +18,7 @@ public class PostConfigTest {
         assertNotNull(postInfo);
         assertEquals("/register", postInfo.getUrl());
         assertEquals("control.UserManager", postInfo.getManager());
-        assertFalse(postInfo.getAccess());
+        assertFalse(postInfo.needAccess());
         assertEquals("register", postInfo.getMethod());
         assertEquals("username", postInfo.getMethodData().get(0));
     }

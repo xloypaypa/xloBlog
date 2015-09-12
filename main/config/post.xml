@@ -44,20 +44,20 @@
     <solver name="get document list by author" url="/getDocumentListByAuthor" manager="control.BlogManager" access="false">
         <method name="getAuthorDocumentList">
             <data>author</data>
-            <data>page</data>
+            <data default="1">page</data>
         </method>
     </solver>
     <solver name="get document list by type" url="/getDocumentListByType" manager="control.BlogManager" access="false">
         <method name="getTypeDocumentList">
             <data>type</data>
-            <data>page</data>
+            <data default="1">page</data>
         </method>
     </solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType" manager="control.BlogManager" access="false">
         <method name="getAuthorTypeDocumentList">
             <data>author</data>
             <data>type</data>
-            <data>page</data>
+            <data default="1">page</data>
         </method>
     </solver>
     <solver name="add reader" url="/addDocumentReader" manager="control.BlogManager" access="false">
@@ -82,6 +82,11 @@
     </solver>
     <solver name="read message" url="/readMessage" manager="control.MessageManager" access="true">
         <method name="readMessage">
+            <data>id</data>
+        </method>
+    </solver>
+    <solver name="read all message" url="/readAllMessage" manager="control.MessageManager" access="true">
+        <method name="readAllMessage" model="array">
             <data>id</data>
         </method>
     </solver>

@@ -40,6 +40,7 @@ public class PostConfig implements ConfigInterface {
             for (Object kid : element.elements()) {
                 Element data = (Element) kid;
                 post.method = data.attributeValue("name");
+                post.array = data.attributeValue("model", "object").equals("array");
                 for (Object methodKid : data.elements()) {
                     Element methodData = (Element) methodKid;
                     String defaultValue = methodData.attributeValue("default");
@@ -67,6 +68,7 @@ public class PostConfig implements ConfigInterface {
         private String manager;
         private boolean access;
         private String method;
+        private boolean array;
         private List<String> methodData;
         private List<String> defaultValue;
 
@@ -82,12 +84,16 @@ public class PostConfig implements ConfigInterface {
             return manager;
         }
 
-        public boolean getAccess() {
+        public boolean needAccess() {
             return access;
         }
 
         public String getMethod() {
             return method;
+        }
+
+        public boolean isArray() {
+            return this.array;
         }
 
         public List<String> getMethodData() {
