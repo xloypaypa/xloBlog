@@ -57,6 +57,15 @@ public class UserManagerTest extends TestClass {
         userAccessManager.loginUser("test user", "pass");
     }
 
+    public static void setMotto(String username, String motto) throws InterruptedException {
+        Counter counter = new Counter(1);
+        UserManagerNoSend userAccessManager = new UserManagerNoSend(counter);
+        userAccessManager.setMotto(username, "pass", motto);
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
     protected void removeUser() {
         UserCollection userCollection = new UserCollection();
         userCollection.removeUser("test user");
@@ -139,5 +148,20 @@ public class UserManagerTest extends TestClass {
         }
         UserCollection userCollection = new UserCollection();
         assertEquals(2, userCollection.getUserData("test user").object.getInteger("test access", 0));
+    }
+
+    @Test
+    public void testMotto() throws Exception {
+        register("test user");
+        setMotto("test user", "test motto");
+
+        Counter counter = new Counter(1);
+        UserManagerNoSend userManager = new UserManagerNoSend(counter);
+        userManager.getMotto("test user");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        assertEquals("test motto", userManager.getManagerNoSend().getMessage().get("return"));
     }
 }

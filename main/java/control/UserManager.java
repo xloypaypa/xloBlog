@@ -58,4 +58,27 @@ public class UserManager extends Manager {
         sendManager.addSendMessage(event);
         event.submit();
     }
+
+    public void setMotto(String username, String password, String motto) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, motto);
+            }
+        };
+        sendManager.addSendMessage(event);
+        event.submit();
+    }
+
+    public void getMotto(String username) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), username, sendManager, this);
+            }
+        };
+        sendManager.addFailMessage(event);
+        event.submit();
+    }
 }

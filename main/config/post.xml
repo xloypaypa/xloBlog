@@ -9,6 +9,16 @@
             <data>password</data>
         </method>
     </solver>
+    <solver name="set motto" url="/setMotto" manager="control.UserManager" access="true">
+        <method name="setMotto">
+            <data>motto</data>
+        </method>
+    </solver>
+    <solver name="get motto" url="/getMotto" manager="control.UserManager" access="false">
+        <method name="getMotto">
+            <data>username</data>
+        </method>
+    </solver>
 
     <solver name="mark" url="/mark" manager="control.MarkManager" access="true">
         <method name="markUser">
