@@ -40,19 +40,30 @@
         <h1 ><a href="index.html" class="nickName">昵称</a></h1>
     </div>
     <ul class="nav nav-tabs">
-        <li role="presentation" ><a href="#">我的资料</a></li>
-        <li role="presentation" class="active"><a href="#">我的关系</a></li>
-        <li role="presentation"><a href="#">我的消息</a></li>
+        <li role="presentation" class="active"><a href="#" >我的资料</a></li>
+        <li role="presentation" ><a href="#" class="myFocus">我的关系</a></li>
+        <li role="presentation"><a href="#" class="myMessages">我的消息</a></li>
     </ul>
-    <div class="me">
+    <div class="Focus" style="display:none;">
         <h3>我关注的人（<span class="focusNum">0</span>）</h3>
         <ul class="focus-list list-group">
         </ul>
     </div>
+    <div class="Messages" style="display:none;">
+        <h3>未读通知(<span class="messageNum">0</span>) | <span class="readAll">全部标记为已读</span></h3>
+        <ul class="message-list list-group">
+        </ul>
+    </div>
 </div>
-<ul id="focus-list" style="display:none;">
-    <li class="list-group-item">1</li>
+<ul id="message-template" style="display:none;">
+    <li class="list-group-item">
+        <input type="checkbox" name="isRead" />
+        <span class="message-content">对不起，系统出错</span>
+        <span class="message-author"></span>
+        <span class="message-date pull-right"></span>
+    </li>
 </ul>
+
 <footer>
     <ul id="copyright">
         <li>版权所有 &copy;&nbsp; <a href="http://ifeve.com/">并发编程网 &#8211; ifeve.com</a></li>
