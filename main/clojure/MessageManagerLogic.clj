@@ -35,11 +35,22 @@
             object (. now object)]
         (. object put "id" (str (. object get "_id")))
         (. object remove "_id")
+        (let [body (. object get "message")
+              preview (if (> (count body) 100) (subs body 0 100) body)]
+          (. object remove "message")
+          (. object put "preview" preview))
         (. ans add object)))
     (. manager addSuccessMessage event ans) true))
+
+(defn removeMessage[username password id]
+  (if (nil? id) false
+    (let [data (. (new MessageCollection) getMessage id)]
+      (if (or (nil? data) (not= username (. (. data object) getString "username"))) false
+        (do (. (new MessageCollection) removeMessage id) true)))))
 
 (. ManagerLogic put "control.MessageManager$addMessage" addMessage 4)
 (. ManagerLogic put "control.MessageManager$getMessage" getMessage 5)
 (. ManagerLogic put "control.MessageManager$readMessage" readMessage 3)
 (. ManagerLogic put "control.MessageManager$getAllMessage" getAllMessage 5)
 (. ManagerLogic put "control.MessageManager$getUserAllMessage" getAllMessage 5)
+(. ManagerLogic put "control.MessageManager$removeMessage" removeMessage 3)

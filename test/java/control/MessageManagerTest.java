@@ -33,6 +33,15 @@ public class MessageManagerTest {
         }
     }
 
+    public static void removeMessage(String username, String id) throws InterruptedException {
+        Counter counter = new Counter(1);
+        MessageManagerNoSend messageManager = new MessageManagerNoSend(counter);
+        messageManager.removeMessage(username, "pass", id);
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
     @After
     public void tearDown() throws InterruptedException {
         UserManagerTest.remove("test user");
@@ -95,7 +104,7 @@ public class MessageManagerTest {
 
         assertEquals(2, messageManager.getManagerNoSend().getArray().size());
         JSONObject object = (JSONObject) messageManager.getManagerNoSend().getArray().get(0);
-        assertEquals("message12", object.getString("message"));
+        assertEquals("message12", object.getString("preview"));
     }
 
     @Test
@@ -114,6 +123,15 @@ public class MessageManagerTest {
 
         assertEquals(2, messageManager.getManagerNoSend().getArray().size());
         JSONObject object = (JSONObject) messageManager.getManagerNoSend().getArray().get(0);
-        assertEquals("message12", object.getString("message"));
+        assertEquals("message12", object.getString("preview"));
+    }
+
+    @Test
+    public void testRemoveMessage() throws Exception {
+        testAddMessage();
+
+        MessageCollection messageCollection = new MessageCollection();
+        removeMessage("test aim", messageCollection.findMessageData(new Document("username", "test aim")).get(0).object.get("_id").toString());
+        assertEquals(0, messageCollection.findMessageData(new Document("username", "test aim")).size());
     }
 }

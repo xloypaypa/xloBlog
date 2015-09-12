@@ -71,4 +71,16 @@ public class MessageManager extends Manager {
         sendManager.addFailMessage(event);
         event.submit();
     }
+
+    public void removeMessage(String username, String password, String id) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id);
+            }
+        };
+        sendManager.addSendMessage(event);
+        event.submit();
+    }
 }
