@@ -1,6 +1,7 @@
 $(function(){
     if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
+
     }else if(window.username){
         author=window.username;
         $('.btn-others').hide();
@@ -33,6 +34,8 @@ $(function(){
         location.href='letters.html?receiver='+author;
     });
 });
+
+//获取文章列表
 function getDocumentList(author){
     var data={
         author:author
@@ -56,6 +59,8 @@ function getDocumentList(author){
             articleNo.find('.author').html(author);
             articleNo.find('.article-body').html(preview);
             articleNo.find('.date').html(date);
+            articleNo.find('.readerNum').html(response[i].reader);
         }
     });
 }
+

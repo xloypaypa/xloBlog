@@ -1,6 +1,7 @@
 $(function(){
     if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
+        addDocumentReader();
     }else if(window.username){
         author=window.username;
         $('.myInfo .buttons').hide();
@@ -71,6 +72,7 @@ function getDocument(){
         $('.article-body').html(body);
         $('.date').html(date);
         $('.commentNum').html(commentLen);
+        $('.readerNum').html(response.reader);
         for(var i=0;i<commentLen;i++){
             $('.comments-list').append("<li class='list-group-item'>"+$('#comment-list').html()+"</li>");
             var commentNo=$('.comments-list li').eq(i);
@@ -95,5 +97,16 @@ function isMarked(author){
         }else{
             $('.focus').html('加关注');
         }
+    });
+}
+
+//阅读人数加一
+function addDocumentReader(){
+    console.log(getQueryString('id'));
+    var data={
+        id:getQueryString('id')
+    };
+    ajaxRequest('/addDocumentReader',data,function(response){
+
     });
 }
