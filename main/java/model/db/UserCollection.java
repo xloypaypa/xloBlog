@@ -21,6 +21,7 @@ public class UserCollection extends DBCollection {
         Map<String, Object> data = new HashMap<>();
         data.put("username", username);
         data.put("password", password);
+        data.put("motto", "");
         this.insert(new Document(data));
         unlockCollection();
     }

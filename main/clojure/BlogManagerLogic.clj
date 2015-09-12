@@ -7,7 +7,7 @@
            [java.util Date LinkedList]
            [control ManagerLogic BlogManager]))
 
-(defn sendDocumentList [manager event message]
+(defn sendDocumentList [manager event message page]
   (let [aimList (vec (. (new BlogCollection) findDocumentListData message))
         ans (new LinkedList)]
     (dotimes [i (count aimList)]
@@ -22,7 +22,10 @@
                     "reader" (. object getInteger "reader" 0)
                     "preview" preview}]
         (. ans add nowMap)))
-    (. manager addSuccessMessage event ans)))
+    (let [left (* (- page 1) 10)
+          right (if (> (+ left 10) (. ans size)) (. ans size) (+ left 10))]
+      (if (< left right) (do (. manager addSuccessMessage event (. ans subList left right)) true)
+        false))))
 
 (defn addDocument [username password title body type]
   (if (or (nil? title) (nil? body) (nil? type)) false
@@ -76,26 +79,24 @@
             val (+ (. object getInteger "reader" 0) 1)]
         (. object put "reader" (int val)) true))))
 
-(defn getAuthorTypeDocumentList [author typeMessage manager event returnCodeConfig]
+(defn getAuthorTypeDocumentList [author typeMessage page manager event returnCodeConfig]
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
     (. manager addFailMessage event object))
   (if (or (nil? author) (nil? typeMessage)) false
     (let [document (new Document)]
-      (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage))
-      true)))
+      (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page)))))
 
-(defn getTypeDocumentList [typeKey typeMessage manager event returnCodeConfig]
+(defn getTypeDocumentList [typeKey typeMessage page manager event returnCodeConfig]
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
     (. manager addFailMessage event object))
   (if (nil? typeMessage) false
     (let [document (new Document)]
-      (sendDocumentList manager event (. document append typeKey typeMessage))
-      true)))
+      (sendDocumentList manager event (. document append typeKey typeMessage) (. Integer valueOf page)))))
 
 (. ManagerLogic put "control.BlogManager$addDocument" addDocument 5)
 (. ManagerLogic put "control.BlogManager$addReply" addReply 4)
 (. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)
 (. ManagerLogic put "control.BlogManager$addReader" addReader 1)
-(. ManagerLogic put "control.BlogManager$getAuthorTypeDocumentList" getAuthorTypeDocumentList 5)
-(. ManagerLogic put "control.BlogManager$getTypeDocumentList" getTypeDocumentList 5)
-(. ManagerLogic put "control.BlogManager$getAuthorDocumentList" getTypeDocumentList 5)
+(. ManagerLogic put "control.BlogManager$getAuthorTypeDocumentList" getAuthorTypeDocumentList 6)
+(. ManagerLogic put "control.BlogManager$getTypeDocumentList" getTypeDocumentList 6)
+(. ManagerLogic put "control.BlogManager$getAuthorDocumentList" getTypeDocumentList 6)

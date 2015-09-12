@@ -9,6 +9,16 @@
             <data>password</data>
         </method>
     </solver>
+    <solver name="set motto" url="/setMotto" manager="control.UserManager" access="true">
+        <method name="setMotto">
+            <data>motto</data>
+        </method>
+    </solver>
+    <solver name="get motto" url="/getMotto" manager="control.UserManager" access="false">
+        <method name="getMotto">
+            <data>username</data>
+        </method>
+    </solver>
 
     <solver name="mark" url="/mark" manager="control.MarkManager" access="true">
         <method name="markUser">
@@ -44,17 +54,20 @@
     <solver name="get document list by author" url="/getDocumentListByAuthor" manager="control.BlogManager" access="false">
         <method name="getAuthorDocumentList">
             <data>author</data>
+            <data default="1">page</data>
         </method>
     </solver>
     <solver name="get document list by type" url="/getDocumentListByType" manager="control.BlogManager" access="false">
         <method name="getTypeDocumentList">
             <data>type</data>
+            <data default="1">page</data>
         </method>
     </solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType" manager="control.BlogManager" access="false">
         <method name="getAuthorTypeDocumentList">
             <data>author</data>
             <data>type</data>
+            <data default="1">page</data>
         </method>
     </solver>
     <solver name="add reader" url="/addDocumentReader" manager="control.BlogManager" access="false">
@@ -82,10 +95,20 @@
             <data>id</data>
         </method>
     </solver>
+    <solver name="read all message" url="/readAllMessage" manager="control.MessageManager" access="true">
+        <method name="readAllMessage" model="array">
+            <data>id</data>
+        </method>
+    </solver>
     <solver name="send message" url="/sendMessage" manager="control.MessageManager" access="true">
         <method name="addMessage">
             <data>message</data>
             <data>aim</data>
+        </method>
+    </solver>
+    <solver name="remove message" url="/removeMessage" manager="control.MessageManager" access="true">
+        <method name="removeMessage">
+            <data>id</data>
         </method>
     </solver>
 </post>

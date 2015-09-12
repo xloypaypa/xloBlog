@@ -229,7 +229,7 @@ public class BlogManagerTest {
 
         Counter counter = new Counter(1);
         BlogManagerNoSend blogManager = new BlogManagerNoSend(counter);
-        blogManager.getAuthorTypeDocumentList("test user", "default");
+        blogManager.getAuthorTypeDocumentList("test user", "default", "1");
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
@@ -245,7 +245,7 @@ public class BlogManagerTest {
 
         Counter counter = new Counter(1);
         BlogManagerNoSend blogManager = new BlogManagerNoSend(counter);
-        blogManager.getAuthorDocumentList("test user");
+        blogManager.getAuthorDocumentList("test user", "1");
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
@@ -262,7 +262,7 @@ public class BlogManagerTest {
 
         Counter counter = new Counter(1);
         BlogManagerNoSend blogManager = new BlogManagerNoSend(counter);
-        blogManager.getTypeDocumentList("type2");
+        blogManager.getTypeDocumentList("type2", "1");
         while (counter.get() != 0) {
             Thread.sleep(500);
         }

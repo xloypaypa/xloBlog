@@ -57,29 +57,29 @@ public class BlogManager extends Manager {
         event.submit();
     }
 
-    public void getAuthorTypeDocumentList(String author, String type) {
+    public void getAuthorTypeDocumentList(String author, String type, final String page) {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), author, type, sendManager, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), author, type, page, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }
 
-    public void getTypeDocumentList(String type) {
+    public void getTypeDocumentList(String type, String page) {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), "type", type, sendManager, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), "type", type, page, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }
 
-    public void getAuthorDocumentList(String author) {
+    public void getAuthorDocumentList(String author, String page) {
         new Event() {
             @Override
             public boolean run() throws Exception {
-                return (boolean) ManagerLogic.invoke(this.getClojureName(), "author", author, sendManager, this, returnCodeConfig);
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), "author", author, page, sendManager, this, returnCodeConfig);
             }
         }.submit();
     }
