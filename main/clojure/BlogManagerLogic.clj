@@ -19,7 +19,7 @@
                     "title" (. object get "title"),
                     "author" (. object get "author"),
                     "time" (. object get "time"),
-                    "reader" (. object get "reader")
+                    "reader" (. object getInteger "reader" 0)
                     "preview" preview}]
         (. ans add nowMap)))
     (. manager addSuccessMessage event ans)))
