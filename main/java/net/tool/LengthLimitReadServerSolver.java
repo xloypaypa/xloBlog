@@ -90,5 +90,5 @@ public abstract class LengthLimitReadServerSolver extends ReadServerSolver {
         }
     }
 
-    public abstract void solveMessage();
+    public abstract void solveMessage() throws Exception;
 }
