@@ -33,6 +33,8 @@
     (dotimes [i (count aimList)]
       (let [now (nth aimList i)
             object (. now object)]
+        (. object put "id" (str (. object get "_id")))
+        (. object remove "_id")
         (. ans add object)))
     (. manager addSuccessMessage event ans) true))
 

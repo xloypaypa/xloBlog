@@ -23,6 +23,7 @@ public class BlogCollection extends DBCollection {
         document.put("body", body);
         document.put("time", date);
         document.put("type", type);
+        document.put("reader", 0);
         this.insert(document);
         unlockCollection();
     }
