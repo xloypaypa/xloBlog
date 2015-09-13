@@ -111,4 +111,9 @@
             <data>id</data>
         </method>
     </solver>
+    <solver name="remove all message" url="/removeAllMessage" manager="control.MessageManager" access="true">
+        <method name="removeAllMessage" model="array">
+            <data>id</data>
+        </method>
+    </solver>
 </post>

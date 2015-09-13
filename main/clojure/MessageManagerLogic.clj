@@ -55,3 +55,4 @@
 (. ManagerLogic put "control.MessageManager$getUserAllMessage" getAllMessage 5)
 (. ManagerLogic put "control.MessageManager$removeMessage" removeMessage 3)
 (. ManagerLogic put "control.MessageManager$readAllMessage" readMessage 3)
+(. ManagerLogic put "control.MessageManager$removeAllMessage" removeMessage 3)

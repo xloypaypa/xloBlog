@@ -8,6 +8,7 @@ import server.serverSolver.RequestSolver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,12 +28,12 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
     public void solveMessage() throws Exception {
         Class<?> managerClass = getManagerClass();
         Object managerObject = getManagerObject(managerClass);
-        List<String> data = getData();
+        List<Object> data = getData();
         Method method = getMethod(managerClass, data);
         method.invoke(managerObject, data.toArray());
     }
 
-    protected Method getMethod(Class<?> managerClass, List<String> data) throws NoSuchMethodException {
+    protected Method getMethod(Class<?> managerClass, List<Object> data) throws NoSuchMethodException {
         String methodName = this.postInfo.getMethod();
         int size;
         if (this.postInfo.isArray() && this.postInfo.needAccess()) {
@@ -54,8 +55,8 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
         return managerClass.getMethod(methodName, methodParamType);
     }
 
-    protected List<String> getData() {
-        List<String> data = new LinkedList<>();
+    protected List<Object> getData() {
+        List<Object> data = new LinkedList<>();
         if (this.postInfo.needAccess()) {
             String username = this.requestSolver.getRequestHeadReader().getMessage("Username");
             String password = this.requestSolver.getRequestHeadReader().getMessage("Password");
@@ -71,14 +72,20 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
             }
         } else {
             JSONArray array = JSONArray.fromObject(this.message);
+            List<Object> arrayData = new ArrayList<>();
             for (Object object : array) {
-                solveObject(data, need, defaultValue, (JSONObject) object);
+                solveObject(arrayData, need, defaultValue, (JSONObject) object);
             }
+            String[] strings = new String[arrayData.size()];
+            for (int i=0;i<strings.length;i++) {
+                strings[i] = (String) arrayData.get(i);
+            }
+            data.add(strings);
         }
         return data;
     }
 
-    private void solveObject(List<String> data, List<String> need, List<String> defaultValue, JSONObject object) {
+    private void solveObject(List<Object> data, List<String> need, List<String> defaultValue, JSONObject object) {
         for (int i = 0; i < need.size(); i++) {
             if (object.containsKey(need.get(i))) {
                 data.add(object.getString(need.get(i)));

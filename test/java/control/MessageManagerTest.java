@@ -51,6 +51,15 @@ public class MessageManagerTest {
         }
     }
 
+    public static void removeAllMessage(String username, String... id) throws InterruptedException {
+        Counter counter = new Counter(1);
+        MessageManagerNoSend messageManager = new MessageManagerNoSend(counter);
+        messageManager.removeAllMessage(username, "pass", id);
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
     @After
     public void tearDown() throws InterruptedException {
         UserManagerTest.remove("test user");
@@ -155,6 +164,20 @@ public class MessageManagerTest {
 
         MessageCollection messageCollection = new MessageCollection();
         removeMessage("test aim", messageCollection.findMessageData(new Document("username", "test aim")).get(0).object.get("_id").toString());
+        assertEquals(0, messageCollection.findMessageData(new Document("username", "test aim")).size());
+    }
+
+    @Test
+    public void testRemoveAllMessage() throws Exception {
+        UserManagerTest.register("test user");
+        UserManagerTest.register("test aim");
+        addMessage("test user", "test aim", "message");
+        addMessage("test user", "test aim", "message2");
+        MessageCollection messageCollection = new MessageCollection();
+        removeAllMessage("test aim",
+                messageCollection.findMessageData(new Document("username", "test aim")).get(0).object.get("_id").toString(),
+                messageCollection.findMessageData(new Document("username", "test aim")).get(1).object.get("_id").toString());
+
         assertEquals(0, messageCollection.findMessageData(new Document("username", "test aim")).size());
     }
 }

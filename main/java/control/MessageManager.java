@@ -102,4 +102,23 @@ public class MessageManager extends Manager {
         sendManager.addSendMessage(event);
         event.submit();
     }
+
+    public void removeAllMessage(String username,String password, String... id) {
+        Event event = new Event() {
+            @Override
+            public boolean run() throws Exception {
+                if (!accessConfig.isAccept(username, password, this)) {
+                    return false;
+                }
+                for (String now : id) {
+                    if (!(boolean) ManagerLogic.invoke(this.getClojureName(), username, password, now)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+        sendManager.addSendMessage(event);
+        event.submit();
+    }
 }
