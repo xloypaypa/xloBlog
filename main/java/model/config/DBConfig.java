@@ -28,7 +28,7 @@ public class DBConfig implements ConfigInterface {
 
     @Override
     public void init() throws Exception {
-        Element root = ConfigInterface.getRootElement("/db.xml");
+        Element root = ConfigInterface.getRootElement(ConfigManager.configPathConfig.getConfigFilePath(this.getClass()));
         for (Object now : root.elements()) {
             Element element = (Element) now;
             if (element.getName().equals("host")) this.host = element.getText();

@@ -24,7 +24,7 @@ public class PostConfig implements ConfigInterface {
 
     @Override
     public void init() throws DocumentException {
-        Element root = ConfigInterface.getRootElement("/post.xml");
+        Element root = ConfigInterface.getRootElement(ConfigManager.configPathConfig.getConfigFilePath(this.getClass()));
         List node = root.elements();
         for (Object now : node) {
             Element element = (Element) now;

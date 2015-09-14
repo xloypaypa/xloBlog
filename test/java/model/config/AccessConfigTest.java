@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
 public class AccessConfigTest {
     @Test
     public void testLoad() throws Exception {
+        ConfigManager.getConfigManager().init();
+
         AccessConfig accessConfig = new AccessConfig();
         accessConfig.init();
         Set<Pair<String, Integer>> value = accessConfig.checkClassAndMethod("control.BlogManager", "addDocument");

@@ -3,7 +3,7 @@
   control.BlogManagerLogic
   (:import [model.db BlogCollection MarkUserCollection MessageCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
-           [config LengthLimitConfig ConfigManager ReturnCodeConfig]
+           [model.config LengthLimitConfig ConfigManager ReturnCodeConfig]
            [java.util Date LinkedList]
            [control ManagerLogic BlogManager]))
 
