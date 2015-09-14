@@ -65,7 +65,7 @@ public class AccessConfig implements ConfigInterface {
         for (Pair<String, Integer> now : need) {
             int have;
             if (data.object.containsKey(now.getKey())) {
-                have = data.object.getInteger(now.getKey());
+                have = Integer.valueOf(data.object.get(now.getKey()).toString());
             } else {
                 have = 0;
             }

@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -23,18 +24,18 @@ public class MarkUserCollection extends BlogDBCollection {
 
     public void removeMark(String username, String aimUser) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
-        Iterator<Document> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return ;
+        List<Map<String, Object>> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return;
 
-        Document document = cursor.next();
-        this.remove((ObjectId) document.get("_id"));
+        Map<String, Object> document = cursor.next();
+        this.remove(new Document("_id", document.get("_id")));
     }
 
     public DBData getMark(String username, String aimUser) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         return addDocumentToUsing(cursor.next());
@@ -42,8 +43,8 @@ public class MarkUserCollection extends BlogDBCollection {
 
     public DBData getMarkData(String username, String aimUser) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document().append("from", username).append("to", aimUser));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
         DBData ans = getDocumentNotUsing(cursor.next());
@@ -54,7 +55,7 @@ public class MarkUserCollection extends BlogDBCollection {
     public List<DBData> find(Document document) {
         lockCollection();
         List<DBData> ans = new LinkedList<>();
-        List<Document> iterable = collection.find(document);
+        List<Map<String, Object>> iterable = collection.find(document);
 
         ans.addAll(iterable.stream().map(this::getDocumentNotUsing).collect(Collectors.toList()));
         unlockCollection();

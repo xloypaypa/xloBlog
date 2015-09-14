@@ -3,10 +3,7 @@ package model.db;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xlo on 2015/8/31.
@@ -28,31 +25,31 @@ public class MessageCollection extends BlogDBCollection {
 
     public void removeMessage(String id) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        Iterator<Document> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return ;
+        List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return;
 
-        Document document = cursor.next();
-        this.remove((ObjectId) document.get("_id"));
+        Map<String, Object> document = cursor.next();
+        this.remove(new Document("_id", document.get("_id")));
     }
 
     public DBData getMessage(String id) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         return addDocumentToUsing(document);
     }
 
     public DBData getMessageData(String id) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         DBData data = getDocumentNotUsing(document);
         unlockCollection();
         return data;
@@ -60,8 +57,8 @@ public class MessageCollection extends BlogDBCollection {
 
     public List<DBData> findMessageData(Document document) {
         lockCollection();
-        List<Document> iterable = collection.find(document);
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(document);
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
 
         List<DBData> ans = new LinkedList<>();
         while (cursor.hasNext()) {

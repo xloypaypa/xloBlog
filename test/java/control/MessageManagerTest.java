@@ -1,5 +1,6 @@
 package control;
 
+import model.db.DBTable;
 import model.db.MessageCollection;
 import net.sf.json.JSONObject;
 import org.bson.Document;
@@ -103,7 +104,8 @@ public class MessageManagerTest {
         MessageCollection messageCollection = new MessageCollection();
         readMessage("test aim", messageCollection.findMessageData(new Document("username", "test aim")).get(0).object.get("_id").toString());
 
-        assertTrue(messageCollection.findMessageData(new Document("username", "test aim")).get(0).object.getBoolean("read"));
+        DBTable.DBData data = messageCollection.findMessageData(new Document("username", "test aim")).get(0);
+        assertTrue(((Document) data.object).getBoolean("read"));
     }
 
     @Test
@@ -117,7 +119,8 @@ public class MessageManagerTest {
                 messageCollection.findMessageData(new Document("username", "test aim")).get(0).object.get("_id").toString(),
                 messageCollection.findMessageData(new Document("username", "test aim")).get(1).object.get("_id").toString());
 
-        assertTrue(messageCollection.findMessageData(new Document("username", "test aim")).get(1).object.getBoolean("read"));
+        DBTable.DBData data = messageCollection.findMessageData(new Document("username", "test aim")).get(1);
+        assertTrue(((Document) data.object).getBoolean("read"));
     }
 
     @Test

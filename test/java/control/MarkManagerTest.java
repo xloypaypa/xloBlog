@@ -52,8 +52,8 @@ public class MarkManagerTest {
 
         MarkUserCollection markUserCollection = new MarkUserCollection();
         BlogDBCollection.DBData data = markUserCollection.find(new Document("from", "test user")).get(0);
-        assertEquals("test user", data.object.getString("from"));
-        assertEquals("test aim", data.object.getString("to"));
+        assertEquals("test user", ((Document) data.object).getString("from"));
+        assertEquals("test aim", ((Document) data.object).getString("to"));
     }
 
     @Test

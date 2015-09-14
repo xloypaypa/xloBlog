@@ -1,6 +1,8 @@
 package model.config;
 
-import model.db.BlogDBClient;
+import model.db.DBClient;
+import model.db.VirtualDBConnection;
+import model.db.virtual.BlogVirtualConnection;
 import org.dom4j.Element;
 
 import java.util.*;
@@ -9,21 +11,21 @@ import java.util.*;
  * Created by xlo on 15-8-23.
  * it's the db config
  */
-public class DBConfig implements ConfigInterface {
+public class BlogDBConfig implements ConfigInterface, DBConfig {
     protected String host = "127.0.0.1";
     protected int port = 27017;
     protected Map<String, String> collections, dbOfCollection, dbType;
     protected Set<String> dbs;
 
-    protected DBConfig() {
+    protected BlogDBConfig() {
         this.collections = new HashMap<>();
         this.dbOfCollection = new HashMap<>();
         this.dbType = new HashMap<>();
         this.dbs = new HashSet<>();
     }
 
-    public static DBConfig getConfig() {
-        return (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
+    public static BlogDBConfig getConfig() {
+        return (BlogDBConfig) ConfigManager.getConfigManager().getConfig(BlogDBConfig.class);
     }
 
     @Override
@@ -64,7 +66,17 @@ public class DBConfig implements ConfigInterface {
         return port;
     }
 
-    public String getCollectionName(Class<? extends BlogDBClient> type) {
+    @Override
+    public String getTableName(Class<? extends DBClient> aClass) {
+        return this.getCollectionName(aClass);
+    }
+
+    @Override
+    public String getDBofTable(String s) {
+        return this.getDBofCollection(s);
+    }
+
+    public String getCollectionName(Class<? extends DBClient> type) {
         return this.collections.get(type.getName());
     }
 
@@ -82,5 +94,10 @@ public class DBConfig implements ConfigInterface {
 
     public HashMap<String, String> getCollections() {
         return new HashMap<>(this.collections);
+    }
+
+    @Override
+    public VirtualDBConnection buildConnection() {
+        return new BlogVirtualConnection();
     }
 }

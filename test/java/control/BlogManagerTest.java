@@ -173,7 +173,7 @@ public class BlogManagerTest {
 
         BlogCollection collection = new BlogCollection();
         BlogDBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-        assertEquals(n, data.object.getInteger("reader", 0));
+        assertEquals(n, ((Document) data.object).getInteger("reader", 0));
     }
 
 
@@ -201,7 +201,7 @@ public class BlogManagerTest {
 
         BlogCollection collection = new BlogCollection();
         BlogDBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
-        assertEquals(n, data.object.getInteger("reader", 0));
+        assertEquals(n, ((Document) data.object).getInteger("reader", 0));
     }
 
     @Test

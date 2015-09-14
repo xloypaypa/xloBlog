@@ -1,6 +1,6 @@
 package model.db;
 
-import model.db.virtual.VirtualCollection;
+import model.db.virtual.BlogVirtualTable;
 
 /**
  * Created by xlo on 2015/8/25.
@@ -13,7 +13,7 @@ public class CollectionGetter {
         this.dbCollection = dbCollection;
     }
 
-    public VirtualCollection getCollection() {
+    public VirtualTable getCollection() {
         return this.dbCollection.collection;
     }
 }

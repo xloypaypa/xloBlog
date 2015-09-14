@@ -2,6 +2,7 @@ package control;
 
 import model.db.CollectionGetter;
 import model.db.BlogDBCollection;
+import model.db.DBTable;
 import model.db.UserCollection;
 import model.lock.TestClass;
 import org.bson.Document;
@@ -147,7 +148,8 @@ public class UserManagerTest extends TestClass {
             Thread.sleep(500);
         }
         UserCollection userCollection = new UserCollection();
-        assertEquals(2, userCollection.getUserData("test user").object.getInteger("test access", 0));
+        DBTable.DBData data = userCollection.getUserData("test user");
+        assertEquals(2, ((Document) data.object).getInteger("test access", 0));
     }
 
     @Test

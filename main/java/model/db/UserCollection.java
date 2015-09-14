@@ -28,21 +28,21 @@ public class UserCollection extends BlogDBCollection {
 
     public DBData getUser(String username) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("username", username));
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("username", username));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         return addDocumentToUsing(document);
     }
 
     public DBData getUserData(String username) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("username", username));
-        Iterator<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("username", username));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         DBData ans = getDocumentNotUsing(document);
         unlockCollection();
         return ans;
@@ -50,18 +50,18 @@ public class UserCollection extends BlogDBCollection {
 
     public void removeUser(String username) {
         lockCollection();
-        List<Document> iterable = collection.find(new Document("username", username));
-        Iterator<Document> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return ;
+        List<Map<String, Object>> iterable = collection.find(new Document("username", username));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return;
 
-        Document document = cursor.next();
-        this.remove((ObjectId) document.get("_id"));
+        Map<String, Object> document = cursor.next();
+        this.remove(new Document("_id", document.get("_id")));
     }
 
     public List<DBData> findUserData(Document document) {
         lockCollection();
         List<DBData> ans = new LinkedList<>();
-        List<Document> iterable = collection.find(document);
+        List<Map<String, Object>> iterable = collection.find(document);
         ans.addAll(iterable.stream().map(this::getDocumentNotUsing).collect(Collectors.toList()));
         unlockCollection();
         return ans;
