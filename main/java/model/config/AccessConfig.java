@@ -1,4 +1,4 @@
-package config;
+package model.config;
 
 import javafx.util.Pair;
 import model.db.DBCollection;

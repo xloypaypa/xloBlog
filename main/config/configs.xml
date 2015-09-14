@@ -1,9 +1,9 @@
-<config>
-    <type>config.DBConfig</type>
-    <type>config.ReturnCodeConfig</type>
-    <type>config.PostConfig</type>
-    <type>config.ShowFileTypeConfig</type>
-    <type>config.AccessConfig</type>
-    <type>config.LengthLimitConfig</type>
-    <type>config.ClojureConfig</type>
-</config>
+<model.config>
+    <type>model.config.DBConfig</type>
+    <type>model.config.ReturnCodeConfig</type>
+    <type>model.config.PostConfig</type>
+    <type>model.config.ShowFileTypeConfig</type>
+    <type>model.config.AccessConfig</type>
+    <type>model.config.LengthLimitConfig</type>
+    <type>model.config.ClojureConfig</type>
+</model.config>

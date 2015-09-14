@@ -1,4 +1,4 @@
-package config;
+package model.config;
 
 import model.db.UserCollection;
 import model.lock.TestClass;

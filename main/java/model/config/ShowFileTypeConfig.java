@@ -1,4 +1,4 @@
-package config;
+package model.config;
 
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

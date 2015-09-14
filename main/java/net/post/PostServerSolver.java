@@ -1,13 +1,13 @@
 package net.post;
 
-import config.ConfigManager;
-import config.PostConfig;
+import model.config.ConfigManager;
+import model.config.PostConfig;
 import net.AimSolverChooser;
+import net.server.serverSolver.RequestSolver;
+import net.server.serverSolver.normalServer.AbstractServerSolver;
+import net.server.serverSolver.normalServer.DynamicServerSolver;
 import net.tool.LengthLimitReadServerSolver;
-import server.serverSolver.RequestSolver;
-import server.serverSolver.normalServer.AbstractServerSolver;
-import server.serverSolver.normalServer.DynamicServerSolver;
-import tool.connection.event.ConnectionEventManager;
+import net.tool.connection.event.ConnectionEventManager;
 
 import java.util.HashMap;
 import java.util.Map;

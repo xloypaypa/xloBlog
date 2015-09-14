@@ -1,4 +1,4 @@
-package config;
+package model.config;
 
 import model.db.DBClient;
 import org.dom4j.Element;

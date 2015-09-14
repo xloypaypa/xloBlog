@@ -1,7 +1,7 @@
 package control;
 
 import model.event.Event;
-import server.serverSolver.RequestSolver;
+import net.server.serverSolver.RequestSolver;
 
 /**
  * Created by xlo on 2015/8/28.

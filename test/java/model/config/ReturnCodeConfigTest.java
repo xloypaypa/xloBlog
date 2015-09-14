@@ -1,4 +1,4 @@
-package config;
+package model.config;
 
 import model.lock.TestClass;
 import org.dom4j.DocumentException;

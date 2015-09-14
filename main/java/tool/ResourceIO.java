@@ -1,6 +1,6 @@
 package tool;
 
-import tool.ioAble.AbstractIOAble;
+import model.tool.ioAble.AbstractIOAble;
 
 /**
  * Created by xlo on 2015/8/19.

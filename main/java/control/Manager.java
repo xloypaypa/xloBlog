@@ -1,13 +1,13 @@
 package control;
 
-import config.AccessConfig;
-import config.ConfigManager;
-import config.ReturnCodeConfig;
+import model.config.AccessConfig;
+import model.config.ConfigManager;
+import model.config.ReturnCodeConfig;
 import model.event.Event;
+import net.server.serverSolver.RequestSolver;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
-import server.serverSolver.RequestSolver;
 
 import java.util.List;
 import java.util.Map;

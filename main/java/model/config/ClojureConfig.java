@@ -1,9 +1,9 @@
-package config;
+package model.config;
 
+import model.script.ForceCacheScriptManager;
+import model.script.ScriptManager;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import script.ForceCacheScriptManager;
-import script.ScriptManager;
 
 import java.io.File;
 import java.io.IOException;

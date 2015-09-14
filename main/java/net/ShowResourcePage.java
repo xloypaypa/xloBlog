@@ -1,13 +1,13 @@
 package net;
 
-import server.serverSolver.RequestSolver;
+import model.tool.ioAble.NormalByteIO;
+import model.tool.streamConnector.NormalStreamConnector;
+import model.tool.streamConnector.StreamConnector;
+import model.tool.streamConnector.io.NormalStreamIONode;
+import model.tool.streamConnector.io.StreamIONode;
+import net.server.serverSolver.RequestSolver;
+import net.tool.head.writer.CustomReplyHeadWriter;
 import tool.ResourceManager;
-import tool.head.writer.CustomReplyHeadWriter;
-import tool.ioAble.NormalByteIO;
-import tool.streamConnector.NormalStreamConnector;
-import tool.streamConnector.StreamConnector;
-import tool.streamConnector.io.NormalStreamIONode;
-import tool.streamConnector.io.StreamIONode;
 
 /**
  * Created by xlo 2015/8/19.

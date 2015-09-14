@@ -1,7 +1,7 @@
 package model.db;
 
-import config.ConfigManager;
-import config.DBConfig;
+import model.config.ConfigManager;
+import model.config.DBConfig;
 import model.lock.NameLockImpl;
 
 import java.util.Map;

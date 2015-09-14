@@ -1,14 +1,15 @@
 package tool;
 
-import tool.ioAble.IOAble;
-import tool.ioAble.NormalByteIO;
-import tool.ioAble.NormalFileIO;
-import tool.streamConnector.NormalStreamConnector;
-import tool.streamConnector.StreamConnector;
-import tool.streamConnector.io.NormalStreamIONode;
-import tool.streamConnector.io.StreamIONode;
+import model.tool.ioAble.IOAble;
+import model.tool.ioAble.NormalByteIO;
+import model.tool.ioAble.NormalFileIO;
+import model.tool.streamConnector.NormalStreamConnector;
+import model.tool.streamConnector.StreamConnector;
+import model.tool.streamConnector.io.NormalStreamIONode;
+import model.tool.streamConnector.io.StreamIONode;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -134,7 +135,11 @@ public class ResourceManager {
 
         this.cache.put(path, byteIO.getValue());
 
-        ioAble.close();
+        try {
+            ioAble.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
