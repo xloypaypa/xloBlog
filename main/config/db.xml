@@ -1,5 +1,5 @@
 <dbs>
-    <connection>model.db.mongo.BlogMongoConnection</connection>
+    <connection>model.db.virtual.BlogVirtualConnection</connection>
     <db name="blog" type="default">
         <collection type="model.db.UserCollection">user</collection>
         <collection type="model.db.BlogCollection">blog</collection>
