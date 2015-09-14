@@ -2,7 +2,6 @@ package model.config;
 
 import model.db.DBClient;
 import model.db.VirtualDBConnection;
-import model.db.virtual.BlogVirtualConnection;
 import org.dom4j.Element;
 
 import java.util.*;
@@ -16,6 +15,7 @@ public class BlogDBConfig implements ConfigInterface, DBConfig {
     protected int port = 27017;
     protected Map<String, String> collections, dbOfCollection, dbType;
     protected Set<String> dbs;
+    protected Class<? extends VirtualDBConnection> connectionClass;
 
     protected BlogDBConfig() {
         this.collections = new HashMap<>();
@@ -28,14 +28,21 @@ public class BlogDBConfig implements ConfigInterface, DBConfig {
         return (BlogDBConfig) ConfigManager.getConfigManager().getConfig(BlogDBConfig.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void init() throws Exception {
         Element root = ConfigInterface.getRootElement(ConfigManager.configPathConfig.getConfigFilePath(this.getClass()));
         for (Object now : root.elements()) {
             Element element = (Element) now;
-            if (element.getName().equals("host")) this.host = element.getText();
-            else if (element.getName().equals("port")) this.port = Integer.valueOf(element.getText());
-            else {
+            if (element.getName().equals("host")) {
+                this.host = element.getText();
+            }
+            else if (element.getName().equals("port")) {
+                this.port = Integer.valueOf(element.getText());
+            }
+            else if (element.getName().equals("connection")) {
+                this.connectionClass = (Class<? extends VirtualDBConnection>) Class.forName(element.getText());
+            } else {
                 String dbName = element.attributeValue("name");
                 dbs.add(dbName);
                 dbType.put(dbName, element.attributeValue("type"));
@@ -98,6 +105,11 @@ public class BlogDBConfig implements ConfigInterface, DBConfig {
 
     @Override
     public VirtualDBConnection buildConnection() {
-        return new BlogVirtualConnection();
+        try {
+            return this.connectionClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
