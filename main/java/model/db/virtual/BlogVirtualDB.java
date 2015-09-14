@@ -1,6 +1,7 @@
 package model.db.virtual;
 
 import model.db.VirtualDB;
+import model.db.VirtualTable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,8 @@ public class BlogVirtualDB implements VirtualDB {
 
     protected Map<String, BlogVirtualTable> collectionMap = new HashMap<>();
 
-    public synchronized BlogVirtualTable getCollection(String collectionName) {
+    @Override
+    public synchronized BlogVirtualTable getTable(String collectionName) {
         if (!this.collectionMap.containsKey(collectionName)) {
             this.collectionMap.put(collectionName, new BlogVirtualTable());
         }

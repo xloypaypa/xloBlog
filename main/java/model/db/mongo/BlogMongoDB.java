@@ -16,7 +16,7 @@ public class BlogMongoDB implements VirtualDB {
     }
 
     @Override
-    public VirtualTable getCollection(String name) {
+    public VirtualTable getTable(String name) {
         return new BlogMongoTable(mongoDatabase.getCollection(name));
     }
 }

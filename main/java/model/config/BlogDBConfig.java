@@ -91,15 +91,18 @@ public class BlogDBConfig implements ConfigInterface, DBConfig {
         return this.dbOfCollection.get(collectionName);
     }
 
+    @Override
     public String getDBType(String name) {
         return this.dbType.get(name);
     }
 
+    @Override
     public Set<String> getDbs() {
         return new HashSet<>(this.dbs);
     }
 
-    public HashMap<String, String> getCollections() {
+    @Override
+    public HashMap<String, String> getTables() {
         return new HashMap<>(this.collections);
     }
 
