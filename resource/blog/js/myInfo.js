@@ -30,14 +30,17 @@ $(function(){
 
 //获取消息列表
 function getMessageList(){
+    $('.nav-tabs li').removeClass('active');
+    $('.myMessages').parent().addClass('active');
     $('.Focus').hide();
     $('.Messages ul').empty();
     $('.Messages').show();
     ajaxHeader('/getMessageList',null,function(response){
 
         var messageNum=0;
+        var array=[];
         for(var i=0;i<response.length;i++){
-            var content=decodeURIComponent(response[i].message);
+            var content=decodeURIComponent(response[i].preview);
             var author=decodeURIComponent(response[i].author);
             var date=transformDate(response[i].time.time);
             $('.message-list').append($('#message-template').html());
@@ -46,6 +49,7 @@ function getMessageList(){
             messageNo.find('.message-author').html('by'+author);
             messageNo.find('.message-date').html(date);
             messageNo.attr('messageId',response[i].id);
+            array.push(JSON.stringify({id:response[i].id}));
             if(response[i].read){
                 messageNo.find('input').attr('checked','false');
                 messageNo.css('opacity','0.5');
@@ -53,12 +57,16 @@ function getMessageList(){
                 messageNum+=1;
             }
         }
+        console.log(array);
+        localStorage.setItem('readAllArray',array);
         $('.messageNum').html(messageNum);
     });
 }
 
 //获取关注列表
 function getMarkedList(){
+    $('.nav-tabs li').removeClass('active');
+    $('.myFocus').parent().addClass('active');
     $('.Focus ul').empty();
     $('.Focus').show();
     $('.Messages').hide();
@@ -67,7 +75,7 @@ function getMarkedList(){
         for(var i=0;i<response.length;i++){
             $('.focus-list').append("<li class='list-group-item'>1</li>");
             var focusNo=$('.focus-list li').eq(i);
-            focusNo.html('用户：'+response[i].user);
+            focusNo.html('用户：'+response[i].to);
         }
     });
 }
@@ -76,6 +84,22 @@ function readAll(){
     console.log($('.message-list li'));
     $('.readAll').click(function(){
         $('.message-list input').attr('checked','true');
+        var data=localStorage.getItem('readAllArray');
+        $.ajax({
+            url:'/readAllMessage',
+            type:'POST',
+            dataType:'json',
+            data:'['+data+']',
+            beforeSend:function(XML){
+                XML.setRequestHeader('username',window.username);
+                XML.setRequestHeader('password',window.password);
+            },
+            success:function(response){
 
+            },
+            error:function(response){
+                console.log(response);
+            }
+        });
     });
 }

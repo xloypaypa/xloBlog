@@ -25,11 +25,7 @@ $(function(){
                 reply:comment
             };
             ajaxHeader('/reply',data,function(response){
-                if(response.return==200){
-                    location.reload();
-                }else{
-                    alert('评论失败');
-                }
+                location.reload();
             });
         }else{
             alert('不得为空');

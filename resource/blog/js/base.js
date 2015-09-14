@@ -33,9 +33,13 @@ function ajaxHeader(url,data,callback){
                 XML.setRequestHeader('password',window.password);
             },
             success:function(response){
-                console.log(response.return);
-                console.log(arguments.length);
-                callback(response);
+                if(response.return==200){
+                    callback(response);
+                }else if(response.return==404){
+                    alert('找不到页面');
+                }else if(response.return=403){
+                    alert('操作有误');
+                }
             },
             error:function(response){
                 console.log(response);
@@ -51,8 +55,13 @@ function ajaxRequest(url,data,callback){
         dataType:'json',
         data:JSON.stringify(data),
         success:function(response){
-            console.log(arguments.length);
-            callback(response);
+            if(response.return==200){
+                callback(response);
+            }else if(response.return==404){
+                alert('找不到页面');
+            }else if(response.return=403){
+                alert('操作有误');
+            }
         },
         error:function(response){
             console.log(response);
@@ -80,7 +89,9 @@ function getQueryString(name){
  $(function () {
      $('.search button').click(function(){
          var searchName=encodeURIComponent($('.search input').val());
+         //ajaxRequest()
          location.href='index.html?name='+searchName;
+
      });
      $('.logout').click(function(){
          localStorage.clear();

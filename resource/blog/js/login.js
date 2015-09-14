@@ -13,11 +13,7 @@ $(function(){
                     XML.setRequestHeader('password',encodeURIComponent($('input[name=password]').val()));
                 },
                 success:function(response){
-                    if(response.return==200){
-                        location.href='index.html';
-                    }else{
-                        alert('系统出错：'+response.return);
-                    }
+                    location.href='index.html';
                 },
                 error:function(response){
                     console.log(response);

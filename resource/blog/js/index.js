@@ -1,7 +1,6 @@
 $(function(){
     if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
-
     }else if(window.username){
         author=window.username;
         $('.btn-others').hide();

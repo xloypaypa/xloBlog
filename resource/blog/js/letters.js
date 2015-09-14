@@ -15,11 +15,7 @@ $(function(){
             message:message
         };
         ajaxHeader('/sendMessage',data,function(response){
-            if(response.return==200){
-                alert('发送成功');
-            }else{
-                alert('系统出错：'+response.return);
-            }
+            alert('发送成功');
         });
     });
 });
