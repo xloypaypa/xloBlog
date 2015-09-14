@@ -2,7 +2,6 @@ package control;
 
 import model.db.BlogCollection;
 import model.db.BlogDBCollection;
-import org.bson.BsonArray;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
@@ -130,7 +129,7 @@ public class BlogManagerTest {
         List<BlogDBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
         BlogDBCollection.DBData data = listData.get(0);
-        assertEquals(n, ((BsonArray) data.object.get("reply")).size());
+        assertEquals(n, ((List) data.object.get("reply")).size());
         collection.submit();
     }
 
@@ -160,7 +159,7 @@ public class BlogManagerTest {
         List<BlogDBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
         BlogDBCollection.DBData data = listData.get(0);
-        assertEquals(n, ((BsonArray) data.object.get("reply")).size());
+        assertEquals(n, ((List) data.object.get("reply")).size());
     }
 
     @Test
