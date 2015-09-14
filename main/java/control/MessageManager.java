@@ -1,6 +1,6 @@
 package control;
 
-import model.event.Event;
+import model.event.SendEvent;
 import net.server.serverSolver.RequestSolver;
 
 /**
@@ -13,43 +13,43 @@ public class MessageManager extends Manager {
     }
 
     public void addMessage(String username, String password, String message, String aimUser) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, message, aimUser);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void getMessage(String username, String password, String id) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id, sendManager, this);
             }
         };
-        sendManager.addFailMessage(event);
-        event.submit();
+        sendManager.addFailMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void readMessage(String username, String password, String id) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void readAllMessage(String username, String password, String... id) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 if (!accessConfig.isAccept(username, password, this)) {
@@ -63,48 +63,48 @@ public class MessageManager extends Manager {
                 return true;
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void getAllMessage(String username, String password) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, username, sendManager, this);
             }
         };
-        sendManager.addFailMessage(event);
-        event.submit();
+        sendManager.addFailMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void getUserAllMessage(String username, String password, String aim) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aim, sendManager, this);
             }
         };
-        sendManager.addFailMessage(event);
-        event.submit();
+        sendManager.addFailMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void removeMessage(String username, String password, String id) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void removeAllMessage(String username,String password, String... id) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 if (!accessConfig.isAccept(username, password, this)) {
@@ -118,7 +118,7 @@ public class MessageManager extends Manager {
                 return true;
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 }

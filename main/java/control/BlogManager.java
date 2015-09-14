@@ -1,6 +1,6 @@
 package control;
 
-import model.event.Event;
+import model.event.SendEvent;
 import net.server.serverSolver.RequestSolver;
 
 /**
@@ -14,31 +14,31 @@ public class BlogManager extends Manager {
     }
 
     public void addDocument(String username, String password, String title, String body, String type) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, title, body, type);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void addReply(String username, String password, String documentID, String reply) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, documentID, reply);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void getDocument(String id) {
-        new Event() {
+        new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), id, sendManager, this, returnCodeConfig);
@@ -47,18 +47,18 @@ public class BlogManager extends Manager {
     }
 
     public void addReader(String id) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), id);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void getAuthorTypeDocumentList(String author, String type, final String page) {
-        new Event() {
+        new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), author, type, page, sendManager, this, returnCodeConfig);
@@ -67,7 +67,7 @@ public class BlogManager extends Manager {
     }
 
     public void getTypeDocumentList(String type, String page) {
-        new Event() {
+        new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), "type", type, page, sendManager, this, returnCodeConfig);
@@ -76,7 +76,7 @@ public class BlogManager extends Manager {
     }
 
     public void getAuthorDocumentList(String author, String page) {
-        new Event() {
+        new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return (boolean) ManagerLogic.invoke(this.getClojureName(), "author", author, page, sendManager, this, returnCodeConfig);

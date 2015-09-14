@@ -3,7 +3,7 @@ package model.config;
 import javafx.util.Pair;
 import model.db.DBCollection;
 import model.db.UserCollection;
-import model.event.Event;
+import model.event.SendEvent;
 import org.dom4j.Element;
 
 import java.util.HashMap;
@@ -55,12 +55,12 @@ public class AccessConfig implements ConfigInterface {
         init();
     }
 
-    public Set<Pair<String, Integer>> getAccessNeed(Event event) {
-        return checkClassAndMethod(event.getClassName(), event.getMethodName());
+    public Set<Pair<String, Integer>> getAccessNeed(SendEvent sendEvent) {
+        return checkClassAndMethod(sendEvent.getClassName(), sendEvent.getMethodName());
     }
 
-    public boolean isAccept(DBCollection.DBData data, Event event) {
-        Set<Pair<String, Integer>> need = getAccessNeed(event);
+    public boolean isAccept(DBCollection.DBData data, SendEvent sendEvent) {
+        Set<Pair<String, Integer>> need = getAccessNeed(sendEvent);
         if (need == null) return true;
         for (Pair<String, Integer> now : need) {
             int have;
@@ -74,11 +74,11 @@ public class AccessConfig implements ConfigInterface {
         return false;
     }
 
-    public boolean isAccept(String username, String password, Event event) {
+    public boolean isAccept(String username, String password, SendEvent sendEvent) {
         if (username == null || password == null) return false;
         UserCollection userCollection = new UserCollection();
         DBCollection.DBData data = userCollection.getUserData(username);
-        return data != null && data.object.get("password").equals(password) && isAccept(data, event);
+        return data != null && data.object.get("password").equals(password) && isAccept(data, sendEvent);
     }
 
     protected Set<Pair<String, Integer>> checkClassAndMethod(String name, String method) {

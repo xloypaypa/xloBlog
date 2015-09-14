@@ -2,6 +2,7 @@ package model.event;
 
 import control.Manager;
 import model.db.DBClient;
+import model.db.event.Event;
 import net.tool.WriteServerSolver;
 
 import java.util.HashSet;
@@ -11,17 +12,13 @@ import java.util.Set;
  * Created by xlo on 15-8-23.
  * it's the event for db
  */
-public abstract class Event {
-    protected Set<Event> successEvent, failEvent, commitEvent;
+public abstract class SendEvent extends Event {
     protected Set<WriteServerSolver> successSend, failSend, commitSend;
     protected String className, methodName;
 
-    public Event() {
-        this.successEvent = new HashSet<>();
+    public SendEvent() {
         this.successSend = new HashSet<>();
-        this.failEvent = new HashSet<>();
         this.failSend = new HashSet<>();
-        this.commitEvent = new HashSet<>();
         this.commitSend = new HashSet<>();
         this.className = "";
         this.methodName = "";
@@ -41,18 +38,6 @@ public abstract class Event {
         }
     }
 
-    public void actionWhileSuccess(Event event) {
-        this.successEvent.add(event);
-    }
-
-    public void actionWhileFail(Event event) {
-        this.failEvent.add(event);
-    }
-
-    public void actionWhileCommit(Event event) {
-        this.commitEvent.add(event);
-    }
-
     public void sendWhileSuccess(WriteServerSolver serverSolver) {
         this.successSend.add(serverSolver);
     }
@@ -65,33 +50,6 @@ public abstract class Event {
         this.commitSend.add(serverSolver);
     }
 
-    public void submit() {
-        EventRunner.getEventRunner().submitAEvent(this);
-    }
-
-    public boolean call() {
-        boolean ans;
-        try {
-            ans = run();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ans = false;
-        }
-
-        if (ans) {
-            DBClient.submitUsing();
-            this.successEvent.forEach(Event::submit);
-            this.successSend.forEach(WriteServerSolver::run);
-        } else {
-            DBClient.releaseUsing();
-            this.failEvent.forEach(Event::submit);
-            this.failSend.forEach(WriteServerSolver::run);
-        }
-        this.commitEvent.forEach(Event::submit);
-        this.commitSend.forEach(WriteServerSolver::run);
-        return ans;
-    }
-
     public String getClassName() {
         return className;
     }
@@ -102,6 +60,24 @@ public abstract class Event {
 
     public String getClojureName() {
         return this.className+"$"+this.methodName;
+    }
+
+    @Override
+    protected void whenSucceed() {
+        super.whenSucceed();
+        this.successSend.forEach(WriteServerSolver::run);
+    }
+
+    @Override
+    protected void whenFailed() {
+        super.whenFailed();
+        this.failSend.forEach(WriteServerSolver::run);
+    }
+
+    @Override
+    protected void whenCommit() {
+        super.whenCommit();
+        this.commitSend.forEach(WriteServerSolver::run);
     }
 
     public abstract boolean run() throws Exception;

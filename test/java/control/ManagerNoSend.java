@@ -1,6 +1,6 @@
 package control;
 
-import model.event.Event;
+import model.event.SendEvent;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import testTool.Counter;
@@ -39,8 +39,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addSuccessMessage(Event event) {
-        event.actionWhileSuccess(new Event() {
+    public void addSuccessMessage(SendEvent sendEvent) {
+        sendEvent.actionWhileSuccess(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
@@ -51,8 +51,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addSuccessMessage(Event event, Map<String, Object> message) {
-        event.actionWhileSuccess(new Event() {
+    public void addSuccessMessage(SendEvent sendEvent, Map<String, Object> message) {
+        sendEvent.actionWhileSuccess(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
@@ -64,8 +64,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addSuccessMessage(Event event, String message) {
-        event.actionWhileSuccess(new Event() {
+    public void addSuccessMessage(SendEvent sendEvent, String message) {
+        sendEvent.actionWhileSuccess(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
@@ -77,8 +77,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addSuccessMessage(Event event, List<Map<String, Object>> message) {
-        event.actionWhileSuccess(new Event() {
+    public void addSuccessMessage(SendEvent sendEvent, List<Map<String, Object>> message) {
+        sendEvent.actionWhileSuccess(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
@@ -90,8 +90,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addFailMessage(Event event) {
-        event.actionWhileFail(new Event() {
+    public void addFailMessage(SendEvent sendEvent) {
+        sendEvent.actionWhileFail(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addFail(1);
@@ -102,8 +102,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addFailMessage(Event event, Map<String, Object> message) {
-        event.actionWhileFail(new Event() {
+    public void addFailMessage(SendEvent sendEvent, Map<String, Object> message) {
+        sendEvent.actionWhileFail(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addFail(1);
@@ -115,8 +115,8 @@ public class ManagerNoSend extends Manager {
     }
 
     @Override
-    public void addFailMessage(Event event, String message) {
-        event.actionWhileFail(new Event() {
+    public void addFailMessage(SendEvent sendEvent, String message) {
+        sendEvent.actionWhileFail(new SendEvent() {
             @Override
             public boolean run() {
                 counter.addFail(1);
