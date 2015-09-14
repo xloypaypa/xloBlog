@@ -1,7 +1,6 @@
 package control;
 
 import model.db.CollectionGetter;
-import model.db.BlogDBCollection;
 import model.db.DBTable;
 import model.db.UserCollection;
 import model.lock.TestClass;
@@ -75,8 +74,6 @@ public class UserManagerTest extends TestClass {
 
     @Test
     public void testRegister() throws InterruptedException {
-        BlogDBCollection.init();
-
         int n = 10;
         Counter counter = new Counter(n);
         for (int i = 0; i < n; i++) {
