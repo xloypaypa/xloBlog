@@ -1,6 +1,7 @@
-package tool;
+package model.tool.resource;
 
 import model.lock.TestClass;
+import model.tool.resource.ResourceManager;
 import org.junit.Test;
 import testTool.Counter;
 

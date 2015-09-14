@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Created by xlo on 15-8-23.
  * it's the collection of user
  */
-public class UserCollection extends DBCollection {
+public class UserCollection extends BlogDBCollection {
 
     public void registerUser(String username, String password) {
         lockCollection();

@@ -1,6 +1,6 @@
 package model.config;
 
-import model.db.DBClient;
+import model.db.BlogDBClient;
 import org.dom4j.Element;
 
 import java.util.*;
@@ -64,7 +64,7 @@ public class DBConfig implements ConfigInterface {
         return port;
     }
 
-    public String getCollectionName(Class<? extends DBClient> type) {
+    public String getCollectionName(Class<? extends BlogDBClient> type) {
         return this.collections.get(type.getName());
     }
 

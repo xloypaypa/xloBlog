@@ -1,6 +1,6 @@
 package main;
 
-import model.db.DBCollection;
+import model.db.BlogDBCollection;
 import model.log.LogManager;
 import model.log.NormalLog;
 import model.script.ForceCacheScriptManager;
@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         ForceCacheScriptManager.getForceCacheScriptManager();
 
-        DBCollection.init();
+        BlogDBCollection.init();
 
         NormalLog normalLog = new NormalLog();
         File file = new File("./log.txt");

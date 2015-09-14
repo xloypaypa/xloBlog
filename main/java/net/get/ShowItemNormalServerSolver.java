@@ -14,7 +14,7 @@ import net.server.serverSolver.normalServer.NormalServerSolver;
 import net.tool.connection.event.ConnectionEvent;
 import net.tool.connection.event.ConnectionEventManager;
 import net.tool.head.writer.CustomReplyHeadWriter;
-import tool.ResourceManager;
+import model.tool.resource.ResourceManager;
 
 import java.io.File;
 import java.io.IOException;

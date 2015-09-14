@@ -12,7 +12,7 @@ import java.util.List;
  * Created by xlo on 2015/8/31.
  * it's the message collection
  */
-public class MessageCollection extends DBCollection {
+public class MessageCollection extends BlogDBCollection {
 
     public void addMessage(String username, String author, String message, Date date) {
         lockCollection();

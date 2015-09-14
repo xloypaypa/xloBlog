@@ -7,7 +7,7 @@ import model.tool.streamConnector.io.NormalStreamIONode;
 import model.tool.streamConnector.io.StreamIONode;
 import net.server.serverSolver.RequestSolver;
 import net.tool.head.writer.CustomReplyHeadWriter;
-import tool.ResourceManager;
+import model.tool.resource.ResourceManager;
 
 /**
  * Created by xlo 2015/8/19.

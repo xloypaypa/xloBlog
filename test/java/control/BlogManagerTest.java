@@ -1,7 +1,7 @@
 package control;
 
 import model.db.BlogCollection;
-import model.db.DBCollection;
+import model.db.BlogDBCollection;
 import org.bson.BsonArray;
 import org.bson.Document;
 import org.junit.After;
@@ -30,7 +30,7 @@ public class BlogManagerTest {
 
     public static void addReply(Document document, String author, String reply, Counter counter) throws InterruptedException {
         BlogCollection collection = new BlogCollection();
-        DBCollection.DBData data = collection.findDocumentListData(document).get(0);
+        BlogDBCollection.DBData data = collection.findDocumentListData(document).get(0);
         if (data.object.get("_id") == null) {
             fail();
         }
@@ -46,7 +46,7 @@ public class BlogManagerTest {
     public static void addReader(Document document, Counter counter) throws InterruptedException {
         BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
         BlogCollection collection = new BlogCollection();
-        DBCollection.DBData data = collection.findDocumentListData(document).get(0);
+        BlogDBCollection.DBData data = collection.findDocumentListData(document).get(0);
         blogManagerNoSend.addReader(data.object.get("_id").toString());
 
         while (counter.get() != 0) {
@@ -80,7 +80,7 @@ public class BlogManagerTest {
         addDocument("test user", "title", "body", new Counter(1), "default");
 
         BlogCollection collection = new BlogCollection();
-        List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<BlogDBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, data.size());
     }
 
@@ -113,7 +113,7 @@ public class BlogManagerTest {
 
         for (int i = 0; i < n; i++) {
             BlogCollection collection = new BlogCollection();
-            List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user " + i));
+            List<BlogDBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user " + i));
             assertEquals(1, data.size());
         }
     }
@@ -127,9 +127,9 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<BlogDBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
-        DBCollection.DBData data = listData.get(0);
+        BlogDBCollection.DBData data = listData.get(0);
         assertEquals(n, ((BsonArray) data.object.get("reply")).size());
         collection.submit();
     }
@@ -157,9 +157,9 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        List<DBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<BlogDBCollection.DBData> listData = collection.findDocumentListData(new Document().append("author", "test user"));
         assertEquals(1, listData.size());
-        DBCollection.DBData data = listData.get(0);
+        BlogDBCollection.DBData data = listData.get(0);
         assertEquals(n, ((BsonArray) data.object.get("reply")).size());
     }
 
@@ -172,7 +172,7 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+        BlogDBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
         assertEquals(n, data.object.getInteger("reader", 0));
     }
 
@@ -200,7 +200,7 @@ public class BlogManagerTest {
         }
 
         BlogCollection collection = new BlogCollection();
-        DBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
+        BlogDBCollection.DBData data = collection.findDocumentListData(new Document().append("author", "test user")).get(0);
         assertEquals(n, data.object.getInteger("reader", 0));
     }
 
@@ -208,7 +208,7 @@ public class BlogManagerTest {
     public void testGetDocument() throws Exception {
         testAddDocument();
         BlogCollection collection = new BlogCollection();
-        List<DBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
+        List<BlogDBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
         String id = data.get(0).object.get("_id").toString();
 
         Counter counter = new Counter(1);

@@ -1,7 +1,7 @@
 package model.db;
 
 import model.db.virtual.VirtualCollection;
-import model.db.virtual.VirtualDB;
+import model.db.virtual.BlogVirtualDB;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -11,24 +11,24 @@ import java.util.*;
  * Created by xlo on 15-8-23.
  * it's handle mongo client
  */
-public abstract class DBCollection extends DBClient {
+public abstract class BlogDBCollection extends BlogDBClient {
 
-    private volatile static Map<String, VirtualDB> databaseMap;
+    private volatile static Map<String, BlogVirtualDB> databaseMap;
 
     public synchronized static void init() {
         databaseMap = new HashMap<>();
         dbConfig.getDbs().stream().filter(now -> dbConfig.getDBType(now).equals("default"))
-                .forEach(now -> databaseMap.put(now, VirtualDB.getDatabase(now)));
+                .forEach(now -> databaseMap.put(now, BlogVirtualDB.getDatabase(now)));
         usingDB = new HashMap<>();
     }
 
-    private static VirtualDB getDatabase(String name) {
+    private static BlogVirtualDB getDatabase(String name) {
         return databaseMap.get(name);
     }
 
     protected VirtualCollection collection;
 
-    public DBCollection() {
+    public BlogDBCollection() {
         super();
         String collectionName = dbConfig.getCollectionName(this.getClass());
         String dbName = dbConfig.getDBofCollection(collectionName);
@@ -38,7 +38,7 @@ public abstract class DBCollection extends DBClient {
 
         this.collection = getDatabase(dbName).getCollection(collectionName);
         if (!usingDB.containsKey(Thread.currentThread())) {
-            synchronized (DBCollection.class) {
+            synchronized (BlogDBCollection.class) {
                 if (!usingDB.containsKey(Thread.currentThread())) {
                     usingDB.put(Thread.currentThread(), new HashSet<>());
                 }

@@ -1,7 +1,6 @@
 package model.event;
 
 import control.Manager;
-import model.db.DBClient;
 import model.db.event.Event;
 import net.tool.WriteServerSolver;
 

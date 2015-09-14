@@ -7,9 +7,9 @@ import model.db.virtual.VirtualCollection;
  * it's the collection getter
  */
 public class CollectionGetter {
-    protected DBCollection dbCollection;
+    protected BlogDBCollection dbCollection;
 
-    public CollectionGetter(DBCollection dbCollection) {
+    public CollectionGetter(BlogDBCollection dbCollection) {
         this.dbCollection = dbCollection;
     }
 

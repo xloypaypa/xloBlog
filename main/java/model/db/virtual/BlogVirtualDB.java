@@ -7,19 +7,19 @@ import java.util.Map;
  * Created by xlo on 2015/9/1.
  * it's the virtual db
  */
-public class VirtualDB {
+public class BlogVirtualDB {
 
-    private static Map<String, VirtualDB> dbMap = new HashMap<>();
+    private static Map<String, BlogVirtualDB> dbMap = new HashMap<>();
 
     protected Map<String, VirtualCollection> collectionMap = new HashMap<>();
 
-    private VirtualDB() {
+    private BlogVirtualDB() {
 
     }
 
-    public synchronized static VirtualDB getDatabase(String name) {
+    public synchronized static BlogVirtualDB getDatabase(String name) {
         if (!dbMap.containsKey(name)) {
-            dbMap.put(name, new VirtualDB());
+            dbMap.put(name, new BlogVirtualDB());
         }
         return dbMap.get(name);
     }

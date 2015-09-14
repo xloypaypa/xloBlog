@@ -12,19 +12,19 @@ import java.util.Vector;
  * Created by xlo on 2015/9/8.
  * it's the db client
  */
-public abstract class DBClient {
+public abstract class BlogDBClient {
     protected static DBConfig dbConfig
             = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
     protected volatile static boolean needInit = true;
-    protected volatile static Map<Thread, Set<DBClient>> usingDB;
+    protected volatile static Map<Thread, Set<BlogDBClient>> usingDB;
     protected String lockName;
     protected volatile Vector<String> locks = new Vector<>();
 
-    public DBClient() {
+    public BlogDBClient() {
         if (needInit) {
-            synchronized (DBClient.class) {
+            synchronized (BlogDBClient.class) {
                 if (needInit) {
-                    DBCollection.init();
+                    BlogDBCollection.init();
                     needInit = false;
                 }
             }
@@ -37,14 +37,14 @@ public abstract class DBClient {
 
     public static void submitUsing() {
         if (usingDB.containsKey(Thread.currentThread())) {
-            usingDB.get(Thread.currentThread()).forEach(DBClient::submit);
+            usingDB.get(Thread.currentThread()).forEach(BlogDBClient::submit);
             usingDB.remove(Thread.currentThread());
         }
     }
 
     public static void releaseUsing() {
         if (usingDB.containsKey(Thread.currentThread())) {
-            usingDB.get(Thread.currentThread()).forEach(DBClient::release);
+            usingDB.get(Thread.currentThread()).forEach(BlogDBClient::release);
             usingDB.remove(Thread.currentThread());
         }
     }

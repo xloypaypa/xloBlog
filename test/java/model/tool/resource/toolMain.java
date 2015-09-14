@@ -1,4 +1,6 @@
-package tool;
+package model.tool.resource;
+
+import model.tool.resource.ResourceManager;
 
 /**
  * Created by xlo on 2015/8/20.

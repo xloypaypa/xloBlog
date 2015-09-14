@@ -12,7 +12,7 @@ import java.util.List;
  * Created by xlo on 2015/8/28.
  * it's the collection of blog
  */
-public class BlogCollection extends DBCollection {
+public class BlogCollection extends BlogDBCollection {
 
     public void addDocument(String author, String title, String body, Date date, String type) {
         lockCollection();
