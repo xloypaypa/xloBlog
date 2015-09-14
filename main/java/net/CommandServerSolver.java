@@ -6,7 +6,6 @@ import net.post.PostServerSolver;
 import net.server.serverSolver.RequestSolver;
 import net.server.serverSolver.normalServer.AbstractServerSolver;
 import net.server.serverSolver.normalServer.DynamicServerSolver;
-import net.tool.connection.event.ConnectionEventManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +68,5 @@ public class CommandServerSolver extends DynamicServerSolver {
         if (this.aimSolver == null) {
             this.aimSolver = new ErrorCommandWriter(this.requestSolver);
         }
-        ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
     }
 }

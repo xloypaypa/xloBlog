@@ -78,6 +78,4 @@ public abstract class SendEvent extends Event {
         super.whenCommit();
         this.commitSend.forEach(WriteServerSolver::run);
     }
-
-    public abstract boolean run() throws Exception;
 }

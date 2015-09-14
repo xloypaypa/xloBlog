@@ -1,6 +1,5 @@
 package model.db;
 
-import model.db.virtual.BlogVirtualConnection;
 import org.bson.Document;
 
 import java.util.Map;

@@ -1,7 +1,6 @@
 package model.db;
 
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.util.Iterator;
 import java.util.LinkedList;

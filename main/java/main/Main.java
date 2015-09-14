@@ -1,6 +1,5 @@
 package main;
 
-import model.db.BlogDBCollection;
 import model.log.LogManager;
 import model.log.NormalLog;
 import model.script.ForceCacheScriptManager;
@@ -20,8 +19,6 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) throws Exception {
         ForceCacheScriptManager.getForceCacheScriptManager();
-
-        BlogDBCollection.init();
 
         NormalLog normalLog = new NormalLog();
         File file = new File("./log.txt");

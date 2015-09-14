@@ -1,7 +1,5 @@
 package model.db;
 
-import model.db.virtual.BlogVirtualTable;
-
 /**
  * Created by xlo on 2015/8/25.
  * it's the collection getter
