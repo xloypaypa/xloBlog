@@ -69,21 +69,21 @@ public abstract class Manager {
         JSONObject object = getJsonObject(message);
         JSONObject result = getJsonObjectAsReturn("forbidden");
         result.put("data", object);
-        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addFailMessage(SendEvent sendEvent, String message) {
         JSONObject object = JSONObject.fromObject(message);
         JSONObject result = getJsonObjectAsReturn("forbidden");
         result.put("data", object);
-        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addFailMessage(SendEvent sendEvent, List<Map<String, Object>> message) {
         JSONArray object = getJsonObject(message);
         JSONObject result = getJsonObjectAsReturn("forbidden");
         result.put("data", object);
-        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, result));
     }
 
     protected JSONObject getJsonObjectAsReturn(String forbidden) {
