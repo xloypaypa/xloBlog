@@ -1,6 +1,6 @@
 package control;
 
-import model.db.DBCollection;
+import model.db.BlogDBCollection;
 import model.db.MarkUserCollection;
 import org.bson.Document;
 import org.junit.After;
@@ -51,9 +51,9 @@ public class MarkManagerTest {
         markUser("test user", "test aim");
 
         MarkUserCollection markUserCollection = new MarkUserCollection();
-        DBCollection.DBData data = markUserCollection.find(new Document("from", "test user")).get(0);
-        assertEquals("test user", data.object.getString("from"));
-        assertEquals("test aim", data.object.getString("to"));
+        BlogDBCollection.DBData data = markUserCollection.find(new Document("from", "test user")).get(0);
+        assertEquals("test user", ((Document) data.object).getString("from"));
+        assertEquals("test aim", ((Document) data.object).getString("to"));
     }
 
     @Test

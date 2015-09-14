@@ -3,10 +3,9 @@ package net;
 import net.get.GetServerSolver;
 import net.post.ErrorCommandWriter;
 import net.post.PostServerSolver;
-import server.serverSolver.RequestSolver;
-import server.serverSolver.normalServer.AbstractServerSolver;
-import server.serverSolver.normalServer.DynamicServerSolver;
-import tool.connection.event.ConnectionEventManager;
+import net.server.serverSolver.RequestSolver;
+import net.server.serverSolver.normalServer.AbstractServerSolver;
+import net.server.serverSolver.normalServer.DynamicServerSolver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +68,5 @@ public class CommandServerSolver extends DynamicServerSolver {
         if (this.aimSolver == null) {
             this.aimSolver = new ErrorCommandWriter(this.requestSolver);
         }
-        ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
     }
 }

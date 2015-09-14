@@ -4,7 +4,7 @@
   (:import [model.db UserCollection BlogCollection MarkUserCollection MessageCollection]
            [control ManagerLogic]
            [org.bson Document]
-           [config LengthLimitConfig]))
+           [model.config LengthLimitConfig]))
 
 (defn loginUser [username password]
   (if (or (nil? username) (nil? password)) false

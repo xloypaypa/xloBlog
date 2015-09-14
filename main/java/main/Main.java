@@ -1,14 +1,13 @@
 package main;
 
-import log.LogManager;
-import log.NormalLog;
-import model.db.DBCollection;
+import model.log.LogManager;
+import model.log.NormalLog;
+import model.script.ForceCacheScriptManager;
+import model.values.SystemStrings;
 import net.CommandServerSolver;
-import script.ForceCacheScriptManager;
-import server.Server;
-import tool.connection.event.ConnectionEvent;
-import tool.connection.event.ConnectionEventManager;
-import values.SystemStrings;
+import net.server.Server;
+import net.tool.connection.event.ConnectionEvent;
+import net.tool.connection.event.ConnectionEventManager;
 
 import javax.swing.*;
 import java.io.File;
@@ -20,8 +19,6 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) throws Exception {
         ForceCacheScriptManager.getForceCacheScriptManager();
-
-        DBCollection.init();
 
         NormalLog normalLog = new NormalLog();
         File file = new File("./log.txt");

@@ -3,7 +3,7 @@
   control.MessageManagerLogic
   (:import [model.db MessageCollection UserCollection]
            [java.util Date LinkedList]
-           [config LengthLimitConfig]
+           [model.config LengthLimitConfig]
            [control ManagerLogic]
            [org.bson Document]))
 

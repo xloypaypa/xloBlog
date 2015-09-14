@@ -1,20 +1,19 @@
 package model.db;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 15-8-23.
  * it's the collection of user
  */
-public class UserCollection extends DBCollection {
+public class UserCollection extends BlogDBCollection {
 
     public void registerUser(String username, String password) {
         lockCollection();
@@ -28,21 +27,21 @@ public class UserCollection extends DBCollection {
 
     public DBData getUser(String username) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("username", username));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         return addDocumentToUsing(document);
     }
 
     public DBData getUserData(String username) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("username", username));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         DBData ans = getDocumentNotUsing(document);
         unlockCollection();
         return ans;
@@ -50,21 +49,19 @@ public class UserCollection extends DBCollection {
 
     public void removeUser(String username) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("username", username));
-        MongoCursor<Document> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return ;
+        List<Map<String, Object>> iterable = collection.find(new Document("username", username));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
+        if (!cursor.hasNext()) return;
 
-        Document document = cursor.next();
-        this.remove((ObjectId) document.get("_id"));
+        Map<String, Object> document = cursor.next();
+        this.remove(new Document("_id", document.get("_id")));
     }
 
     public List<DBData> findUserData(Document document) {
         lockCollection();
         List<DBData> ans = new LinkedList<>();
-        FindIterable<Document> iterable = collection.find(document);
-        for (Document anIterable : iterable) {
-            ans.add(getDocumentNotUsing(anIterable));
-        }
+        List<Map<String, Object>> iterable = collection.find(document);
+        ans.addAll(iterable.stream().map(this::getDocumentNotUsing).collect(Collectors.toList()));
         unlockCollection();
         return ans;
     }

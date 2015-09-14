@@ -1,19 +1,15 @@
 package model.db;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xlo on 2015/8/28.
  * it's the collection of blog
  */
-public class BlogCollection extends DBCollection {
+public class BlogCollection extends BlogDBCollection {
 
     public void addDocument(String author, String title, String body, Date date, String type) {
         lockCollection();
@@ -30,31 +26,31 @@ public class BlogCollection extends DBCollection {
 
     public void removeDocument(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return ;
 
-        Document document = cursor.next();
-        this.remove((ObjectId) document.get("_id"));
+        Map<String, Object> document = cursor.next();
+        this.remove(new Document("_id", document.get("_id")));
     }
 
     public DBData getDocument(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         return addDocumentToUsing(document);
     }
 
     public DBData getDocumentData(String id) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(new Document("_id", new ObjectId(id)));
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
         if (!cursor.hasNext()) return null;
 
-        Document document = cursor.next();
+        Map<String, Object> document = cursor.next();
         DBData ans = getDocumentNotUsing(document);
         unlockCollection();
         return ans;
@@ -62,12 +58,12 @@ public class BlogCollection extends DBCollection {
 
     public List<DBData> findDocumentListData(Document message) {
         lockCollection();
-        FindIterable<Document> iterable = collection.find(message);
-        MongoCursor<Document> cursor = iterable.iterator();
+        List<Map<String, Object>> iterable = collection.find(message);
+        Iterator<Map<String, Object>> cursor = iterable.iterator();
 
         List<DBData> ans = new LinkedList<>();
         while (cursor.hasNext()) {
-            Document document = cursor.next();
+            Map<String, Object> document = cursor.next();
             ans.add(getDocumentNotUsing(document));
         }
         unlockCollection();

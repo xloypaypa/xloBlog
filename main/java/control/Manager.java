@@ -1,13 +1,13 @@
 package control;
 
-import config.AccessConfig;
-import config.ConfigManager;
-import config.ReturnCodeConfig;
-import model.event.Event;
+import model.config.AccessConfig;
+import model.config.ConfigManager;
+import model.config.ReturnCodeConfig;
+import model.event.SendEvent;
+import net.server.serverSolver.RequestSolver;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.WriteMessageServerSolver;
-import server.serverSolver.RequestSolver;
 
 import java.util.List;
 import java.util.Map;
@@ -27,51 +27,51 @@ public abstract class Manager {
         this.requestSolver = requestSolver;
     }
 
-    public void addSendMessage(Event event) {
-        addSuccessMessage(event);
-        addFailMessage(event);
+    public void addSendMessage(SendEvent sendEvent) {
+        addSuccessMessage(sendEvent);
+        addFailMessage(sendEvent);
     }
 
-    public void addSuccessMessage(Event event) {
+    public void addSuccessMessage(SendEvent sendEvent) {
         String accept = "accept";
         JSONObject object = getJsonObjectAsReturn(accept);
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addSuccessMessage(Event event, Map<String, Object> message) {
+    public void addSuccessMessage(SendEvent sendEvent, Map<String, Object> message) {
         JSONObject object = getJsonObject(message);
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addSuccessMessage(Event event, String message) {
+    public void addSuccessMessage(SendEvent sendEvent, String message) {
         JSONObject object = JSONObject.fromObject(message);
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addSuccessMessage(Event event, List<Map<String, Object>> message) {
+    public void addSuccessMessage(SendEvent sendEvent, List<Map<String, Object>> message) {
         JSONArray object = getJsonObject(message);
-        event.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addFailMessage(Event event) {
+    public void addFailMessage(SendEvent sendEvent) {
         String forbidden = "forbidden";
         JSONObject object = getJsonObjectAsReturn(forbidden);
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addFailMessage(Event event, Map<String, Object> message) {
+    public void addFailMessage(SendEvent sendEvent, Map<String, Object> message) {
         JSONObject object = getJsonObject(message);
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addFailMessage(Event event, String message) {
+    public void addFailMessage(SendEvent sendEvent, String message) {
         JSONObject object = JSONObject.fromObject(message);
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 
-    public void addFailMessage(Event event, List<Map<String, Object>> message) {
+    public void addFailMessage(SendEvent sendEvent, List<Map<String, Object>> message) {
         JSONArray object = getJsonObject(message);
-        event.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
     }
 
     protected JSONObject getJsonObjectAsReturn(String forbidden) {

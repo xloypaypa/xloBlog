@@ -1,9 +1,9 @@
 package net.tool;
 
-import server.serverSolver.RequestSolver;
-import server.serverSolver.normalServer.NormalKeepAliveServerSolver;
-import tool.connection.event.ConnectionEvent;
-import tool.connection.event.ConnectionEventManager;
+import net.server.serverSolver.RequestSolver;
+import net.server.serverSolver.normalServer.NormalKeepAliveServerSolver;
+import net.tool.connection.event.ConnectionEvent;
+import net.tool.connection.event.ConnectionEventManager;
 
 /**
  * Created by xlo on 2015/8/21.

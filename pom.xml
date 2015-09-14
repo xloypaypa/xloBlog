@@ -17,7 +17,7 @@
         <dependency>
             <groupId>ladder</groupId>
             <artifactId>ladder</artifactId>
-            <version>0.9.3-LADDER</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>

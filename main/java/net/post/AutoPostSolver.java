@@ -1,10 +1,10 @@
 package net.post;
 
-import config.PostConfig;
+import model.config.PostConfig;
+import net.server.serverSolver.RequestSolver;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.LengthLimitReadServerSolver;
-import server.serverSolver.RequestSolver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

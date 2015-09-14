@@ -1,10 +1,9 @@
 package net.get;
 
-import config.ConfigManager;
-import config.ShowFileTypeConfig;
-import server.serverSolver.RequestSolver;
-import server.serverSolver.normalServer.DynamicServerSolver;
-import tool.connection.event.ConnectionEventManager;
+import model.config.ConfigManager;
+import model.config.ShowFileTypeConfig;
+import net.server.serverSolver.RequestSolver;
+import net.server.serverSolver.normalServer.DynamicServerSolver;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -35,7 +34,6 @@ public class GetServerSolver extends DynamicServerSolver {
                 }.set(requestSolver);
             }
 
-            ConnectionEventManager.getConnectionEventManager().proxyItem(this, this.aimSolver);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

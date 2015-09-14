@@ -1,7 +1,7 @@
 package control;
 
-import model.event.Event;
-import server.serverSolver.RequestSolver;
+import model.event.SendEvent;
+import net.server.serverSolver.RequestSolver;
 
 /**
  * Created by xlo on 2015/9/9.
@@ -13,43 +13,43 @@ public class MarkManager extends Manager {
     }
 
     public void markUser(String username, String password, String aimUser) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aimUser);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void unMarkUser(String username, String password, String aimUser) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aimUser);
             }
         };
-        sendManager.addSendMessage(event);
-        event.submit();
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void isMarked(String username, String password, String aimUser) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
                         && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, aimUser, sendManager, this);
             }
         };
-        sendManager.addFailMessage(event);
-        event.submit();
+        sendManager.addFailMessage(sendEvent);
+        sendEvent.submit();
     }
 
     public void getMarkedList(String username, String password) {
-        Event event = new Event() {
+        SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
@@ -69,7 +69,7 @@ public class MarkManager extends Manager {
 //                return true;
             }
         };
-        sendManager.addFailMessage(event);
-        event.submit();
+        sendManager.addFailMessage(sendEvent);
+        sendEvent.submit();
     }
 }

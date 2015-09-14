@@ -1,7 +1,7 @@
 package net;
 
-import server.serverSolver.RequestSolver;
-import server.serverSolver.normalServer.AbstractServerSolver;
+import net.server.serverSolver.RequestSolver;
+import net.server.serverSolver.normalServer.AbstractServerSolver;
 
 /**
  * Created by xlo on 2015/8/26.
