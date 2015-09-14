@@ -40,17 +40,23 @@ public abstract class Manager {
 
     public void addSuccessMessage(SendEvent sendEvent, Map<String, Object> message) {
         JSONObject object = getJsonObject(message);
-        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        JSONObject result = getJsonObjectAsReturn("accept");
+        result.put("data", object);
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addSuccessMessage(SendEvent sendEvent, String message) {
         JSONObject object = JSONObject.fromObject(message);
-        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        JSONObject result = getJsonObjectAsReturn("accept");
+        result.put("data", object);
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addSuccessMessage(SendEvent sendEvent, List<Map<String, Object>> message) {
         JSONArray object = getJsonObject(message);
-        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, object));
+        JSONObject result = getJsonObjectAsReturn("accept");
+        result.put("data", object);
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addFailMessage(SendEvent sendEvent) {
@@ -61,17 +67,23 @@ public abstract class Manager {
 
     public void addFailMessage(SendEvent sendEvent, Map<String, Object> message) {
         JSONObject object = getJsonObject(message);
-        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        JSONObject result = getJsonObjectAsReturn("forbidden");
+        result.put("data", object);
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addFailMessage(SendEvent sendEvent, String message) {
         JSONObject object = JSONObject.fromObject(message);
-        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        JSONObject result = getJsonObjectAsReturn("forbidden");
+        result.put("data", object);
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
     }
 
     public void addFailMessage(SendEvent sendEvent, List<Map<String, Object>> message) {
         JSONArray object = getJsonObject(message);
-        sendEvent.sendWhileFail(new WriteMessageServerSolver(requestSolver, object));
+        JSONObject result = getJsonObjectAsReturn("forbidden");
+        result.put("data", object);
+        sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
     }
 
     protected JSONObject getJsonObjectAsReturn(String forbidden) {
