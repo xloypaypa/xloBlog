@@ -24,7 +24,7 @@
         (. ans add nowMap)))
     (let [left (* (- page 1) 10)
           right (if (> (+ left 10) (. ans size)) (. ans size) (+ left 10))]
-      (if (< left right) (do (. manager addSuccessMessage event (. ans subList left right)) true)
+      (if (<= left right) (do (. manager addSuccessMessage event (. ans subList left right)) true)
         false))))
 
 (defn addDocument [username password title body type]

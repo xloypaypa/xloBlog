@@ -267,4 +267,19 @@ public class BlogManagerTest {
         }
         assertEquals(2, blogManager.getManagerNoSend().getArray().size());
     }
+
+    @Test
+    public void testGetTypeDocumentEmptyList() throws InterruptedException {
+        UserManagerTest.register("test user");
+        UserManagerTest.register("test user 2");
+
+        Counter counter = new Counter(1);
+        BlogManagerNoSend blogManager = new BlogManagerNoSend(counter);
+        blogManager.getTypeDocumentList("type2", "1");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+        assertEquals(1, counter.getSuccess());
+        assertEquals(0, blogManager.getManagerNoSend().getArray().size());
+    }
 }
