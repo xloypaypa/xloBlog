@@ -1,7 +1,6 @@
 package control;
 
 import model.db.CollectionGetter;
-import model.db.BlogDBCollection;
 import model.db.DBTable;
 import model.db.UserCollection;
 import model.lock.TestClass;
