@@ -65,10 +65,20 @@
             <data default="1">page</data>
         </method>
     </solver>
+    <solver name="get document list by author size" url="/getDocumentListByAuthorSize" manager="control.BlogManager" access="false">
+        <method name="getAuthorDocumentListSize">
+            <data>author</data>
+        </method>
+    </solver>
     <solver name="get document list by type" url="/getDocumentListByType" manager="control.BlogManager" access="false">
         <method name="getTypeDocumentList">
             <data>type</data>
             <data default="1">page</data>
+        </method>
+    </solver>
+    <solver name="get document list by type size" url="/getDocumentListByTypeSize" manager="control.BlogManager" access="false">
+        <method name="getTypeDocumentListSize">
+            <data>type</data>
         </method>
     </solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType" manager="control.BlogManager" access="false">
@@ -76,6 +86,12 @@
             <data>author</data>
             <data>type</data>
             <data default="1">page</data>
+        </method>
+    </solver>
+    <solver name="get document list by author and type size" url="/getDocumentListByAuthorAndTypeSize" manager="control.BlogManager" access="false">
+        <method name="getAuthorTypeDocumentListSize">
+            <data>author</data>
+            <data>type</data>
         </method>
     </solver>
     <solver name="add reader" url="/addDocumentReader" manager="control.BlogManager" access="false">
