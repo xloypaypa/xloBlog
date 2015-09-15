@@ -3,7 +3,6 @@ package control;
 import model.db.CollectionGetter;
 import model.db.DBTable;
 import model.db.UserCollection;
-import model.lock.TestClass;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
@@ -15,7 +14,7 @@ import static org.junit.Assert.assertEquals;
  * Created by xlo on 2015/8/25.
  * it's the test code of user register
  */
-public class UserManagerTest extends TestClass {
+public class UserManagerTest {
 
     @After
     public void tearDown() throws Exception {
