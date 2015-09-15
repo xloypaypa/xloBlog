@@ -85,6 +85,25 @@ function getQueryString(name){
      return year+'-'+month+'-'+day;
  }
 
+//按时间排序
+ function rankByTime(data){
+     var oldArr=[];
+     var rankArr=[];
+     var newData=[];
+     //按时间排序
+     for(var i=0;i<data.length;i++){
+         oldArr.push(data[i].time.time);
+         rankArr.push(data[i].time.time);
+     }
+     rankArr.sort();
+     for(i=0;i<rankArr.length;i++){
+         var rank=oldArr.indexOf(rankArr[i]);
+         newData.push(data[rank]);
+     }
+     return newData;
+ }
+
+
  /*导航条搜索*/
  $(function () {
      $('.search button').click(function(){

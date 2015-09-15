@@ -35,20 +35,9 @@ function getMessageList(){
     ajaxHeader('/getMessageList',null,function(data){
         var messageNum=0;
         var array=[];
-        var oldArr=[];
-        var rankArr=[];
-        var newData=[];
-        for(var i=0;i<data.length;i++){
-            oldArr.push(data[i].time.time);
-            rankArr.push(data[i].time.time);
-        }
-        rankArr.sort();
-        for(i=0;i<rankArr.length;i++){
-            var rank=oldArr.indexOf(rankArr[i]);
-            newData.push(data[rank]);
-        }
+        var newData=rankByTime(data);
 
-        for(i=0;i<newData.length;i++){
+        for(var i=0;i<newData.length;i++){
             var content=decodeURIComponent(newData[i].preview);
             var author=decodeURIComponent(newData[i].author);
             var date=transformDate(newData[i].time.time);

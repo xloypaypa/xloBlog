@@ -42,27 +42,28 @@ function getDocumentList(author,page){
         author:author,
         page:page?page:1
     };
-    ajaxRequest('/getDocumentListByAuthor',data,function(response){
+    ajaxRequest('/getDocumentListByAuthor',data,function(data){
         $('.article-list').empty();
-        for(var i=0;i<response.length;i++){
+        var newData=rankByTime(data);
+        for(var i=0;i<newData.length;i++){
             $('.article-list').append("<div class='article'>"+$('#article').html()+"</div>");
             var articleNo=$('.article').eq(i);
-            var date=transformDate(response[i].time.time);
-            var title=decodeURIComponent(response[i].title);
-            var preview=decodeURIComponent(response[i].preview);
-            var author=decodeURIComponent(response[i].author);
+            var date=transformDate(newData[i].time.time);
+            var title=decodeURIComponent(newData[i].title);
+            var preview=decodeURIComponent(newData[i].preview);
+            var author=decodeURIComponent(newData[i].author);
             console.log(title);
             if(getQueryString('name')){
-                articleNo.find('h2 a').html(title).attr('href','article.html?id='+response[i].id+'&name='+author);
-                articleNo.find('.readMore').attr('href','article.html?id='+response[i].id+'&name='+author);
+                articleNo.find('h2 a').html(title).attr('href','article.html?id='+newData[i].id+'&name='+author);
+                articleNo.find('.readMore').attr('href','article.html?id='+newData[i].id+'&name='+author);
             }else{
-                articleNo.find('h2 a').html(title).attr('href','article.html?id='+response[i].id);
-                articleNo.find('.readMore').attr('href','article.html?id='+response[i].id);
+                articleNo.find('h2 a').html(title).attr('href','article.html?id='+newData[i].id);
+                articleNo.find('.readMore').attr('href','article.html?id='+newData[i].id);
             }
             articleNo.find('.author').html(author);
             articleNo.find('.article-body').html(preview);
             articleNo.find('.date').html(date);
-            articleNo.find('.readerNum').html(response[i].reader);
+            articleNo.find('.readerNum').html(newData[i].reader);
         }
     });
 }
