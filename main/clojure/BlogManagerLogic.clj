@@ -44,7 +44,7 @@
                 messageCollection (new MessageCollection)
                 marks (vec (. markUserCollection find (new Document "to" username)))]
             (dotimes [i (count marks)]
-              (. messageCollection addMessage (. (. (nth marks i) object) getString "to") username title (new Date))))
+              (. messageCollection addMessage (. (. (nth marks i) object) getString "to") username title (new Date) "system")))
           true)))))
 
 (defn addReply [username password documentID reply]
@@ -65,7 +65,7 @@
               (. (. document object) put "reply" replyList)
               (let [messageCollection (new MessageCollection)]
                 (. messageCollection addMessage
-                  (. (. document object) getString "author") username (str "reply: " reply) (new Date)))
+                  (. (. document object) getString "author") username (str "reply: " reply) (new Date) "system"))
               true)))))))
 
 (defn getDocument [id manager event returnCodeConfig]

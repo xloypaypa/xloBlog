@@ -13,7 +13,7 @@
       (if (> (count message) (. lengthLimitConfig getLimit "message")) false
         (let [aimUserData (. (new UserCollection) getUserData aimUser)]
           (if (nil? aimUserData) false
-            (do (. (new MessageCollection) addMessage aimUser username message (new Date)) true)))))))
+            (do (. (new MessageCollection) addMessage aimUser username message (new Date) "message") true)))))))
 
 (defn getMessage [username passwrod id manager event]
   (if (nil? id) false
