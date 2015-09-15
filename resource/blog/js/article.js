@@ -1,7 +1,10 @@
 $(function(){
     if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
+        //阅读人数加一
         addDocumentReader();
+        //是否关注
+        isMarked(author);
     }else if(window.username){
         author=window.username;
         $('.myInfo .buttons').hide();
@@ -13,8 +16,7 @@ $(function(){
     //获取文章信息
     getDocument();
 
-    //是否关注
-    isMarked(author);
+
 
     //评论
     $('.myComment .submit').click(function(){
@@ -98,7 +100,6 @@ function isMarked(author){
 
 //阅读人数加一
 function addDocumentReader(){
-    console.log(getQueryString('id'));
     var data={
         id:getQueryString('id')
     };

@@ -13,7 +13,11 @@ $(function(){
                     XML.setRequestHeader('password',encodeURIComponent($('input[name=password]').val()));
                 },
                 success:function(response){
-                    location.href='index.html';
+                    if(response.return==200){
+                        location.href='index.html';
+                    }else{
+                        alert('用户账号或密码有错误');
+                    }
                 },
                 error:function(response){
                     console.log(response);

@@ -1,6 +1,8 @@
 $(function(){
     if(getQueryString('name')!=window.username&&getQueryString('name')){
         var author=getQueryString('name');
+        //是否关注
+        isMarked(author);
     }else if(window.username){
         author=window.username;
         $('.btn-others').hide();
@@ -40,6 +42,7 @@ function getDocumentList(author){
         author:author
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
+
         $('.article-list').empty();
         for(var i=0;i<response.length;i++){
             $('.article-list').append("<div class='article'>"+$('#article').html()+"</div>");
@@ -48,6 +51,7 @@ function getDocumentList(author){
             var title=decodeURIComponent(response[i].title);
             var preview=decodeURIComponent(response[i].preview);
             var author=decodeURIComponent(response[i].author);
+            console.log(title);
             if(getQueryString('name')){
                 articleNo.find('h2 a').html(title).attr('href','article.html?id='+response[i].id+'&name='+author);
                 articleNo.find('.readMore').attr('href','article.html?id='+response[i].id+'&name='+author);
@@ -63,3 +67,16 @@ function getDocumentList(author){
     });
 }
 
+function isMarked(author){
+    console.log(author);
+    var data={
+        aimUser:author
+    };
+    ajaxHeader('/isMarked',data,function(response){
+        if(response.return){
+            $('.focus').html('已关注');
+        }else{
+            $('.focus').html('加关注');
+        }
+    });
+}

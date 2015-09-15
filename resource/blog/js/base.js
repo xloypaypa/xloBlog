@@ -34,7 +34,7 @@ function ajaxHeader(url,data,callback){
             },
             success:function(response){
                 if(response.return==200){
-                    callback(response);
+                    callback(response.data);
                 }else if(response.return==404){
                     alert('找不到页面');
                 }else if(response.return=403){
@@ -56,7 +56,7 @@ function ajaxRequest(url,data,callback){
         data:JSON.stringify(data),
         success:function(response){
             if(response.return==200){
-                callback(response);
+                callback(response.data);
             }else if(response.return==404){
                 alert('找不到页面');
             }else if(response.return=403){
@@ -89,9 +89,12 @@ function getQueryString(name){
  $(function () {
      $('.search button').click(function(){
          var searchName=encodeURIComponent($('.search input').val());
-         //ajaxRequest()
-         location.href='index.html?name='+searchName;
-
+         var data={
+             author:searchName
+         };
+         ajaxRequest('/getDocumentListByAuthor',data,function(response){
+             location.href='index.html?name='+searchName;
+         });
      });
      $('.logout').click(function(){
          localStorage.clear();
