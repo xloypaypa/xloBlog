@@ -1,7 +1,7 @@
 (ns
   ^{:author xlo}
   control.BlogManagerLogic
-  (:import [model.db BlogCollection MarkUserCollection MessageCollection]
+  (:import [model.db BlogCollection MarkUserCollection MessageCollection UserCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
            [model.config LengthLimitConfig ConfigManager ReturnCodeConfig]
            [java.util Date LinkedList]
@@ -26,6 +26,11 @@
           right (if (> (+ left 10) (. ans size)) (. ans size) (+ left 10))]
       (if (<= left right) (do (. manager addSuccessMessage event (. ans subList left right)) true)
         false))))
+
+(defn sendDocumentListSize [manager event message]
+  (let [aimList (vec (. (new BlogCollection) findDocumentListData message))
+        pageSize (max 1 (+ (int (/ (count aimList) 10)) (if (= 0 (rem (count aimList) 10)) 0 1)))]
+    (do (. manager addSuccessMessage event (str "{\"return\":" pageSize "}"))) true))
 
 (defn addDocument [username password title body type]
   (if (or (nil? title) (nil? body) (nil? type)) false
@@ -83,8 +88,17 @@
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
     (. manager addFailMessage event object))
   (if (or (nil? author) (nil? typeMessage)) false
-    (let [document (new Document)]
-      (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page)))))
+    (let [userData (. (new UserCollection) getUserData author)]
+      (let [document (new Document)]
+        (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page))))))
+
+(defn getAuthorTypeDocumentListSize [author typeMessage manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object))
+  (if (or (nil? author) (nil? typeMessage)) false
+    (let [userData (. (new UserCollection) getUserData author)]
+      (let [document (new Document)]
+        (sendDocumentListSize manager event (. (. document append "author" author) append "type" typeMessage))))))
 
 (defn getTypeDocumentList [typeKey typeMessage page manager event returnCodeConfig]
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
@@ -93,6 +107,13 @@
     (let [document (new Document)]
       (sendDocumentList manager event (. document append typeKey typeMessage) (. Integer valueOf page)))))
 
+(defn getTypeDocumentListSize [typeKey typeMessage manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object))
+  (if (nil? typeMessage) false
+    (let [document (new Document)]
+      (sendDocumentListSize manager event (. document append typeKey typeMessage)))))
+
 (. ManagerLogic put "control.BlogManager$addDocument" addDocument 5)
 (. ManagerLogic put "control.BlogManager$addReply" addReply 4)
 (. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)
@@ -100,3 +121,6 @@
 (. ManagerLogic put "control.BlogManager$getAuthorTypeDocumentList" getAuthorTypeDocumentList 6)
 (. ManagerLogic put "control.BlogManager$getTypeDocumentList" getTypeDocumentList 6)
 (. ManagerLogic put "control.BlogManager$getAuthorDocumentList" getTypeDocumentList 6)
+(. ManagerLogic put "control.BlogManager$getAuthorTypeDocumentListSize" getAuthorTypeDocumentListSize 5)
+(. ManagerLogic put "control.BlogManager$getTypeDocumentListSize" getTypeDocumentListSize 5)
+(. ManagerLogic put "control.BlogManager$getAuthorDocumentListSize" getTypeDocumentListSize 5)

@@ -3,19 +3,20 @@ package control;
 import model.db.CollectionGetter;
 import model.db.DBTable;
 import model.db.UserCollection;
-import model.lock.TestClass;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
 import testTool.Counter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by xlo on 2015/8/25.
  * it's the test code of user register
  */
-public class UserManagerTest extends TestClass {
+public class UserManagerTest {
 
     @After
     public void tearDown() throws Exception {
@@ -162,5 +163,28 @@ public class UserManagerTest extends TestClass {
         }
 
         assertEquals("test motto", userManager.getManagerNoSend().getMessage().get("return"));
+    }
+
+    @Test
+    public void testUserExist() throws Exception {
+        register("test user");
+
+        Counter counter = new Counter(1);
+        UserManagerNoSend userManager = new UserManagerNoSend(counter);
+        userManager.userExist("test user");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        assertTrue(userManager.getManagerNoSend().getMessage().getBoolean("return"));
+
+        counter = new Counter(1);
+        userManager = new UserManagerNoSend(counter);
+        userManager.userExist("test");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        assertFalse(userManager.getManagerNoSend().getMessage().getBoolean("return"));
     }
 }

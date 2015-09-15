@@ -233,6 +233,15 @@ public class BlogManagerTest {
             Thread.sleep(500);
         }
         assertEquals(2, blogManager.getManagerNoSend().getArray().size());
+
+        counter = new Counter(1);
+        blogManager = new BlogManagerNoSend(counter);
+        blogManager.getAuthorTypeDocumentListSize("test user", "default");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+        assertEquals(1, counter.getSuccess());
+        assertEquals(1, blogManager.getManagerNoSend().getMessage().getInt("return"));
     }
 
     @Test
@@ -249,6 +258,15 @@ public class BlogManagerTest {
             Thread.sleep(500);
         }
         assertEquals(1, blogManager.getManagerNoSend().getArray().size());
+
+        counter = new Counter(1);
+        blogManager = new BlogManagerNoSend(counter);
+        blogManager.getAuthorDocumentListSize("test user");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+        assertEquals(1, counter.getSuccess());
+        assertEquals(1, blogManager.getManagerNoSend().getMessage().getInt("return"));
     }
 
     @Test
@@ -266,20 +284,14 @@ public class BlogManagerTest {
             Thread.sleep(500);
         }
         assertEquals(2, blogManager.getManagerNoSend().getArray().size());
-    }
 
-    @Test
-    public void testGetTypeDocumentEmptyList() throws InterruptedException {
-        UserManagerTest.register("test user");
-        UserManagerTest.register("test user 2");
-
-        Counter counter = new Counter(1);
-        BlogManagerNoSend blogManager = new BlogManagerNoSend(counter);
-        blogManager.getTypeDocumentList("type2", "1");
+        counter = new Counter(1);
+        blogManager = new BlogManagerNoSend(counter);
+        blogManager.getTypeDocumentListSize("default");
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
         assertEquals(1, counter.getSuccess());
-        assertEquals(0, blogManager.getManagerNoSend().getArray().size());
+        assertEquals(1, blogManager.getManagerNoSend().getMessage().getInt("return"));
     }
 }

@@ -88,4 +88,16 @@ public class MarkManagerTest {
         }
         assertEquals(1, markManager.getManagerNoSend().getArray().size());
     }
+
+    @Test
+    public void testGetMarkedMeList() throws Exception {
+        testMarkUser();
+        Counter counter = new Counter(1);
+        MarkManagerNoSend markManager = new MarkManagerNoSend(counter);
+        markManager.getMarkedMeList("test aim", "pass");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+        assertEquals(1, markManager.getManagerNoSend().getArray().size());
+    }
 }

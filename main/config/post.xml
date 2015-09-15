@@ -19,6 +19,11 @@
             <data>username</data>
         </method>
     </solver>
+    <solver name="use exist" url="/userExist" manager="control.UserManager" access="false">
+        <method name="userExist">
+            <data>username</data>
+        </method>
+    </solver>
 
     <solver name="mark" url="/mark" manager="control.MarkManager" access="true">
         <method name="markUser">
@@ -37,6 +42,9 @@
     </solver>
     <solver name="get marked list" url="/getMarkedList" manager="control.MarkManager" access="true">
         <method name="getMarkedList"/>
+    </solver>
+    <solver name="get marked me list" url="/getMarkedMeList" manager="control.MarkManager" access="true">
+        <method name="getMarkedMeList"/>
     </solver>
 
     <solver name="add document" url="/addDocument" manager="control.BlogManager" access="true">
@@ -57,10 +65,20 @@
             <data default="1">page</data>
         </method>
     </solver>
+    <solver name="get document list by author size" url="/getDocumentListByAuthorSize" manager="control.BlogManager" access="false">
+        <method name="getAuthorDocumentListSize">
+            <data>author</data>
+        </method>
+    </solver>
     <solver name="get document list by type" url="/getDocumentListByType" manager="control.BlogManager" access="false">
         <method name="getTypeDocumentList">
             <data>type</data>
             <data default="1">page</data>
+        </method>
+    </solver>
+    <solver name="get document list by type size" url="/getDocumentListByTypeSize" manager="control.BlogManager" access="false">
+        <method name="getTypeDocumentListSize">
+            <data>type</data>
         </method>
     </solver>
     <solver name="get document list by author and type" url="/getDocumentListByAuthorAndType" manager="control.BlogManager" access="false">
@@ -68,6 +86,12 @@
             <data>author</data>
             <data>type</data>
             <data default="1">page</data>
+        </method>
+    </solver>
+    <solver name="get document list by author and type size" url="/getDocumentListByAuthorAndTypeSize" manager="control.BlogManager" access="false">
+        <method name="getAuthorTypeDocumentListSize">
+            <data>author</data>
+            <data>type</data>
         </method>
     </solver>
     <solver name="add reader" url="/addDocumentReader" manager="control.BlogManager" access="false">

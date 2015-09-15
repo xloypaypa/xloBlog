@@ -56,8 +56,8 @@ public class ManagerNoSend extends Manager {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
-                counter.add(-1);
                 setMessage(getJsonObject(message));
+                counter.add(-1);
                 return true;
             }
         });
@@ -69,8 +69,8 @@ public class ManagerNoSend extends Manager {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
-                counter.add(-1);
                 setMessage(JSONObject.fromObject(message));
+                counter.add(-1);
                 return true;
             }
         });
@@ -82,8 +82,8 @@ public class ManagerNoSend extends Manager {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
-                counter.add(-1);
                 setArray(getJsonObject(message));
+                counter.add(-1);
                 return true;
             }
         });
@@ -107,8 +107,8 @@ public class ManagerNoSend extends Manager {
             @Override
             public boolean run() {
                 counter.addFail(1);
-                counter.add(-1);
                 setMessage(getJsonObject(message));
+                counter.add(-1);
                 return true;
             }
         });
@@ -120,8 +120,8 @@ public class ManagerNoSend extends Manager {
             @Override
             public boolean run() {
                 counter.addFail(1);
-                counter.add(-1);
                 setMessage(JSONObject.fromObject(message));
+                counter.add(-1);
                 return true;
             }
         });
