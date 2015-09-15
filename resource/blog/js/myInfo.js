@@ -3,27 +3,24 @@
  */
 $(function(){
     $('.nickName').html(decodeURIComponent(window.username));
-
-    //标记已读
-    $('.message-list').on('click','li',function(){
-        $(this).find('input').attr('checked','true').css('opacity','0.8');
-        var data={
-            id:$(this).attr('messageId')
-        };
-        ajaxHeader('/readMessage',data,function(response){
-
-        });
-    });
-
     //我的关注
     $('.myFocus').click(function(){
         getMarkedList();
     });
 
+    //消息部分
     $('.myMessages').click(function(){
         getMessageList();
         //全部标记为已读
-        readAll();
+        $('.readAll').click(function(){
+             readAll();
+        });
+    });
+
+    //标记已读
+    $('.message-list').on('click','li',function(){
+        var _this=$(this);
+        readMessage(_this);
     });
 });
 
@@ -35,29 +32,39 @@ function getMessageList(){
     $('.Focus').hide();
     $('.Messages ul').empty();
     $('.Messages').show();
-    ajaxHeader('/getMessageList',null,function(response){
-
+    ajaxHeader('/getMessageList',null,function(data){
         var messageNum=0;
         var array=[];
-        for(var i=0;i<response.length;i++){
-            var content=decodeURIComponent(response[i].preview);
-            var author=decodeURIComponent(response[i].author);
-            var date=transformDate(response[i].time.time);
-            $('.message-list').append($('#message-template').html());
-            var messageNo=$('.message-list li').eq(i);
+        var oldArr=[];
+        var rankArr=[];
+        var newData=[];
+        for(var i=0;i<data.length;i++){
+            oldArr.push(data[i].time.time);
+            rankArr.push(data[i].time.time);
+        }
+        rankArr.sort();
+        for(i=0;i<rankArr.length;i++){
+            var rank=oldArr.indexOf(rankArr[i]);
+            newData.push(data[rank]);
+        }
+
+        for(i=0;i<newData.length;i++){
+            var content=decodeURIComponent(newData[i].preview);
+            var author=decodeURIComponent(newData[i].author);
+            var date=transformDate(newData[i].time.time);
+            $('.message-list').prepend($('#message-template').html());
+            var messageNo=$('.message-list li').eq(0);
             messageNo.find('.message-content').html(content);
             messageNo.find('.message-author').html('by'+author);
             messageNo.find('.message-date').html(date);
-            messageNo.attr('messageId',response[i].id);
-            array.push(JSON.stringify({id:response[i].id}));
-            if(response[i].read){
-                messageNo.find('input').attr('checked','false');
-                messageNo.css('opacity','0.5');
+            messageNo.attr('messageId',newData[i].id);
+            array.push(JSON.stringify({id:newData[i].id}));
+            if(newData[i].read){
+                messageNo.css('opacity','0.6');
             }else{
                 messageNum+=1;
             }
         }
-        console.log(array);
         localStorage.setItem('readAllArray',array);
         $('.messageNum').html(messageNum);
     });
@@ -80,26 +87,35 @@ function getMarkedList(){
     });
 }
 
-function readAll(){
-    console.log($('.message-list li'));
-    $('.readAll').click(function(){
-        $('.message-list input').attr('checked','true');
-        var data=localStorage.getItem('readAllArray');
-        $.ajax({
-            url:'/readAllMessage',
-            type:'POST',
-            dataType:'json',
-            data:'['+data+']',
-            beforeSend:function(XML){
-                XML.setRequestHeader('username',window.username);
-                XML.setRequestHeader('password',window.password);
-            },
-            success:function(response){
-
-            },
-            error:function(response){
-                console.log(response);
-            }
-        });
+//所有标记为已读
+function readAll() {
+    var data = localStorage.getItem('readAllArray');
+    $.ajax({
+        url: '/readAllMessage',
+        type: 'POST',
+        dataType: 'json',
+        data: '[' + data + ']',
+        beforeSend: function (XML) {
+            XML.setRequestHeader('username', window.username);
+            XML.setRequestHeader('password', window.password);
+        },
+        success: function (data) {
+            $('.message-list li').css('opacity', '0.6');
+            $('.messageNum').html('0');
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+}
+//读取消息
+function readMessage(_this){
+    var data={
+        id:$(_this).attr('messageId')
+    };
+    ajaxHeader('/readMessage',data,function(data){
+        var messageNum=$('.messageNum');
+        $(_this).css('opacity','0.6');
+        messageNum.html(messageNum.html()-1);
     });
 }

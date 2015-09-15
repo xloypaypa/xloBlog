@@ -90,10 +90,15 @@ function getQueryString(name){
      $('.search button').click(function(){
          var searchName=encodeURIComponent($('.search input').val());
          var data={
-             author:searchName
+             username:searchName
          };
-         ajaxRequest('/getDocumentListByAuthor',data,function(response){
-             location.href='index.html?name='+searchName;
+         ajaxRequest('/userExist',data,function(data){
+             if(data.return){
+                 location.href='index.html?name='+searchName;
+             }else{
+                 alert('该用户不存在');
+             }
+
          });
      });
      $('.logout').click(function(){

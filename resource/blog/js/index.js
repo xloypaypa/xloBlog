@@ -12,7 +12,7 @@ $(function(){
     $('.nickName').html(decodeURIComponent(author));
 
     //获取文章列表
-    getDocumentList(author);
+    getDocumentList(author,1);
 
     //关注
     $('.focus').click(function(){
@@ -20,11 +20,11 @@ $(function(){
             aimUser:author
         };
         if($(this).html()=='加关注'){
-            ajaxHeader('/mark',data,function(response){
+            ajaxHeader('/mark',data,function(data){
                 $('.focus').html('已关注');
             });
         }else{
-            ajaxHeader('/unMark',data,function(response){
+            ajaxHeader('/unMark',data,function(data){
                 $('.focus').html('加关注');
             });
         }
@@ -37,12 +37,12 @@ $(function(){
 });
 
 //获取文章列表
-function getDocumentList(author){
+function getDocumentList(author,page){
     var data={
-        author:author
+        author:author,
+        page:page?page:1
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(response){
-
         $('.article-list').empty();
         for(var i=0;i<response.length;i++){
             $('.article-list').append("<div class='article'>"+$('#article').html()+"</div>");
