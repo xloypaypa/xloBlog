@@ -44,7 +44,7 @@
                 messageCollection (new MessageCollection)
                 marks (vec (. markUserCollection find (new Document "to" username)))]
             (dotimes [i (count marks)]
-              (. messageCollection addMessage (. (. (nth marks i) object) getString "to") username title (new Date) "system")))
+              (. messageCollection addMessage (. (. (nth marks i) object) getString "from") username title (new Date) "system")))
           true)))))
 
 (defn addReply [username password documentID reply]

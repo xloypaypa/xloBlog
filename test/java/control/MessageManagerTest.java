@@ -183,4 +183,16 @@ public class MessageManagerTest {
 
         assertEquals(0, messageCollection.findMessageData(new Document("username", "test aim")).size());
     }
+
+    @Test
+    public void testDocumentAddMessage() throws Exception {
+        UserManagerTest.register("test user");
+        UserManagerTest.register("test aim");
+
+        MarkManagerTest.markUser("test aim", "test user");
+        BlogManagerTest.addDocument("test user", "title", "body", new Counter(1), "default");
+
+        MessageCollection messageCollection = new MessageCollection();
+        assertEquals(1, messageCollection.findMessageData(new Document("username", "test aim")).size());
+    }
 }
