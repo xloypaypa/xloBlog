@@ -1,7 +1,7 @@
 (ns
   ^{:author xlo}
   control.BlogManagerLogic
-  (:import [model.db BlogCollection MarkUserCollection MessageCollection]
+  (:import [model.db BlogCollection MarkUserCollection MessageCollection UserCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
            [model.config LengthLimitConfig ConfigManager ReturnCodeConfig]
            [java.util Date LinkedList]
@@ -83,8 +83,10 @@
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
     (. manager addFailMessage event object))
   (if (or (nil? author) (nil? typeMessage)) false
-    (let [document (new Document)]
-      (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page)))))
+    (let [userData (. (new UserCollection) getUserData author)]
+      (if (nil? userData) false
+        (let [document (new Document)]
+          (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page)))))))
 
 (defn getTypeDocumentList [typeKey typeMessage page manager event returnCodeConfig]
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
