@@ -9,6 +9,8 @@ import org.junit.Test;
 import testTool.Counter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by xlo on 2015/8/25.
@@ -161,5 +163,28 @@ public class UserManagerTest {
         }
 
         assertEquals("test motto", userManager.getManagerNoSend().getMessage().get("return"));
+    }
+
+    @Test
+    public void testUserExist() throws Exception {
+        register("test user");
+
+        Counter counter = new Counter(1);
+        UserManagerNoSend userManager = new UserManagerNoSend(counter);
+        userManager.userExist("test user");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        assertTrue(userManager.getManagerNoSend().getMessage().getBoolean("return"));
+
+        counter = new Counter(1);
+        userManager = new UserManagerNoSend(counter);
+        userManager.userExist("test");
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+
+        assertFalse(userManager.getManagerNoSend().getMessage().getBoolean("return"));
     }
 }

@@ -35,6 +35,17 @@ public class UserManager extends Manager {
         sendEvent.submit();
     }
 
+    public void userExist(String username) {
+        SendEvent sendEvent = new SendEvent() {
+            @Override
+            public boolean run() throws Exception {
+                return (boolean) ManagerLogic.invoke(this.getClojureName(), username, sendManager, this);
+            }
+        };
+        sendManager.addFailMessage(sendEvent);
+        sendEvent.submit();
+    }
+
     public void removeUser(String username, String password) {
         SendEvent sendEvent = new SendEvent() {
             @Override

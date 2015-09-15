@@ -84,9 +84,8 @@
     (. manager addFailMessage event object))
   (if (or (nil? author) (nil? typeMessage)) false
     (let [userData (. (new UserCollection) getUserData author)]
-      (if (nil? userData) false
-        (let [document (new Document)]
-          (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page)))))))
+      (let [document (new Document)]
+        (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page))))))
 
 (defn getTypeDocumentList [typeKey typeMessage page manager event returnCodeConfig]
   (let [object {"return" (. returnCodeConfig getCode "not found")}]
