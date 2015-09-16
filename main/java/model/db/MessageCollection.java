@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class MessageCollection extends BlogDBCollection {
 
-    public void addMessage(String username, String author, String message, Date date, String type) {
+    public void addMessage(String username, String author, String message, Date date, String type, int preview) {
         lockCollection();
         Document document = new Document();
         document.put("username", username);
@@ -20,6 +20,7 @@ public class MessageCollection extends BlogDBCollection {
         document.put("message", message);
         document.put("read", false);
         document.put("type", type);
+        document.put("preview", preview);
         this.insert(document);
         unlockCollection();
     }

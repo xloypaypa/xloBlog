@@ -52,6 +52,7 @@
             <data>title</data>
             <data>body</data>
             <data default="default">type</data>
+            <data default="100">preview</data>
         </method>
     </solver>
     <solver name="get document" url="/getDocument" manager="control.BlogManager" access="false">
@@ -128,6 +129,7 @@
         <method name="addMessage">
             <data>message</data>
             <data>aim</data>
+            <data default="100">preview</data>
         </method>
     </solver>
     <solver name="remove message" url="/removeMessage" manager="control.MessageManager" access="true">

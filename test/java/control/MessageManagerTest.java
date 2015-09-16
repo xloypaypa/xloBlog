@@ -19,7 +19,7 @@ public class MessageManagerTest {
     public static void addMessage(String username, String aimUser, String message) throws InterruptedException {
         Counter counter = new Counter(1);
         MessageManagerNoSend messageManager = new MessageManagerNoSend(counter);
-        messageManager.addMessage(username, "pass", message, aimUser);
+        messageManager.addMessage(username, "pass", message, aimUser, "100");
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
