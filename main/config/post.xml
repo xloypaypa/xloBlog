@@ -142,4 +142,18 @@
             <data>id</data>
         </method>
     </solver>
+
+    <solver name="check upload access" url="/checkUploadAccess" manager="control.ImageManager" access="true">
+        <method name="checkUploadAccess"/>
+    </solver>
+    <solver name="uploadImage" url="/uploadImage" manager="control.ImageManager" access="true">
+        <method name="uploadImage" model="file">
+            <data>image</data>
+        </method>
+    </solver>
+    <solver name="getImage" url="/getImage" manager="control.ImageManager" access="false">
+        <method name="getImage">
+            <data>fileName</data>
+        </method>
+    </solver>
 </post>

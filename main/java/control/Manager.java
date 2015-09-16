@@ -7,6 +7,7 @@ import model.event.SendEvent;
 import net.server.serverSolver.RequestSolver;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.tool.WriteFileServerSolver;
 import net.tool.WriteMessageServerSolver;
 
 import java.util.List;
@@ -57,6 +58,10 @@ public abstract class Manager {
         JSONObject result = getJsonObjectAsReturn("accept");
         result.put("data", object);
         sendEvent.sendWhileSuccess(new WriteMessageServerSolver(requestSolver, result));
+    }
+
+    public void addSendFile(SendEvent sendEvent, String path) {
+        sendEvent.sendWhileSuccess(new WriteFileServerSolver(requestSolver, path));
     }
 
     public void addFailMessage(SendEvent sendEvent) {

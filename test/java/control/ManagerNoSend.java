@@ -3,8 +3,10 @@ package control;
 import model.event.SendEvent;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.tool.WriteFileServerSolver;
 import testTool.Counter;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ public class ManagerNoSend extends Manager {
     protected Counter counter;
     protected JSONObject message;
     protected JSONArray array;
+    protected File file;
 
     public ManagerNoSend(Counter counter) {
         super(null);
@@ -30,12 +33,20 @@ public class ManagerNoSend extends Manager {
         return array;
     }
 
+    public File getFile() {
+        return file;
+    }
+
     private void setMessage(JSONObject message) {
         this.message = message;
     }
 
     private void setArray(JSONArray array) {
         this.array = array;
+    }
+
+    private void setFile(File file) {
+        this.file = file;
     }
 
     @Override
@@ -83,6 +94,18 @@ public class ManagerNoSend extends Manager {
             public boolean run() {
                 counter.addSuccess(1);
                 setArray(getJsonObject(message));
+                counter.add(-1);
+                return true;
+            }
+        });
+    }
+
+    public void addSendFile(SendEvent sendEvent, String path) {
+        sendEvent.actionWhileSuccess(new SendEvent() {
+            @Override
+            public boolean run() {
+                counter.addSuccess(1);
+                setFile(new File(path));
                 counter.add(-1);
                 return true;
             }

@@ -6,4 +6,7 @@
         <collection type="model.db.MessageCollection">msg</collection>
         <collection type="model.db.MarkUserCollection">mark</collection>
     </db>
+    <db name="image" type="file">
+        <collection type="model.db.ImageCollection">image</collection>
+    </db>
 </dbs>

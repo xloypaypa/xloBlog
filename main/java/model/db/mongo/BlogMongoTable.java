@@ -2,6 +2,7 @@ package model.db.mongo;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import model.db.VirtualDataTable;
 import model.db.VirtualTable;
 import org.bson.Document;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  * Created by xlo on 2015/9/14.
  * it's the mongo collection
  */
-public class BlogMongoTable implements VirtualTable {
+public class BlogMongoTable implements VirtualDataTable {
     MongoCollection<Document> mongoCollection;
 
     protected BlogMongoTable(MongoCollection<Document> mongoCollection) {
