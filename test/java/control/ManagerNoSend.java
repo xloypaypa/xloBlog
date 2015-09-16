@@ -1,9 +1,15 @@
 package control;
 
 import model.event.SendEvent;
+import model.tool.ioAble.FileIOBuilder;
+import model.tool.ioAble.NormalByteIO;
+import model.tool.ioAble.NormalFileIO;
+import model.tool.streamConnector.NormalStreamConnector;
+import model.tool.streamConnector.StreamConnector;
+import model.tool.streamConnector.io.NormalStreamIONode;
+import model.tool.streamConnector.io.StreamIONode;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.tool.WriteFileServerSolver;
 import testTool.Counter;
 
 import java.io.File;
@@ -18,7 +24,7 @@ public class ManagerNoSend extends Manager {
     protected Counter counter;
     protected JSONObject message;
     protected JSONArray array;
-    protected File file;
+    protected byte[] file;
 
     public ManagerNoSend(Counter counter) {
         super(null);
@@ -33,7 +39,7 @@ public class ManagerNoSend extends Manager {
         return array;
     }
 
-    public File getFile() {
+    public byte[] getFile() {
         return file;
     }
 
@@ -45,7 +51,7 @@ public class ManagerNoSend extends Manager {
         this.array = array;
     }
 
-    private void setFile(File file) {
+    private void setFile(byte[] file) {
         this.file = file;
     }
 
@@ -105,7 +111,37 @@ public class ManagerNoSend extends Manager {
             @Override
             public boolean run() {
                 counter.addSuccess(1);
-                setFile(new File(path));
+
+                StreamConnector connector = new NormalStreamConnector();
+
+                NormalByteIO byteIO = new NormalByteIO();
+                byteIO.setInitValue(new byte[0]);
+                byteIO.buildIO();
+
+                FileIOBuilder fileIOBuilder = new NormalFileIO();
+                fileIOBuilder.setFile(path);
+                fileIOBuilder.buildIO();
+
+                StreamIONode streamIONode = new NormalStreamIONode();
+                streamIONode.setInputStream(fileIOBuilder.getInputStream());
+                streamIONode.addOutputStream(byteIO.getOutputStream());
+                connector.addMember(streamIONode);
+
+                connector.connect();
+                fileIOBuilder.close();
+                byteIO.close();
+
+                setFile(byteIO.getValue());
+
+                File file = new File(path);
+                if (file.exists() && !file.delete()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 counter.add(-1);
                 return true;
             }

@@ -21,8 +21,8 @@ public class ImageCollection extends DBFileTable {
     @Override
     public File find(String s) throws IOException {
         lockCollection();
+        NameLockManager.getNameLockManager().getLock("file ./" + s).lock();
         File ans = super.find(s);
-        NameLockManager.getNameLockManager().getLock("file " + ans.getPath()).lock();
         unlockCollection();
         return ans;
     }

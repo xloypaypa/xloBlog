@@ -1,20 +1,12 @@
 package control;
 
-import model.tool.ioAble.FileIOBuilder;
-import model.tool.ioAble.NormalFileIO;
-import model.tool.ioAble.NormalStringIO;
-import model.tool.streamConnector.NormalStreamConnector;
-import model.tool.streamConnector.StreamConnector;
-import model.tool.streamConnector.io.NormalStreamIONode;
-import model.tool.streamConnector.io.StreamIONode;
 import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 import testTool.Counter;
 
-import java.io.File;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by xlo on 2015/9/16.
@@ -22,15 +14,36 @@ import static org.junit.Assert.*;
  */
 public class ImageManagerTest {
 
-    public static void uploadImage(String username, byte[] file) throws InterruptedException {
-        Counter counter = new Counter(1);
-
+    public static String uploadImage(String username, byte[] file, Counter counter) throws InterruptedException {
         ImageManagerNoSend imageManager = new ImageManagerNoSend(counter);
         imageManager.uploadImage(username, "pass", file);
 
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
+        JSONObject object = imageManager.getManagerNoSend().getMessage();
+        assertNotNull(object);
+        return object.getString("return");
+    }
+
+    public static String uploadImage(String username, byte[] file) throws InterruptedException {
+        Counter counter = new Counter(1);
+        return uploadImage(username, file, counter);
+    }
+
+    public static byte[] getImage(String path) throws InterruptedException {
+        Counter counter = new Counter(1);
+        return getImage(path, counter);
+    }
+
+    public static byte[] getImage(String path, Counter counter) throws InterruptedException {
+        ImageManagerNoSend imageManager = new ImageManagerNoSend(counter);
+        imageManager.getImage(path);
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+        return imageManager.getManagerNoSend().getFile();
     }
 
     @After
@@ -41,54 +54,52 @@ public class ImageManagerTest {
     @Test
     public void testImage() throws Exception {
         UserManagerTest.register("test user");
+        String path = uploadImage("test user", "abc".getBytes());
+        byte[] value = getImage(path);
+        assertEquals("abc", new String(value));
+    }
 
-        byte[] bytes = "abc".getBytes();
-        Counter counter = new Counter(1);
-        ImageManagerNoSend imageManager = new ImageManagerNoSend(counter);
-        imageManager.uploadImage("test user", "pass", bytes);
+    @Test
+    public void testImageAgain() throws Exception {
+        UserManagerTest.register("test user");
+        int n = 10;
+        String[] path = new String[n];
+        Counter counter = new Counter(n);
+        for (int i = 0; i < n; i++) {
+            final int finalI = i;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        path[finalI] = uploadImage("test user", ("body " + finalI).getBytes());
+                        counter.add(-1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }
+
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
 
-        JSONObject object = imageManager.getManagerNoSend().getMessage();
-        assertNotNull(object);
-
-        counter = new Counter(1);
-        imageManager = new ImageManagerNoSend(counter);
-        imageManager.getImage(object.getString("return"));
-
-        while (counter.get() != 0) {
-            Thread.sleep(500);
-        }
-
-        File file = imageManager.getManagerNoSend().getFile();
-        assertNotNull(file);
-        assertTrue(file.exists());
-
-        StreamConnector connector = new NormalStreamConnector();
-
-        NormalStringIO stringIO = new NormalStringIO();
-        stringIO.setInitValue("");
-        stringIO.buildIO();
-
-        FileIOBuilder  fileIOBuilder = new NormalFileIO();
-        fileIOBuilder.setFile(file.getPath());
-        fileIOBuilder.buildIO();
-
-        StreamIONode streamIONode = new NormalStreamIONode();
-        streamIONode.setInputStream(fileIOBuilder.getInputStream());
-        streamIONode.addOutputStream(stringIO.getOutputStream());
-        connector.addMember(streamIONode);
-
-        connector.connect();
-
-        fileIOBuilder.close();
-        stringIO.close();
-
-        assertEquals("abc", stringIO.getValue());
-
-        while (!file.delete()) {
-            Thread.sleep(500);
+        int m = 5;
+        for (int i = 0; i < n; i++) {
+            final int finalI = i;
+            for (int j = 0; j < m; j++) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            byte[] ans = getImage(path[finalI]);
+                            assertEquals("body " + finalI, new String(ans));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+            }
         }
     }
 }
