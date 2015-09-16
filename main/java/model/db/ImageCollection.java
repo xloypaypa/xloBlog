@@ -1,7 +1,5 @@
 package model.db;
 
-import model.lock.NameLockManager;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -21,7 +19,6 @@ public class ImageCollection extends DBFileTable {
     @Override
     public File find(String s) throws IOException {
         lockCollection();
-        NameLockManager.getNameLockManager().getLock("file ./" + s).lock();
         File ans = super.find(s);
         unlockCollection();
         return ans;

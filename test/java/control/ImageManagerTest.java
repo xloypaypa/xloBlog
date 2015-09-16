@@ -1,9 +1,13 @@
 package control;
 
+import model.db.ImageCollection;
 import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 import testTool.Counter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,6 +18,8 @@ import static org.junit.Assert.assertNotNull;
  */
 public class ImageManagerTest {
 
+    protected static Set<String> images = new HashSet<>();
+
     public static String uploadImage(String username, byte[] file, Counter counter) throws InterruptedException {
         ImageManagerNoSend imageManager = new ImageManagerNoSend(counter);
         imageManager.uploadImage(username, "pass", file);
@@ -23,7 +29,9 @@ public class ImageManagerTest {
         }
         JSONObject object = imageManager.getManagerNoSend().getMessage();
         assertNotNull(object);
-        return object.getString("return");
+        String path = object.getString("return");
+        images.add(path);
+        return path;
     }
 
     public static String uploadImage(String username, byte[] file) throws InterruptedException {
@@ -49,6 +57,8 @@ public class ImageManagerTest {
     @After
     public void tearDown() throws Exception {
         UserManagerTest.remove("test user");
+        ImageCollection imageCollection = new ImageCollection();
+        images.forEach(imageCollection::delete);
     }
 
     @Test
