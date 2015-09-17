@@ -32,7 +32,12 @@ public class ImageCacheManager extends CacheManager {
     protected CacheObject newCacheObject(Object object) {
         return new WaitDeleteCacheObject(object, () -> {
             File file = new File(object.toString());
-            file.deleteOnExit();
+            while (file.exists() && !file.delete()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ignored) {
+                }
+            }
         });
     }
 }
