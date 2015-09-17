@@ -4,11 +4,16 @@
   (:import [model.db BlogCollection MarkUserCollection MessageCollection UserCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
            [model.config LengthLimitConfig ConfigManager ReturnCodeConfig]
-           [java.util Date LinkedList]
+           [java.util Date LinkedList Comparator]
            [control ManagerLogic BlogManager]))
 
+(defn document-compare [o1 o2]
+  (let [date1 (. (. o1 object) get "time")
+        date2 (. (. o2 object) get "time")]
+    (if (. date1 after date2) -1 (if (. date2 after date1) 1 0))))
+
 (defn sendDocumentList [manager event message page]
-  (let [aimList (vec (. (new BlogCollection) findDocumentListData message))
+  (let [aimList (sort document-compare (vec (. (new BlogCollection) findDocumentListData message)))
         ans (new LinkedList)]
     (dotimes [i (count aimList)]
       (let [now (nth aimList i)
