@@ -72,7 +72,7 @@ public class BlogVirtualTable implements VirtualDataTable {
                 }
             }
             if (flag) {
-                ans.add(now);
+                ans.add(new HashMap<>(now));
             }
         }
         return ans;
