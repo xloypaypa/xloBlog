@@ -4,8 +4,6 @@ import model.config.ConfigManager;
 import model.config.DBConfig;
 import model.db.VirtualDB;
 import model.db.VirtualDBConnection;
-import model.db.mongo.BlogMongoDB;
-import model.db.mongo.BlogOldMongoDB;
 
 import java.util.HashMap;
 import java.util.Map;

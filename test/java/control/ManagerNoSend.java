@@ -12,7 +12,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import testTool.Counter;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -132,15 +131,6 @@ public class ManagerNoSend extends Manager {
                 byteIO.close();
 
                 setFile(byteIO.getValue());
-
-                File file = new File(path);
-                if (file.exists() && !file.delete()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
 
                 counter.add(-1);
                 return true;

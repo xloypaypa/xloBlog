@@ -31,7 +31,7 @@ public class ImageCacheManager extends CacheManager {
     @Override
     protected CacheObject newCacheObject(Object object) {
         return new WaitDeleteCacheObject(object, () -> {
-            File file = (File) object;
+            File file = new File(object.toString());
             file.deleteOnExit();
         });
     }

@@ -3,7 +3,6 @@ package model.db.mongo;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import model.db.VirtualDataTable;
-import model.db.VirtualTable;
 import org.bson.Document;
 
 import java.util.LinkedList;

@@ -1,6 +1,6 @@
 package net.tool;
 
-import model.lock.NameLockManager;
+import model.cache.ImageCacheManager;
 import model.tool.ioAble.FileIOBuilder;
 import model.tool.ioAble.NormalFileIO;
 import model.tool.streamConnector.NormalStreamConnector;
@@ -13,7 +13,6 @@ import net.tool.connection.event.ConnectionEventManager;
 import net.tool.head.writer.CustomReplyHeadWriter;
 
 import java.io.File;
-import java.util.concurrent.locks.Lock;
 
 /**
  * Created by xlo on 2015/9/16.
@@ -33,11 +32,7 @@ public class WriteFileServerSolver extends WriteServerSolver {
                 (event, solver) -> {
                     fileIOBuilder.close();
                     closeSocket();
-                    file.deleteOnExit();
-                    Lock lock = NameLockManager.getNameLockManager().getLock("file " + path);
-                    if (lock != null) {
-                        lock.unlock();
-                    }
+                    ImageCacheManager.getImageCacheManager().unUse(file.getAbsoluteFile());
                 });
     }
 

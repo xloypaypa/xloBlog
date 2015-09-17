@@ -1,5 +1,6 @@
 package control;
 
+import model.cache.ImageCacheManager;
 import model.db.ImageCollection;
 import net.sf.json.JSONObject;
 import org.junit.After;
@@ -59,6 +60,7 @@ public class ImageManagerTest {
         UserManagerTest.remove("test user");
         ImageCollection imageCollection = new ImageCollection();
         images.forEach(imageCollection::delete);
+        ImageCacheManager.getImageCacheManager().clear();
     }
 
     @Test

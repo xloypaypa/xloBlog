@@ -24,6 +24,9 @@ public class ImageVirtualTable implements VirtualFileTable {
     @Override
     public File find(String s) throws IOException {
         File ans = new File("./" + s);
+        if (ans.exists()) {
+            return ans;
+        }
         if (!ans.createNewFile()) throw new IOException();
         FileOutputStream outputStream = new FileOutputStream(ans);
         outputStream.write(value.get(s));

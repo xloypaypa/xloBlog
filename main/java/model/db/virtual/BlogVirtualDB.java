@@ -1,7 +1,6 @@
 package model.db.virtual;
 
 import model.db.VirtualDB;
-import model.db.VirtualTable;
 
 import java.util.HashMap;
 import java.util.Map;

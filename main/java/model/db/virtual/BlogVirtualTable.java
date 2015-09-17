@@ -1,7 +1,6 @@
 package model.db.virtual;
 
 import model.db.VirtualDataTable;
-import model.db.VirtualTable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 

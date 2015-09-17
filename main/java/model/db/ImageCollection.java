@@ -1,5 +1,7 @@
 package model.db;
 
+import model.cache.ImageCacheManager;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -21,6 +23,7 @@ public class ImageCollection extends DBFileTable {
         lockCollection();
         File ans = super.find(s);
         unlockCollection();
+        ImageCacheManager.getImageCacheManager().cache(ans.getAbsoluteFile());
         return ans;
     }
 

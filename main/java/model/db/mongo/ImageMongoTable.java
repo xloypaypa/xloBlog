@@ -32,6 +32,9 @@ public class ImageMongoTable implements VirtualFileTable {
     public File find(String s) throws IOException {
         GridFSDBFile gridFSDBFile = this.gridFS.findOne(new ObjectId(s));
         File ans = new File("./" + s);
+        if (ans.exists()) {
+            return ans;
+        }
         if (!ans.createNewFile()) throw new IOException();
         gridFSDBFile.writeTo(ans);
         return ans;

@@ -3,7 +3,7 @@ package control;
 import testTool.Counter;
 
 /**
- * Created by suxin on 2015/9/11.
+ * Created by xlo on 2015/9/11.
  * it's the mark manager who not send reply
  */
 public class MarkManagerNoSend extends MarkManager {
