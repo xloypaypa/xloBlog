@@ -51,10 +51,15 @@ function getDocumentList(page){
         page:page?page:1
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(data){
+
         if(data&&data.length!=0){
+            var main=$('.article-list');
+            main.empty();
             var newData=rankByTime(data);
+            console.log(newData);
+            console.log(newData.length);
             for(var i=0;i<newData.length;i++){
-                $('.article-list').prepend($('#article').html());
+                main.prepend($('#article').html());
                 var articleNo=$('.article').eq(0);
                 var date=transformDate(newData[i].time.time);
                 var title=decodeURIComponent(newData[i].title);
@@ -74,7 +79,7 @@ function getDocumentList(page){
             }
         }else{
             $('.pagination').empty();
-            $('.article-list').html('<h1>空空如也</h1>')
+            main.html('<h1>空空如也</h1>')
         }
     });
 }

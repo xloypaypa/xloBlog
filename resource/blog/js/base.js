@@ -46,6 +46,27 @@ function ajaxHeader(url,data,callback){
             }
         });
 }
+//发送json数组
+function ajaxHeaderByArray(url,data,callback){
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        data: '[' + data + ']',
+        beforeSend: function (XML) {
+            XML.setRequestHeader('username', window.username);
+            XML.setRequestHeader('password', window.password);
+        },
+        success: function (response) {
+            if(response.return==200){
+                callback(response.data);
+            }
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+}
 
 //不需要加头部的ajax
 function ajaxRequest(url,data,callback){
