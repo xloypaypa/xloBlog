@@ -37,7 +37,8 @@
     (let [lengthLimitConfig (. LengthLimitConfig getConfig)]
       (if
         (or (> (count title) (. lengthLimitConfig getLimit "documentTitle"))
-          (> (count body) (. lengthLimitConfig getLimit "documentBody"))) false
+          (> (count body) (. lengthLimitConfig getLimit "documentBody"))
+          (> (. Integer valueOf preview) (. lengthLimitConfig getLimit "preview"))) false
         (do (let [blogCollection (new BlogCollection)]
               (. blogCollection addDocument username title body (new Date) type (. Integer valueOf preview)))
           (let [markUserCollection (new MarkUserCollection)

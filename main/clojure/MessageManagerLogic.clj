@@ -10,7 +10,8 @@
 (defn addMessage [username password message aimUser preview]
   (if (or (nil? message) (nil? aimUser)) false
     (let [lengthLimitConfig (. LengthLimitConfig getConfig)]
-      (if (> (count message) (. lengthLimitConfig getLimit "message")) false
+      (if (or (> (count message) (. lengthLimitConfig getLimit "message"))
+            (> (. Integer valueOf preview) (. lengthLimitConfig getLimit "preview"))) false
         (let [aimUserData (. (new UserCollection) getUserData aimUser)]
           (if (nil? aimUserData) false
             (do (. (new MessageCollection) addMessage aimUser username message (new Date) "message" (. Integer valueOf preview)) true)))))))
