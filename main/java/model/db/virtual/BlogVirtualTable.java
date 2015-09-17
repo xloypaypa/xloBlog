@@ -1,6 +1,6 @@
 package model.db.virtual;
 
-import model.db.VirtualTable;
+import model.db.VirtualDataTable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Created by xlo on 2015/9/1.
  * it's the virtual collection
  */
-public class BlogVirtualTable implements VirtualTable {
+public class BlogVirtualTable implements VirtualDataTable {
     protected Map<String, Document> value = new HashMap<>();
 
     @Override

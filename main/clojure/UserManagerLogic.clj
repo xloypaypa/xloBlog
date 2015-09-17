@@ -33,7 +33,7 @@
     (let [marks (vec (. markUserCollection find (new Document "from" username)))]
       (dotimes [i (count marks)]
         (. markUserCollection removeMark (. (. (nth marks i) object) getString "from") (. (. (nth marks i) object) getString "to"))))
-    (let [marks (. markUserCollection find (new Document "to" username))]
+    (let [marks (vec (. markUserCollection find (new Document "to" username)))]
       (dotimes [i (count marks)]
         (. markUserCollection removeMark (. (. (nth marks i) object) getString "from") (. (. (nth marks i) object) getString "to")))))
   (let [messageCollection (new MessageCollection)]

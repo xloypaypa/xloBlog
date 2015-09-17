@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class BlogCollection extends BlogDBCollection {
 
-    public void addDocument(String author, String title, String body, Date date, String type) {
+    public void addDocument(String author, String title, String body, Date date, String type, int preview) {
         lockCollection();
         Document document = new Document();
         document.put("author", author);
@@ -20,6 +20,7 @@ public class BlogCollection extends BlogDBCollection {
         document.put("time", date);
         document.put("type", type);
         document.put("reader", 0);
+        document.put("preview", preview);
         this.insert(document);
         unlockCollection();
     }
@@ -28,7 +29,7 @@ public class BlogCollection extends BlogDBCollection {
         lockCollection();
         List<Map<String, Object>> iterable = collection.find(new Document("_id", new ObjectId(id)));
         Iterator<Map<String, Object>> cursor = iterable.iterator();
-        if (!cursor.hasNext()) return ;
+        if (!cursor.hasNext()) return;
 
         Map<String, Object> document = cursor.next();
         this.remove(new Document("_id", document.get("_id")));

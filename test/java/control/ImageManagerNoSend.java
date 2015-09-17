@@ -3,13 +3,13 @@ package control;
 import testTool.Counter;
 
 /**
- * Created by xlo on 2015/9/11.
- * it's the mark manager who not send reply
+ * Created by xlo on 2015/9/16.
+ * it's the image manager no send
  */
-public class MarkManagerNoSend extends MarkManager {
+public class ImageManagerNoSend extends ImageManager {
     private ManagerNoSend managerNoSend;
 
-    public MarkManagerNoSend(Counter counter) {
+    public ImageManagerNoSend(Counter counter) {
         super(null);
         managerNoSend = new ManagerNoSend(counter);
         this.sendManager = managerNoSend;

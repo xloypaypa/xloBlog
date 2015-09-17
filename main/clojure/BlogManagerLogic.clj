@@ -14,7 +14,7 @@
       (let [now (nth aimList i)
             object (. now object)
             body (. object get "body")
-            preview (if (> (count body) 100) (subs body 0 100) body)
+            preview (if (> (count body) (. object getInteger "preview" 100)) (subs body 0 (. object getInteger "preview" 100)) body)
             nowMap {"id" (str (. object get "_id")),
                     "title" (. object get "title"),
                     "author" (. object get "author"),
@@ -32,19 +32,20 @@
         pageSize (max 1 (+ (int (/ (count aimList) 10)) (if (= 0 (rem (count aimList) 10)) 0 1)))]
     (do (. manager addSuccessMessage event (str "{\"return\":" pageSize "}"))) true))
 
-(defn addDocument [username password title body type]
+(defn addDocument [username password title body type preview]
   (if (or (nil? title) (nil? body) (nil? type)) false
     (let [lengthLimitConfig (. LengthLimitConfig getConfig)]
       (if
         (or (> (count title) (. lengthLimitConfig getLimit "documentTitle"))
-          (> (count body) (. lengthLimitConfig getLimit "documentBody"))) false
+          (> (count body) (. lengthLimitConfig getLimit "documentBody"))
+          (> (. Integer valueOf preview) (. lengthLimitConfig getLimit "preview"))) false
         (do (let [blogCollection (new BlogCollection)]
-              (. blogCollection addDocument username title body (new Date) type))
+              (. blogCollection addDocument username title body (new Date) type (. Integer valueOf preview)))
           (let [markUserCollection (new MarkUserCollection)
                 messageCollection (new MessageCollection)
                 marks (vec (. markUserCollection find (new Document "to" username)))]
             (dotimes [i (count marks)]
-              (. messageCollection addMessage (. (. (nth marks i) object) getString "to") username title (new Date))))
+              (. messageCollection addMessage (. (. (nth marks i) object) getString "from") username title (new Date) "system" 100)))
           true)))))
 
 (defn addReply [username password documentID reply]
@@ -65,7 +66,7 @@
               (. (. document object) put "reply" replyList)
               (let [messageCollection (new MessageCollection)]
                 (. messageCollection addMessage
-                  (. (. document object) getString "author") username (str "reply: " reply) (new Date)))
+                  (. (. document object) getString "author") username (str "reply: " reply) (new Date) "system" 100))
               true)))))))
 
 (defn getDocument [id manager event returnCodeConfig]
@@ -114,7 +115,7 @@
     (let [document (new Document)]
       (sendDocumentListSize manager event (. document append typeKey typeMessage)))))
 
-(. ManagerLogic put "control.BlogManager$addDocument" addDocument 5)
+(. ManagerLogic put "control.BlogManager$addDocument" addDocument 6)
 (. ManagerLogic put "control.BlogManager$addReply" addReply 4)
 (. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)
 (. ManagerLogic put "control.BlogManager$addReader" addReader 1)

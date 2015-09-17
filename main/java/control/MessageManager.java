@@ -12,12 +12,12 @@ public class MessageManager extends Manager {
         super(requestSolver);
     }
 
-    public void addMessage(String username, String password, String message, String aimUser) {
+    public void addMessage(String username, String password, String message, String aimUser, String preview) {
         SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
-                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, message, aimUser);
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, message, aimUser, preview);
             }
         };
         sendManager.addSendMessage(sendEvent);

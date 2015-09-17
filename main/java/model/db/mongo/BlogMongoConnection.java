@@ -15,6 +15,7 @@ public class BlogMongoConnection implements VirtualDBConnection {
 
     protected static MongoClient mongoClient = null;
 
+    @SuppressWarnings("deprecation")
     @Override
     public VirtualDB getDatabase(String name) {
         if (mongoClient == null) {
@@ -24,6 +25,10 @@ public class BlogMongoConnection implements VirtualDBConnection {
                 }
             }
         }
-        return new BlogMongoDB(mongoClient.getDatabase(name));
+        if (dbConfig.getDBType(name).equals("default")) {
+            return new BlogMongoDB(mongoClient.getDatabase(name));
+        } else {
+            return new BlogOldMongoDB(mongoClient.getDB(name));
+        }
     }
 }

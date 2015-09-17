@@ -20,7 +20,7 @@ public class BlogManagerTest {
 
     public static void addDocument(String author, String title, String body, Counter counter, String type) throws InterruptedException {
         BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
-        blogManagerNoSend.addDocument(author, "pass", title, body, type);
+        blogManagerNoSend.addDocument(author, "pass", title, body, type, "100");
 
         while (counter.get() != 0) {
             Thread.sleep(500);

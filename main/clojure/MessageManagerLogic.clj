@@ -7,13 +7,14 @@
            [control ManagerLogic]
            [org.bson Document]))
 
-(defn addMessage [username password message aimUser]
+(defn addMessage [username password message aimUser preview]
   (if (or (nil? message) (nil? aimUser)) false
     (let [lengthLimitConfig (. LengthLimitConfig getConfig)]
-      (if (> (count message) (. lengthLimitConfig getLimit "message")) false
+      (if (or (> (count message) (. lengthLimitConfig getLimit "message"))
+            (> (. Integer valueOf preview) (. lengthLimitConfig getLimit "preview"))) false
         (let [aimUserData (. (new UserCollection) getUserData aimUser)]
           (if (nil? aimUserData) false
-            (do (. (new MessageCollection) addMessage aimUser username message (new Date)) true)))))))
+            (do (. (new MessageCollection) addMessage aimUser username message (new Date) "message" (. Integer valueOf preview)) true)))))))
 
 (defn getMessage [username passwrod id manager event]
   (if (nil? id) false
@@ -36,7 +37,7 @@
         (. object put "id" (str (. object get "_id")))
         (. object remove "_id")
         (let [body (. object get "message")
-              preview (if (> (count body) 100) (subs body 0 100) body)]
+              preview (if (> (count body) (. object getInteger "preview" 100)) (subs body 0 (. object getInteger "preview" 100)) body)]
           (. object remove "message")
           (. object put "preview" preview))
         (. ans add object)))
@@ -48,7 +49,7 @@
       (if (or (nil? data) (not= username (. (. data object) getString "username"))) false
         (do (. (new MessageCollection) removeMessage id) true)))))
 
-(. ManagerLogic put "control.MessageManager$addMessage" addMessage 4)
+(. ManagerLogic put "control.MessageManager$addMessage" addMessage 5)
 (. ManagerLogic put "control.MessageManager$getMessage" getMessage 5)
 (. ManagerLogic put "control.MessageManager$readMessage" readMessage 3)
 (. ManagerLogic put "control.MessageManager$getAllMessage" getAllMessage 5)

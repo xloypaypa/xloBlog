@@ -19,7 +19,7 @@ public class MessageManagerTest {
     public static void addMessage(String username, String aimUser, String message) throws InterruptedException {
         Counter counter = new Counter(1);
         MessageManagerNoSend messageManager = new MessageManagerNoSend(counter);
-        messageManager.addMessage(username, "pass", message, aimUser);
+        messageManager.addMessage(username, "pass", message, aimUser, "100");
         while (counter.get() != 0) {
             Thread.sleep(500);
         }
@@ -182,5 +182,17 @@ public class MessageManagerTest {
                 messageCollection.findMessageData(new Document("username", "test aim")).get(1).object.get("_id").toString());
 
         assertEquals(0, messageCollection.findMessageData(new Document("username", "test aim")).size());
+    }
+
+    @Test
+    public void testDocumentAddMessage() throws Exception {
+        UserManagerTest.register("test user");
+        UserManagerTest.register("test aim");
+
+        MarkManagerTest.markUser("test aim", "test user");
+        BlogManagerTest.addDocument("test user", "title", "body", new Counter(1), "default");
+
+        MessageCollection messageCollection = new MessageCollection();
+        assertEquals(1, messageCollection.findMessageData(new Document("username", "test aim")).size());
     }
 }

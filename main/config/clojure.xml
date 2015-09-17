@@ -3,4 +3,5 @@
     <path>/BlogManagerLogic.clj</path>
     <path>/MessageManagerLogic.clj</path>
     <path>/MarkManagerLogic.clj</path>
+    <path>/ImageManagerLogic.clj</path>
 </code>

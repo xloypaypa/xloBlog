@@ -36,9 +36,9 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
     protected Method getMethod(Class<?> managerClass, List<Object> data) throws NoSuchMethodException {
         String methodName = this.postInfo.getMethod();
         int size;
-        if (this.postInfo.isArray() && this.postInfo.needAccess()) {
+        if (!this.postInfo.getDataType().equals("object") && this.postInfo.needAccess()) {
             size = 3;
-        } else if (this.postInfo.isArray()) {
+        } else if (!this.postInfo.getDataType().equals("object")) {
             size = 1;
         } else {
             size = data.size();
@@ -47,10 +47,16 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
         for (int i = 0; i < size - 1; i++) {
             methodParamType[i] = String.class;
         }
-        if (this.postInfo.isArray()) {
-            methodParamType[size - 1] = String[].class;
-        } else {
-            methodParamType[size - 1] = String.class;
+        switch (this.postInfo.getDataType()) {
+            case "array":
+                methodParamType[size - 1] = String[].class;
+                break;
+            case "file":
+                methodParamType[size - 1] = byte[].class;
+                break;
+            default:
+                methodParamType[size - 1] = String.class;
+                break;
         }
         return managerClass.getMethod(methodName, methodParamType);
     }
@@ -65,22 +71,28 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
         }
         List<String> need = this.postInfo.getMethodData();
         List<String> defaultValue = this.postInfo.getDefaultValue();
-        if (!this.postInfo.isArray()) {
-            if (need.size() != 0) {
-                JSONObject object = JSONObject.fromObject(this.message);
-                solveObject(data, need, defaultValue, object);
-            }
-        } else {
-            JSONArray array = JSONArray.fromObject(this.message);
-            List<Object> arrayData = new ArrayList<>();
-            for (Object object : array) {
-                solveObject(arrayData, need, defaultValue, (JSONObject) object);
-            }
-            String[] strings = new String[arrayData.size()];
-            for (int i=0;i<strings.length;i++) {
-                strings[i] = (String) arrayData.get(i);
-            }
-            data.add(strings);
+        switch (this.postInfo.getDataType()) {
+            case "file":
+                data.add(this.originalMessage);
+                break;
+            case "array":
+                JSONArray array = JSONArray.fromObject(this.message);
+                List<Object> arrayData = new ArrayList<>();
+                for (Object object : array) {
+                    solveObject(arrayData, need, defaultValue, (JSONObject) object);
+                }
+                String[] strings = new String[arrayData.size()];
+                for (int i = 0; i < strings.length; i++) {
+                    strings[i] = (String) arrayData.get(i);
+                }
+                data.add(strings);
+                break;
+            default:
+                if (need.size() != 0) {
+                    JSONObject object = JSONObject.fromObject(this.message);
+                    solveObject(data, need, defaultValue, object);
+                }
+                break;
         }
         return data;
     }

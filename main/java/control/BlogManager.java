@@ -13,12 +13,12 @@ public class BlogManager extends Manager {
         super(requestSolver);
     }
 
-    public void addDocument(String username, String password, String title, String body, String type) {
+    public void addDocument(String username, String password, String title, String body, String type, String preview) {
         SendEvent sendEvent = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this)
-                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, title, body, type);
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, title, body, type, preview);
             }
         };
         sendManager.addSendMessage(sendEvent);

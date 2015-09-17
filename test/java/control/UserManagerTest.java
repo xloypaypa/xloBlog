@@ -3,6 +3,7 @@ package control;
 import model.db.CollectionGetter;
 import model.db.DBTable;
 import model.db.UserCollection;
+import model.db.VirtualDataTable;
 import org.bson.Document;
 import org.junit.After;
 import org.junit.Test;
@@ -93,7 +94,7 @@ public class UserManagerTest {
         }
 
         CollectionGetter collectionGetter = new CollectionGetter(new UserCollection());
-        assertEquals(1, collectionGetter.getCollection().count(new Document("username", "test user")));
+        assertEquals(1, ((VirtualDataTable) collectionGetter.getCollection()).count(new Document("username", "test user")));
     }
 
     @Test

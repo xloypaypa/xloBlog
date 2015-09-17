@@ -1,5 +1,8 @@
 package model.db.virtual;
 
+import model.config.ConfigManager;
+import model.config.DBConfig;
+import model.db.VirtualDB;
 import model.db.VirtualDBConnection;
 
 import java.util.HashMap;
@@ -10,11 +13,19 @@ import java.util.Map;
  * it's the virtual connection
  */
 public class BlogVirtualConnection implements VirtualDBConnection {
-    private static Map<String, BlogVirtualDB> dbMap = new HashMap<>();
+    protected static DBConfig dbConfig = (DBConfig) ConfigManager.getConfigManager().getConfig(DBConfig.class);
 
-    public synchronized BlogVirtualDB getDatabase(String name) {
-        if (!dbMap.containsKey(name)) {
-            dbMap.put(name, new BlogVirtualDB());
+    private static Map<String, VirtualDB> dbMap = new HashMap<>();
+
+    public synchronized VirtualDB getDatabase(String name) {
+        if (dbConfig.getDBType(name).equals("default")) {
+            if (!dbMap.containsKey(name)) {
+                dbMap.put(name, new BlogVirtualDB());
+            }
+        } else {
+            if (!dbMap.containsKey(name)) {
+                dbMap.put(name, new BlogOldVirtualDB());
+            }
         }
         return dbMap.get(name);
     }
