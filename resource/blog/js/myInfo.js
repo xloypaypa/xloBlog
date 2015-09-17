@@ -36,13 +36,13 @@ function getMessageList(){
         var messageNum=0;
         var array=[];
         var newData=rankByTime(data);
-
         for(var i=0;i<newData.length;i++){
             var content=decodeURIComponent(newData[i].preview);
             var author=decodeURIComponent(newData[i].author);
             var date=transformDate(newData[i].time.time);
             $('.message-list').prepend($('#message-template').html());
             var messageNo=$('.message-list li').eq(0);
+            messageNo.find('.message-tag').html(newData[i].type+':');
             messageNo.find('.message-content').html(content);
             messageNo.find('.message-author').html('by'+author);
             messageNo.find('.message-date').html(date);
@@ -53,6 +53,7 @@ function getMessageList(){
             }else{
                 messageNum+=1;
             }
+            console.log(messageNum);
         }
         localStorage.setItem('readAllArray',array);
         $('.messageNum').html(messageNum);
@@ -105,6 +106,6 @@ function readMessage(_this){
     ajaxHeader('/readMessage',data,function(data){
         var messageNum=$('.messageNum');
         $(_this).css('opacity','0.6');
-        messageNum.html(messageNum.html()-1);
+        //messageNum.html(messageNum.html()-1);
     });
 }

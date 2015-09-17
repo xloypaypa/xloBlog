@@ -51,8 +51,7 @@ function getDocumentList(page){
         page:page?page:1
     };
     ajaxRequest('/getDocumentListByAuthor',data,function(data){
-        if(data){
-            $('.article-list').empty();
+        if(data&&data.length!=0){
             var newData=rankByTime(data);
             for(var i=0;i<newData.length;i++){
                 $('.article-list').prepend($('#article').html());
@@ -74,6 +73,7 @@ function getDocumentList(page){
                 articleNo.find('.readerNum').html(newData[i].reader);
             }
         }else{
+            $('.pagination').empty();
             $('.article-list').html('<h1>空空如也</h1>')
         }
     });
@@ -106,33 +106,36 @@ function articleSize(author){
 
 //分页
 function page(pageNum,pageNo){
-    $('.pagination').empty()
-        .append("<li><a href='#' page='1'>首页</a></li>" +
-        "<li class='active'><a href='#'  page='"+pageNo+"'>"+pageNo+"</a></li>" +
-        "<li><a href='#' page='"+pageNum+"'>尾页</a></li>");
-    if(pageNo!=1)
-        $('.pagination li:first').after("<li><a href='#' class='prev' page='"+(pageNo-1)+"'>上一页</a></li>");
-    if(pageNo!=pageNum)
-        $('.pagination li:last').before("<li><a href='#' class='next' page='"+(pageNo+1)+"'>下一页</a></li>");
-    console.log($('.next').attr('page'));
-    if(pageNo>4){
-        $('.active').before("<li><a href='#'>...</a></li>")
-            .before("<li><a href='#' page='"+(pageNo-3)+"'>"+(pageNo-3)+"</a></li>")
-            .before("<li><a href='#' page='"+(pageNo-2)+"'>"+(pageNo-2)+"</a></li>")
-            .before("<li><a href='#' page='"+(pageNo-1)+"'>"+(pageNo-1)+"</a></li>");
+    if(pageNum==1){
+        $('.pagination').empty();
     }else{
-        for(var i=1;i<pageNo;i++){
-            $('.active').before("<li><a href='#' page='"+i+"'>"+i+"</a></li>");
+        $('.pagination').empty()
+            .append("<li><a href='#' page='1'>首页</a></li>" +
+            "<li class='active'><a href='#'  page='"+pageNo+"'>"+pageNo+"</a></li>" +
+            "<li><a href='#' page='"+pageNum+"'>尾页</a></li>");
+        if(pageNo!=1)
+            $('.pagination li:first').after("<li><a href='#' class='prev' page='"+(pageNo-1)+"'>上一页</a></li>");
+        if(pageNo!=pageNum)
+            $('.pagination li:last').before("<li><a href='#' class='next' page='"+(pageNo+1)+"'>下一页</a></li>");
+        if(pageNo>4){
+            $('.active').before("<li><a href='#'>...</a></li>")
+                .before("<li><a href='#' page='"+(pageNo-3)+"'>"+(pageNo-3)+"</a></li>")
+                .before("<li><a href='#' page='"+(pageNo-2)+"'>"+(pageNo-2)+"</a></li>")
+                .before("<li><a href='#' page='"+(pageNo-1)+"'>"+(pageNo-1)+"</a></li>");
+        }else{
+            for(var i=1;i<pageNo;i++){
+                $('.active').before("<li><a href='#' page='"+i+"'>"+i+"</a></li>");
+            }
         }
-    }
-    if(pageNum-pageNo>3){
-        $('.active').after("<li><a href='#'>...</a></li>")
-            .after("<li><a href='#' page='"+(pageNum)+"'>"+(pageNum)+"</a></li>")
-            .after("<li><a href='#' page='"+(pageNum-1)+"'>"+(pageNum-1)+"</a></li>")
-            .after("<li><a href='#' page='"+(pageNum-2)+"'>"+(pageNum-2)+"</a></li>");
-    }else{
-        for(var i=pageNum;i>pageNo;i--){
-            $('.active').after("<li><a href='#' page='"+i+"'>"+i+"</a></li>");
+        if(pageNum-pageNo>3){
+            $('.active').after("<li><a href='#'>...</a></li>")
+                .after("<li><a href='#' page='"+(pageNum)+"'>"+(pageNum)+"</a></li>")
+                .after("<li><a href='#' page='"+(pageNum-1)+"'>"+(pageNum-1)+"</a></li>")
+                .after("<li><a href='#' page='"+(pageNum-2)+"'>"+(pageNum-2)+"</a></li>");
+        }else{
+            for(i=pageNum;i>pageNo;i--){
+                $('.active').after("<li><a href='#' page='"+i+"'>"+i+"</a></li>");
+            }
         }
     }
     getDocumentList(pageNo);

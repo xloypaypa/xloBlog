@@ -7,12 +7,13 @@ $(function(){
 
     //发送消息
     $('.submit').click(function(){
-        var message=encodeURIComponent($('.chatContent textarea').val());
-        console.log(receiver);
-        console.log(message);
+        var value=$('.chatContent textarea').val();
+        var preview=encodeURIComponent(value.substr(0,50));
+        var message=encodeURIComponent(value);
         var data={
             aim:receiver,
-            message:message
+            message:message,
+            preview:preview.length
         };
         ajaxHeader('/sendMessage',data,function(response){
             alert('发送成功');
