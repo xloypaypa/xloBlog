@@ -80,23 +80,11 @@ function getMarkedList(){
 //所有标记为已读
 function readAll() {
     var data = localStorage.getItem('readAllArray');
-    $.ajax({
-        url: '/readAllMessage',
-        type: 'POST',
-        dataType: 'json',
-        data: '[' + data + ']',
-        beforeSend: function (XML) {
-            XML.setRequestHeader('username', window.username);
-            XML.setRequestHeader('password', window.password);
-        },
-        success: function (data) {
-            $('.message-list li').css('opacity', '0.6');
-            $('.messageNum').html('0');
-        },
-        error: function (response) {
-            console.log(response);
-        }
+    ajaxHeaderByArray('/readAllMessage',data,function(data){
+        $('.message-list li').css('opacity', '0.6');
+        $('.messageNum').html('0');
     });
+
 }
 //读取消息
 function readMessage(_this){
@@ -107,5 +95,13 @@ function readMessage(_this){
         var messageNum=$('.messageNum');
         $(_this).css('opacity','0.6');
         //messageNum.html(messageNum.html()-1);
+    });
+}
+
+//删除消息
+function removeMessage(){
+
+    ajaxHeaderByArray('/removeAllMessage',data,function(data){
+
     });
 }

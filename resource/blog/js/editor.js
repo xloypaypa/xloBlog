@@ -1,7 +1,6 @@
 $(function(){
     $('.nickName').html(decodeURIComponent(window.username));
     $('.submit').click(function(){
-        console.log(encodeURIComponent($('.blog-title input').val()));
         var value=$('.blog-content textarea').val();
         var preview=encodeURIComponent(value.substr(0,100));
         var data={

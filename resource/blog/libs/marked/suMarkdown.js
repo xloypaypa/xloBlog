@@ -1,6 +1,5 @@
 
 
-
 (function($){
     $.fn.upload=function(url,settings){
 
@@ -268,7 +267,8 @@ var SuMarkdown=function(option){
        var methods={
            bold:function(){
                var reg=/^\*{2}[^\0]*\*{2}$/m;
-               var target=get($('textarea',mark));
+               var target=get($('textarea',mark));         //应该是markdown的东西
+               console.log(target);
                var dst;
                if(!reg.test(target.select.text))
                    dst=replace(target.container,'**'+target.select.text+'**');
@@ -659,3 +659,4 @@ var SuMarkdown=function(option){
     }
 
 };
+
