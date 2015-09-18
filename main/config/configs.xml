@@ -6,4 +6,5 @@
     <type path="/access.xml">model.config.AccessConfig</type>
     <type path="/lengthLimit.xml">model.config.LengthLimitConfig</type>
     <type path="/clojure.xml">model.config.ClojureConfig</type>
+    <type path="/const.xml">model.config.ConstConfig</type>
 </model.config>

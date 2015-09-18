@@ -3,7 +3,7 @@
   control.BlogManagerLogic
   (:import [model.db BlogCollection MarkUserCollection MessageCollection UserCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
-           [model.config LengthLimitConfig ConfigManager ReturnCodeConfig]
+           [model.config LengthLimitConfig ConfigManager ReturnCodeConfig ConstConfig]
            [java.util Date LinkedList Comparator]
            [control ManagerLogic BlogManager]))
 
@@ -19,7 +19,8 @@
       (let [now (nth aimList i)
             object (. now object)
             body (. object get "body")
-            preview (if (> (count body) (. object getInteger "preview" 100)) (subs body 0 (. object getInteger "preview" 100)) body)
+            previewDefault (. (. ConstConfig getConfig) getConst "preview default")
+            preview (if (> (count body) (. object getInteger "preview" previewDefault)) (subs body 0 (. object getInteger "preview" previewDefault)) body)
             nowMap {"id" (str (. object get "_id")),
                     "title" (. object get "title"),
                     "author" (. object get "author"),
@@ -27,14 +28,16 @@
                     "reader" (. object getInteger "reader" 0)
                     "preview" preview}]
         (. ans add nowMap)))
-    (let [left (* (- page 1) 10)
-          right (if (> (+ left 10) (. ans size)) (. ans size) (+ left 10))]
+    (let [onePageSize (. (. ConstConfig getConfig) getConst "blog page size")
+           left (* (- page 1) onePageSize)
+          right (if (> (+ left onePageSize) (. ans size)) (. ans size) (+ left onePageSize))]
       (if (<= left right) (do (. manager addSuccessMessage event (. ans subList left right)) true)
         false))))
 
 (defn sendDocumentListSize [manager event message]
-  (let [aimList (vec (. (new BlogCollection) findDocumentListData message))
-        pageSize (max 1 (+ (int (/ (count aimList) 10)) (if (= 0 (rem (count aimList) 10)) 0 1)))]
+  (let [onePageSize (. (. ConstConfig getConfig) getConst "blog page size")
+         aimList (vec (. (new BlogCollection) findDocumentListData message))
+        pageSize (max 1 (+ (int (/ (count aimList) onePageSize)) (if (= 0 (rem (count aimList) onePageSize)) 0 1)))]
     (do (. manager addSuccessMessage event (str "{\"return\":" pageSize "}"))) true))
 
 (defn addDocument [username password title body type preview]

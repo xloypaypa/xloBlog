@@ -3,7 +3,7 @@
   control.MessageManagerLogic
   (:import [model.db MessageCollection UserCollection]
            [java.util Date LinkedList]
-           [model.config LengthLimitConfig]
+           [model.config LengthLimitConfig ConstConfig]
            [control ManagerLogic]
            [org.bson Document]))
 
@@ -37,7 +37,8 @@
         (. object put "id" (str (. object get "_id")))
         (. object remove "_id")
         (let [body (. object get "message")
-              preview (if (> (count body) (. object getInteger "preview" 100)) (subs body 0 (. object getInteger "preview" 100)) body)]
+              previewDefault (. (. ConstConfig getConfig) getConst "preview default")
+              preview (if (> (count body) (. object getInteger "preview" previewDefault)) (subs body 0 (. object getInteger "preview" previewDefault)) body)]
           (. object remove "message")
           (. object put "preview" preview))
         (. ans add object)))
