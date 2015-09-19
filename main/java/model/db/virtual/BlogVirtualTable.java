@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by xlo on 2015/9/1.
@@ -24,14 +23,26 @@ public class BlogVirtualTable implements VirtualDataTable {
 
     @Override
     public List<Map<String, Object>> find() {
-        return value.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toCollection(LinkedList::new));
+        List<Map<String, Object>> ans = new LinkedList<>();
+        for (Map.Entry<String, Document> entry : this.value.entrySet()) {
+            Document document = new Document();
+            document.putAll(entry.getValue());
+            ans.add(document);
+        }
+        return ans;
     }
 
     @Override
     public List<Map<String, Object>> find(Map<String, Object> map) {
         Document document = new Document();
         document.putAll(map);
-        return find(document);
+        List<Map<String, Object>> ret = find(document);
+        List<Map<String, Object>> ans = new LinkedList<>();
+        for (Map<String, Object> now : ret) {
+            HashMap<String, Object> e = new HashMap<>(now);
+            ans.add(e);
+        }
+        return ans;
     }
 
     @Override
@@ -51,7 +62,9 @@ public class BlogVirtualTable implements VirtualDataTable {
 
     @Override
     public void updateOne(Map<String, Object> filter, Map<String, Object> update) {
-        List<Map<String, Object>> ans = find(filter);
+        Document filterDocument = new Document();
+        filterDocument.putAll(filter);
+        List<Map<String, Object>> ans = find(filterDocument);
         if (ans.size() == 0) return;
         update = (Document) update.get("$set");
         Map<String, Object> document = ans.get(0);

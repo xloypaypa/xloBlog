@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class LengthLimitConfigTest {
     @Test
     public void testLoad() throws DocumentException {
-        LengthLimitConfig lengthLimitConfig = new LengthLimitConfig();
+        LengthLimitConfig lengthLimitConfig = LengthLimitConfig.getConfig();
         lengthLimitConfig.init();
         assertEquals(123, lengthLimitConfig.getLimit("username"));
     }

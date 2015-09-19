@@ -3,7 +3,7 @@
   control.BlogManagerLogic
   (:import [model.db BlogCollection MarkUserCollection MessageCollection UserCollection]
            [org.bson Document BsonArray BsonDocument BsonDateTime BsonString]
-           [model.config LengthLimitConfig ConfigManager ReturnCodeConfig]
+           [model.config LengthLimitConfig ConfigManager ReturnCodeConfig ConstConfig]
            [java.util Date LinkedList Comparator]
            [control ManagerLogic BlogManager]))
 
@@ -19,7 +19,8 @@
       (let [now (nth aimList i)
             object (. now object)
             body (. object get "body")
-            preview (if (> (count body) (. object getInteger "preview" 100)) (subs body 0 (. object getInteger "preview" 100)) body)
+            previewDefault (. (. ConstConfig getConfig) getConst "preview default")
+            preview (if (> (count body) (. object getInteger "preview" previewDefault)) (subs body 0 (. object getInteger "preview" previewDefault)) body)
             nowMap {"id" (str (. object get "_id")),
                     "title" (. object get "title"),
                     "author" (. object get "author"),
@@ -27,23 +28,28 @@
                     "reader" (. object getInteger "reader" 0)
                     "preview" preview}]
         (. ans add nowMap)))
-    (let [left (* (- page 1) 10)
-          right (if (> (+ left 10) (. ans size)) (. ans size) (+ left 10))]
+    (let [onePageSize (. (. ConstConfig getConfig) getConst "blog page size")
+          left (* (- page 1) onePageSize)
+          right (if (> (+ left onePageSize) (. ans size)) (. ans size) (+ left onePageSize))]
       (if (<= left right) (do (. manager addSuccessMessage event (. ans subList left right)) true)
         false))))
 
 (defn sendDocumentListSize [manager event message]
-  (let [aimList (vec (. (new BlogCollection) findDocumentListData message))
-        pageSize (max 1 (+ (int (/ (count aimList) 10)) (if (= 0 (rem (count aimList) 10)) 0 1)))]
+  (let [onePageSize (. (. ConstConfig getConfig) getConst "blog page size")
+        aimList (vec (. (new BlogCollection) findDocumentListData message))
+        pageSize (max 1 (+ (int (/ (count aimList) onePageSize)) (if (= 0 (rem (count aimList) onePageSize)) 0 1)))]
     (do (. manager addSuccessMessage event (str "{\"return\":" pageSize "}"))) true))
+
+(defn documentNotFoundMessage [manager event returnCodeConfig]
+  (let [object {"return" (. returnCodeConfig getCode "not found")}]
+    (. manager addFailMessage event object)))
 
 (defn addDocument [username password title body type preview]
   (if (or (nil? title) (nil? body) (nil? type)) false
     (let [lengthLimitConfig (. LengthLimitConfig getConfig)]
-      (if
-        (or (> (count title) (. lengthLimitConfig getLimit "documentTitle"))
-          (> (count body) (. lengthLimitConfig getLimit "documentBody"))
-          (> (. Integer valueOf preview) (. lengthLimitConfig getLimit "preview"))) false
+      (if (or (> (count title) (. lengthLimitConfig getLimit "documentTitle"))
+            (> (count body) (. lengthLimitConfig getLimit "documentBody"))
+            (> (. Integer valueOf preview) (. lengthLimitConfig getLimit "preview"))) false
         (do (let [blogCollection (new BlogCollection)]
               (. blogCollection addDocument username title body (new Date) type (. Integer valueOf preview)))
           (let [markUserCollection (new MarkUserCollection)
@@ -75,8 +81,7 @@
               true)))))))
 
 (defn getDocument [id manager event returnCodeConfig]
-  (let [object {"return" (. returnCodeConfig getCode "not found")}]
-    (. manager addFailMessage event object))
+  (documentNotFoundMessage manager event returnCodeConfig)
   (if (nil? id) false
     (let [data (. (new BlogCollection) getDocumentData id)]
       (if (nil? data) false
@@ -91,31 +96,27 @@
         (. object put "reader" (int val)) true))))
 
 (defn getAuthorTypeDocumentList [author typeMessage page manager event returnCodeConfig]
-  (let [object {"return" (. returnCodeConfig getCode "not found")}]
-    (. manager addFailMessage event object))
+  (documentNotFoundMessage manager event returnCodeConfig)
   (if (or (nil? author) (nil? typeMessage)) false
     (let [userData (. (new UserCollection) getUserData author)]
       (let [document (new Document)]
         (sendDocumentList manager event (. (. document append "author" author) append "type" typeMessage) (. Integer valueOf page))))))
 
 (defn getAuthorTypeDocumentListSize [author typeMessage manager event returnCodeConfig]
-  (let [object {"return" (. returnCodeConfig getCode "not found")}]
-    (. manager addFailMessage event object))
+  (documentNotFoundMessage manager event returnCodeConfig)
   (if (or (nil? author) (nil? typeMessage)) false
     (let [userData (. (new UserCollection) getUserData author)]
       (let [document (new Document)]
         (sendDocumentListSize manager event (. (. document append "author" author) append "type" typeMessage))))))
 
 (defn getTypeDocumentList [typeKey typeMessage page manager event returnCodeConfig]
-  (let [object {"return" (. returnCodeConfig getCode "not found")}]
-    (. manager addFailMessage event object))
+  (documentNotFoundMessage manager event returnCodeConfig)
   (if (nil? typeMessage) false
     (let [document (new Document)]
       (sendDocumentList manager event (. document append typeKey typeMessage) (. Integer valueOf page)))))
 
 (defn getTypeDocumentListSize [typeKey typeMessage manager event returnCodeConfig]
-  (let [object {"return" (. returnCodeConfig getCode "not found")}]
-    (. manager addFailMessage event object))
+  (documentNotFoundMessage manager event returnCodeConfig)
   (if (nil? typeMessage) false
     (let [document (new Document)]
       (sendDocumentListSize manager event (. document append typeKey typeMessage)))))
