@@ -39,19 +39,25 @@ function markdown(){
             toggleEdit: 'Toggle Edit Mode',
             toggleFullscreen: 'Enter Fullscreen'
         },
-        autogrow: false
+        autogrow:{
+            minHeight:100,
+            maxHeight:400,
+            scroll:true
+        }
+        //autogrow: false,
+
     };
     var editor = new EpicEditor(opts).load();
 
     $('.submit').click(function () {
-        var sendVal=editor.getElement('editor').body.innerHTML;
+        var sendVal=editor.getElement('previewer').body.innerHTML;
         var preview=encodeURIComponent(sendVal.slice(0,99));
         var title=encodeURIComponent($('.blog-title input').val());
         addDocument(title,encodeURIComponent(sendVal),preview);
         editor.focus();
     });
     $('.su-tool-code').click(function(){
-
+        editor.focus();
     });
 
 }
@@ -63,6 +69,6 @@ function addDocument(title,body,preview){
         preview:preview.length
     };
     ajaxHeader('/addDocument',data,function(data){
-        location.href='index.html';
+        //location.href='index.html';
     });
 }
