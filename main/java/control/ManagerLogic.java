@@ -20,6 +20,7 @@ public class ManagerLogic {
                 objects[i] = Object.class;
             }
             Method method = object.getClass().getMethod("invoke", objects);
+            method.setAccessible(true);
             logicFun.put(name, method);
         }
     }
