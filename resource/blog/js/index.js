@@ -79,7 +79,7 @@ function getDocumentList(page){
             }
         }else{
             $('.pagination').empty();
-            main.html('<h1>空空如也</h1>')
+            //main.html('<h1>空空如也</h1>')
         }
     });
 }

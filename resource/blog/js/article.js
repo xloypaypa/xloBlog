@@ -16,8 +16,6 @@ $(function(){
     //获取文章信息
     getDocument();
 
-
-
     //评论
     $('.myComment .submit').click(function(){
         var comment=encodeURIComponent($('.myComment textarea').val());

@@ -15,13 +15,35 @@ $(function(){
         $('.readAll').click(function(){
              readAll();
         });
+        var listParent=$('.message-list');
+        //标记已读
+        listParent.on('click','li',function(){
+            var _this=$(this);
+            readMessage(_this);
+            getMessage($(this).attr('messageId'));
+        });
+
+        //选中
+        listParent.on('click','input',function(event){
+            event.stopPropagation();
+        });
+
+        $('.delete').click(function(){
+            var selectArr=[];
+            var messageLi=$('.message-list li');
+            var length=messageLi.length;
+            for(var i=0;i<length;i++){
+                var isSelected=messageLi.eq(i).find('input').prop('checked');
+                if(isSelected){
+                    selectArr.push(JSON.stringify({
+                        id:messageLi.eq(i).attr('messageId')
+                    }));
+                }
+            }
+            removeMessage(selectArr);
+        });
     });
 
-    //标记已读
-    $('.message-list').on('click','li',function(){
-        var _this=$(this);
-        readMessage(_this);
-    });
 });
 
 
@@ -94,14 +116,31 @@ function readMessage(_this){
     ajaxHeader('/readMessage',data,function(data){
         var messageNum=$('.messageNum');
         $(_this).css('opacity','0.6');
-        //messageNum.html(messageNum.html()-1);
     });
 }
 
 //删除消息
-function removeMessage(){
+function removeMessage(sendData){
+    ajaxHeaderByArray('/removeAllMessage',sendData,function(data){
+        var messageLi=$('.message-list li');
+        var length=messageLi.length;
+        for(var i=0;i<length;i++){
+            var isSelected=messageLi.eq(i).find('input').prop('checked');
+            if(isSelected){
+                messageLi.eq(i).remove();
+            }
+        }
+    });
+}
 
-    ajaxHeaderByArray('/removeAllMessage',data,function(data){
-
+function getMessage(id){
+    var data={
+        id:id
+    };
+    ajaxHeader('/getMessage',data,function(data){
+        var info=$('#messageModal');
+        var message=decodeURIComponent(data.message);
+        $(info).find('.modal-title').html(data.type+'<span class="label label-default">by'+data.author+'</span>');
+        $(info).find('.modal-body').html('<p>'+message+'</p>');
     });
 }

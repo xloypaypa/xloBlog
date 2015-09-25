@@ -21,11 +21,5 @@
 .Messages .message-author{
     color:#999;
 }
-.readAll{
-    font-size:14px;
-    font-weight: normal;
-    color:blue;
-}
-.readAll:hover,.message-list li:hover{
-    cursor: pointer;
-}
+
+

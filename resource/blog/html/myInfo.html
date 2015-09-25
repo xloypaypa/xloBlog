@@ -50,13 +50,17 @@
         </ul>
     </div>
     <div class="Messages" style="display:none;">
-        <h3>未读通知(<span class="messageNum">0</span>) | <span class="readAll">全部标记为已读</span></h3>
+        <h3>
+            未读通知(<span class="messageNum">0</span>) |
+            <button class="readAll btn btn-default btn-xs">全部标记为已读</button>
+            <button class="delete btn btn-default btn-xs">删除选中消息</button>
+        </h3>
         <ul class="message-list list-group">
         </ul>
     </div>
 </div>
 <ul id="message-template" style="display:none;">
-    <li class="list-group-item">
+    <li class="list-group-item" data-toggle="modal" data-target="#messageModal">
         <input type="checkbox" name="isRead" />
         <span class="message-tag"></span>
         <span class="message-content">对不起，系统出错</span>
@@ -64,6 +68,24 @@
         <span class="message-date pull-right"></span>
     </li>
 </ul>
+
+<!-- Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer>
 
