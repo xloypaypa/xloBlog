@@ -7,7 +7,7 @@
 
 (defn uploadImage [data manager event]
   (let [path (. (new ImageCollection) insert data)]
-    (do (. manager addSuccessMessage event (str "{\"return\":\"" path "\"}")) true)))
+    (do (. manager addSuccessMessage event (str "{\"return\":\"/" path "\"}")) true)))
 
 (defn getImage [path manager event]
   (let [fileObject (. (new ImageCollection) find path)]
