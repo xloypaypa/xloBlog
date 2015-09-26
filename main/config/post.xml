@@ -151,9 +151,4 @@
             <data>image</data>
         </method>
     </solver>
-    <solver name="getImage" url="/getImage" manager="control.ImageManager" access="false">
-        <method name="getImage">
-            <data>fileName</data>
-        </method>
-    </solver>
 </post>
