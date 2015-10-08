@@ -1,12 +1,12 @@
 package net.post;
 
 import model.config.PostConfig;
-import net.server.serverSolver.RequestSolver;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.tool.LengthLimitReadServerSolver;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,27 +20,28 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
 
     protected PostConfig.PostInfo postInfo;
 
+    private PostConfig postConfig;
+
     public AutoPostSolver(PostConfig.PostInfo postInfo) {
         this.postInfo = postInfo;
+        this.postConfig = PostConfig.getConfig();
     }
 
     @Override
     public void solveMessage() throws Exception {
-        Class<?> managerClass = getManagerClass();
-        Object managerObject = getManagerObject(managerClass);
+        Object managerObject = getManagerObject();
         List<Object> data = getData();
-        Method method = getMethod(managerClass, data);
+        Method method = getMethod(data);
         method.invoke(managerObject, data.toArray());
     }
 
-    protected Method getMethod(Class<?> managerClass, List<Object> data) throws NoSuchMethodException {
-        String methodName = this.postInfo.getMethod();
+    protected Method getMethod(List<Object> data) throws NoSuchMethodException, ClassNotFoundException {
         int size = data.size();
         Class[] methodParamType = new Class[size];
         for (int i = 0; i < size; i++) {
             methodParamType[i] = data.get(i).getClass();
         }
-        return managerClass.getMethod(methodName, methodParamType);
+        return this.postConfig.getMethod(this.postInfo.getManager(), this.postInfo.getMethod(), methodParamType);
     }
 
     protected List<Object> getData() {
@@ -92,15 +93,9 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
         }
     }
 
-    protected Object getManagerObject(Class<?> managerClass) throws NoSuchMethodException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
-        Class[] paramTypes = {RequestSolver.class};
+    protected Object getManagerObject() throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Object[] param = {this.requestSolver};
-        Constructor<?> constructor = managerClass.getConstructor(paramTypes);
+        Constructor<?> constructor = this.postConfig.getManagerConstructor(this.postInfo.getManager());
         return constructor.newInstance(param);
-    }
-
-    protected Class<?> getManagerClass() throws ClassNotFoundException {
-        String managerName = this.postInfo.getManager();
-        return Class.forName(managerName);
     }
 }
