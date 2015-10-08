@@ -41,9 +41,9 @@ public class ImageMongoTable implements VirtualFileTable {
     }
 
     @Override
-    public String insert(byte[] bytes) {
+    public String insert(byte[] bytes, String type) {
         GridFSInputFile gridFSInputFile = this.gridFS.createFile(bytes);
-        String id = new ObjectId().toString();
+        String id = new ObjectId().toString() + "." + type;
         gridFSInputFile.setFilename(id);
         gridFSInputFile.save();
         return id;

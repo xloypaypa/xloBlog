@@ -28,9 +28,9 @@ public class ImageCollection extends DBFileTable {
     }
 
     @Override
-    public String insert(byte[] bytes) {
+    public String insert(byte[] bytes, String type) {
         lockCollection();
-        String ans = super.insert(bytes);
+        String ans = super.insert(bytes, type);
         unlockCollection();
         return ans;
     }

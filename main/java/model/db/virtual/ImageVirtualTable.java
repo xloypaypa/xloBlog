@@ -35,8 +35,8 @@ public class ImageVirtualTable implements VirtualFileTable {
     }
 
     @Override
-    public String insert(byte[] bytes) {
-        String path = "file" + count;
+    public String insert(byte[] bytes, String type) {
+        String path = "file" + count + "." + type;
         count++;
         value.put(path, bytes);
         return path;

@@ -1,11 +1,14 @@
 package model.config;
 
+import net.server.serverSolver.RequestSolver;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by xlo on 2015/8/28.
@@ -13,9 +16,15 @@ import java.util.List;
  */
 public class PostConfig implements ConfigInterface {
     protected List<PostInfo> postInfo;
+    private Map<String, Map<String, Map<Class[], Method>>> method;
+    private Map<String, Constructor<?>> manager;
+    private ReadWriteLock readWriteLock;
 
     protected PostConfig() {
         this.postInfo = new LinkedList<>();
+        this.method = new HashMap<>();
+        this.manager = new HashMap<>();
+        this.readWriteLock = new ReentrantReadWriteLock();
     }
 
     public static PostConfig getConfig() {
@@ -50,6 +59,11 @@ public class PostConfig implements ConfigInterface {
             }
             postInfo.add(post);
         }
+
+        this.readWriteLock.writeLock().lock();
+        this.method.clear();
+        this.manager.clear();
+        this.readWriteLock.writeLock().unlock();
     }
 
     @Override
@@ -60,6 +74,29 @@ public class PostConfig implements ConfigInterface {
 
     public List<PostInfo> getPostInfo() {
         return postInfo;
+    }
+
+    public Constructor<?> getManagerConstructor(String className) throws ClassNotFoundException, NoSuchMethodException {
+        if (!this.manager.containsKey(className)) {
+            Class[] paramTypes = {RequestSolver.class};
+            this.manager.put(className, Class.forName(className).getConstructor(paramTypes));
+        }
+        return this.manager.get(className);
+    }
+
+    public Method getMethod(String className, String methodName, Class[] methodParamType) throws ClassNotFoundException, NoSuchMethodException {
+        if (!this.method.containsKey(className)) {
+            this.method.put(className, new HashMap<>());
+        }
+        Map<String, Map<Class[], Method>> map = this.method.get(className);
+        if (!map.containsKey(methodName)) {
+            map.put(methodName, new HashMap<>());
+        }
+        Map<Class[], Method> methodMap = map.get(methodName);
+        if (!methodMap.containsKey(methodParamType)) {
+            methodMap.put(methodParamType, Class.forName(className).getMethod(methodName, methodParamType));
+        }
+        return methodMap.get(methodParamType);
     }
 
     public class PostInfo {

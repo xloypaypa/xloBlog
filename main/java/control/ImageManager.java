@@ -23,12 +23,12 @@ public class ImageManager extends Manager {
         event.submit();
     }
 
-    public void uploadImage(String username, String password, byte[] image) {
+    public void uploadImage(String username, String password, String type, byte[] image) {
         SendEvent event = new SendEvent() {
             @Override
             public boolean run() throws Exception {
                 return accessConfig.isAccept(username, password, this) &&
-                        (boolean) ManagerLogic.invoke(this.getClojureName(), image, sendManager, this);
+                        (boolean) ManagerLogic.invoke(this.getClojureName(), type, image, sendManager, this);
             }
         };
         sendManager.addFailMessage(event);
