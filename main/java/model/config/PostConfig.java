@@ -95,7 +95,6 @@ public class PostConfig implements ConfigInterface {
         Map<Class[], Method> methodMap = map.get(methodName);
         if (!methodMap.containsKey(methodParamType)) {
             methodMap.put(methodParamType, Class.forName(className).getMethod(methodName, methodParamType));
-            System.out.println("!!!");
         }
         return methodMap.get(methodParamType);
     }
