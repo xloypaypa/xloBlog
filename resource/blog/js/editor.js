@@ -2,9 +2,6 @@ $(function(){
 
     markdown();
     $('.nickName').html(decodeURIComponent(window.username));
-    var oMyForm = new FormData();
-    oMyForm.append("username", "Groucho");
-    console.log(oMyForm);
 });
 function markdown(){
     var opts = {
@@ -62,7 +59,7 @@ function markdown(){
     $(utilbar).find('.epiceditor-bold-btn').click(function(){
 
     });
-    uploadImage($('.upload'));
+    uploadImage($('.upload'),getEditor);
 }
 
 function addDocument(title,body,preview){
@@ -76,12 +73,9 @@ function addDocument(title,body,preview){
     });
 }
 
-function uploadImage(target){
+function uploadImage(target,getEditor){
     target.change(function(event){
-        var file=this.files[0],
-            _parent=$(this).parent(),
-            _self=$(this);
-        console.log(file);
+        var file=this.files[0];
         if(!file)  return null;
         var rFilter=/^(image\/bmp|image\/gif|image\/jpeg|image\/png|image\/tiff)$/i;
         if(!checkUploadAccess()){
@@ -93,46 +87,48 @@ function uploadImage(target){
                 return null;
             }
         }
-        upload(_parent,file);
+        upload(file,getEditor);
     });
 }
-function upload(which, file) {
-    console.log(file);
+
+function upload(file,getEditor) {
     var formData = new FormData($('form')[0]);
     formData.append('img', file);
-    console.log(formData);
-    $.ajax({
-        url:'/uploadImage',
-        type:'POST',
-        dataType:'json',
-        data:formData,
-        beforeSend:function(XML){
-            XML.setRequestHeader('username',window.username);
-            XML.setRequestHeader('password',window.password);
-        },
-        success:function(response){
-            if(response.return==200){
-
-            }else if(response.return==404){
-                alert('找不到页面');
-            }else if(response.return=403){
-                alert('操作有误');
-            }
-        },
-        error:function(response){
-            console.log(response);
+    var xhr=false;
+    try {
+        xhr = new XMLHttpRequest();
+    } catch(e) {
+        try {
+            xhr = new ActiveXObject('Msxml2.XMLHTTP');
+        } catch (e) {
+            xhr = new ActiveXObject('Microsoft.XMLHTTP');
         }
-    });
-
+    }
+    xhr.open('POST', '/uploadImage');
+    xhr.setRequestHeader('username',window.username);
+    xhr.setRequestHeader('password',window.password);
+    xhr.send(formData);
+    xhr.onreadystatechange = function(e) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var data=JSON.parse(e.target.response);
+            console.log(data);
+            console.log(getEditor);
+            $(getEditor).append('<img src="127.0.0.0:8001/'+data.data.return+'">');
+            //getImage(data.data.return);
+        }
+    };
 }
 function checkUploadAccess(){
     ajaxHeader('/checkUploadAccess',null,function(data){
     });
     return true;
 }
+
+
 function getImage(fileName){
+    console.log(fileName);
     var data={
-        fileName:fileName
+        fileName:"http://0.0.0.0:8001/"+fileName
     };
     ajaxRequest('/getImage',data,function(data){
 
