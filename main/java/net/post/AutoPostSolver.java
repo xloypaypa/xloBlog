@@ -35,28 +35,10 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
 
     protected Method getMethod(Class<?> managerClass, List<Object> data) throws NoSuchMethodException {
         String methodName = this.postInfo.getMethod();
-        int size;
-        if (!this.postInfo.getDataType().equals("object") && this.postInfo.needAccess()) {
-            size = 3;
-        } else if (!this.postInfo.getDataType().equals("object")) {
-            size = 1;
-        } else {
-            size = data.size();
-        }
+        int size = data.size();
         Class[] methodParamType = new Class[size];
-        for (int i = 0; i < size - 1; i++) {
-            methodParamType[i] = String.class;
-        }
-        switch (this.postInfo.getDataType()) {
-            case "array":
-                methodParamType[size - 1] = String[].class;
-                break;
-            case "file":
-                methodParamType[size - 1] = byte[].class;
-                break;
-            default:
-                methodParamType[size - 1] = String.class;
-                break;
+        for (int i = 0; i < size; i++) {
+            methodParamType[i] = data.get(i).getClass();
         }
         return managerClass.getMethod(methodName, methodParamType);
     }
@@ -73,6 +55,7 @@ public class AutoPostSolver extends LengthLimitReadServerSolver {
         List<String> defaultValue = this.postInfo.getDefaultValue();
         switch (this.postInfo.getDataType()) {
             case "file":
+                data.add(this.requestSolver.getRequestHeadReader().getMessage("File-Type"));
                 data.add(this.originalMessage);
                 break;
             case "array":

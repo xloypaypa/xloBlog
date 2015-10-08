@@ -12,6 +12,12 @@ import java.net.URLDecoder;
 public class DBImageSolver extends LengthLimitReadServerSolver {
 
     @Override
+    protected boolean checkRequestVisitable() {
+        this.length = 0;
+        return true;
+    }
+
+    @Override
     public void solveMessage() throws Exception {
         String path = URLDecoder.decode(requestSolver.getRequestHeadReader().getUrl().getPath(), "UTF-8");
         path = path.substring(path.lastIndexOf('/') + 1);

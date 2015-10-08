@@ -23,7 +23,7 @@ public class ImageManagerTest {
 
     public static String uploadImage(String username, byte[] file, Counter counter) throws InterruptedException {
         ImageManagerNoSend imageManager = new ImageManagerNoSend(counter);
-        imageManager.uploadImage(username, "pass", file);
+        imageManager.uploadImage(username, "pass", "jpg", file);
 
         while (counter.get() != 0) {
             Thread.sleep(500);
