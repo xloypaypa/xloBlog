@@ -92,11 +92,10 @@ function uploadImage(target,getEditor){
 }
 
 function upload(file,getEditor) {
-    var formData = new FormData($('form')[0]);
-    formData.append('img', file);
+    //var formData = new FormData($('form')[0]);
+    //formData.append('img', file);
     var xhr=false;
     var fileType=(file.type).toString().slice(6);
-    console.log(fileType);
     try {
         xhr = new XMLHttpRequest();
     } catch(e) {
@@ -109,8 +108,8 @@ function upload(file,getEditor) {
     xhr.open('POST', '/uploadImage');
     xhr.setRequestHeader('username',window.username);
     xhr.setRequestHeader('password',window.password);
-    xhr.setRequestHeader('Image-Type',fileType);
-    xhr.send(formData);
+    xhr.setRequestHeader('File-Type',fileType);
+    xhr.send(file);
     xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var data=JSON.parse(e.target.response);
@@ -128,6 +127,7 @@ function checkUploadAccess(){
 }
 
 
+/*
 function getImage(fileName){
     console.log(fileName);
     var data={
@@ -136,4 +136,4 @@ function getImage(fileName){
     ajaxRequest('/getImage',data,function(data){
 
     });
-}
+}*/
