@@ -113,7 +113,7 @@ function upload(file,getEditor) {
             var data=JSON.parse(e.target.response);
             console.log(data);
             console.log(getEditor);
-            $(getEditor).append('<img src="http://127.0.0.0:8001/'+data.data.return+'">');
+            $(getEditor).append('<img src="http://127.0.0.1:8001/'+data.data.return+'">');
             //getImage(data.data.return);
         }
     };
