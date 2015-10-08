@@ -43,13 +43,8 @@ public class Main {
         jButton.addActionListener(e -> {
             panel.remove(jButton);
             panel.repaint();
-            new Thread() {
-                @Override
-                public void run() {
-                    startServer(8001, DBImageSolver::new);
-                    startServer(8000, CommandServerSolver::new);
-                }
-            }.start();
+            startServer(8001, DBImageSolver::new);
+            startServer(8000, CommandServerSolver::new);
         });
         panel.add(jButton);
         frame.setVisible(true);
@@ -58,9 +53,14 @@ public class Main {
     }
 
     private static void startServer(int port, SolverBuilder solverBuilder) {
-        Server server = Server.getNewServer();
-        server.setSolverBuilder(solverBuilder);
-        server.getInstance(port);
-        server.accept();
+        new Thread() {
+            @Override
+            public void run() {
+                Server server = Server.getNewServer();
+                server.setSolverBuilder(solverBuilder);
+                server.getInstance(port);
+                server.accept();
+            }
+        }.start();
     }
 }
