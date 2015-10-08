@@ -5,7 +5,9 @@ import model.log.NormalLog;
 import model.script.ForceCacheScriptManager;
 import model.values.SystemStrings;
 import net.CommandServerSolver;
+import net.get.DBImageSolver;
 import net.server.Server;
+import net.server.serverSolver.SolverBuilder;
 import net.tool.connection.event.ConnectionEvent;
 import net.tool.connection.event.ConnectionEventManager;
 
@@ -41,25 +43,24 @@ public class Main {
         jButton.addActionListener(e -> {
             panel.remove(jButton);
             panel.repaint();
-            new Thread() {
-                @Override
-                public void run() {
-                    Server server = Server.getNewServer();
-                    server.setSolverBuilder(CommandServerSolver::new);
-                    server.getInstance(8000);
-                    server.accept();
-                    System.out.println("end");
-                }
-            }.start();
+            startServer(8001, DBImageSolver::new);
+            startServer(8000, CommandServerSolver::new);
         });
         panel.add(jButton);
         frame.setVisible(true);
 
         ConnectionEventManager.getConnectionEventManager().addEventHandler(ConnectionEvent.connectFail, (event, solver) -> System.out.println(event));
+    }
 
-        Server server = Server.getNewServer();
-        server.setSolverBuilder(CommandServerSolver::new);
-        server.getInstance(8001);
-        server.accept();
+    private static void startServer(int port, SolverBuilder solverBuilder) {
+        new Thread() {
+            @Override
+            public void run() {
+                Server server = Server.getNewServer();
+                server.setSolverBuilder(solverBuilder);
+                server.getInstance(port);
+                server.accept();
+            }
+        }.start();
     }
 }
