@@ -54,7 +54,6 @@ function markdown(){
         var preview=encodeURIComponent(sendVal.slice(0,99));
         var title=encodeURIComponent($('.blog-title input').val());
         addDocument(title,encodeURIComponent(sendVal),preview);
-        console.log(document.selection);
     });
     $(utilbar).find('.epiceditor-bold-btn').click(function(){
 
@@ -87,11 +86,11 @@ function uploadImage(target,getEditor){
                 return null;
             }
         }
-        upload(file,getEditor);
+        uploadImg(file,getEditor);
     });
 }
 
-function upload(file,getEditor) {
+function uploadImg(file,getEditor) {
     //var formData = new FormData($('form')[0]);
     //formData.append('img', file);
     var xhr=false;
@@ -113,10 +112,10 @@ function upload(file,getEditor) {
     xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var data=JSON.parse(e.target.response);
-            console.log(data);
-            console.log(getEditor);
-            $(getEditor).append('<img src="http://127.0.0.1:8001/'+data.data.return+'">');
-            //getImage(data.data.return);
+            var hostName=window.location.hostname;
+            var fileName=data.data.return;
+            //$(getEditor).append('<p><img src="http://'+hostName+':8001/'+fileName+'"></p>');
+            $(getEditor).append('![Alt text](http://'+hostName+':8001/'+fileName+')');
         }
     };
 }
