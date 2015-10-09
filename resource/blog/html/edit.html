@@ -8,43 +8,7 @@
     <link rel="stylesheet" href="../libs/highlight/styles/default.css"/>
     <link rel="stylesheet" href="../css/base.css" />
     <link rel="stylesheet" href="../css/editor.css" />
-    <style>
-        .su-toolbar{
-            width:100%;
-            height:45px;
-            display: block;
-            background: #f5f5f5;
-            padding: 5px;
-            border: solid 1px;
-            border-color: #ccc;
-        }
-        .su-toolbar .tool-block{
-            cursor: pointer;
-            display: block;
-            width:35px;
-            margin:0 1%;
-            height:35px;
-            float:left;
-            padding: 5px;
-        }
-        .su-toolbar .tool-block *{
-            left:20%;
-            top:20%;
-        }
-        .su-toolbar .tool-block:hover{
-            background: #00ffff;
-        }
-        .su-toolbar .upload{
-            display: inline-block;
-            width:35px;
-            height:35px;
-            cursor: pointer;
-            position:absolute;
-            top:0;
-            left:0;
-            opacity: 0;
-        }
-    </style>
+
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -105,30 +69,30 @@
                 <div class="tool-block su-tool-head" title="Header(Ctrl+H)" data-placement="top" data-toggle="tooltip">
                     <span class="glyphicon glyphicon-header"></span>
                 </div>
-                <div class="tool-block su-tool-link" title="Link(Ctrl+L)" data-placement="top" data-toggle="tooltip">
+                <div class="tool-block su-tool-link" title="Link(Ctrl+L)" data-placement="top" data-toggle="modal" data-target="#linkModal">
                     <span class="glyphicon glyphicon-link"></span>
                 </div>
-                <div class="tool-block su-tool-img" title="Image(Ctrl+G)" data-placement="top" data-toggle="tooltip">
+                <div class="tool-block su-tool-img" title="Image(Ctrl+G)" data-placement="top" data-toggle="tooltip" style="position: relative;">
                     <span class="glyphicon glyphicon-picture"></span>
                     <input type="file" class="upload">
                 </div>
-                <div class="tool-block su-tool-list" title="List(Ctrl+U)" data-placement="top" data-toggle="tooltip">
+                <!--<div class="tool-block su-tool-list" title="List(Ctrl+U)" data-placement="top" data-toggle="tooltip">
                     <span class="glyphicon glyphicon-list"></span>
                 </div>
                 <div class="tool-block su-tool-orderlist" title="OrderList(Ctrl+O)" data-placement="top" data-toggle="tooltip">
                     <span class="glyphicon glyphicon-th-list"></span>
-                </div>
+                </div>-->
                 <div class="tool-block su-tool-code" title="Code(Ctrl+K)" data-placement="top" data-toggle="tooltip">
                     <span class="glyphicon glyphicon-asterisk"></span>
                 </div>
-                <div class="tool-block su-tool-block" title="Quote(Ctrl+Q)" data-placement="top" data-toggle="tooltip">
+                <!--<div class="tool-block su-tool-block" title="Quote(Ctrl+Q)" data-placement="top" data-toggle="tooltip">
                     <span class="glyphicon glyphicon-comment"></span>
-                </div>
+                </div>-->
                 <div class="tool-block su-tool-upload"  title="File Upload" data-placement="top" data-toggle="tooltip" style="position: relative;">
                     <span class="glyphicon glyphicon-upload" ></span>
                     <input type="file" class="upload">
                 </div>
-                <div class="tool-block su-tool-help" title="Help" data-placement="top" data-toggle="tooltip">
+                <div class="tool-block su-tool-help" title="Help" data-placement="top" data-toggle="modal" data-target="#helpModal">
                     <span class="glyphicon glyphicon-info-sign"></span>
                 </div>
             </div>
@@ -137,9 +101,55 @@
         <button type="button" class="btn submit">提交</button>
     </div>
 </div>
-
-
 <footer></footer>
+
+<div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="myModalLabel">插入链接</h2>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class=" icon-link"></i></span>
+                    <input type="text" class="linkAddress form-control" placeholder="链接地址"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-font"></i></span>
+                    <input type="text" class="linkFont form-control" placeholder="链接文本" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="confirm btn btn-primary" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="ModalLabel">使用说明</h2>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item">加粗： **文本**</li>
+                    <li class="list-group-item">斜体：*文本*</li>
+                    <li class="list-group-item">标题：###文本</li>
+                    <li class="list-group-item">链接：</li>
+                    <li class="list-group-item">图片：</li>
+                    <li class="list-group-item">代码：`文本`</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="confirm btn btn-primary" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="../libs/jquery-1.11.2.min.js"></script>
 <script src="../libs/bootstrap/bootstrap.min.js"></script>
 <script src="../libs/EpicEditor/js/epiceditor.min.js"></script>

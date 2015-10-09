@@ -46,8 +46,8 @@ function markdown(){
     };
     var editor = new EpicEditor(opts).load();
     var getEditor=editor.getElement('editor').body;
-    var utilbar=$(editor.getElement('wrapper')).find('#epiceditor-utilbar');
-    $(utilbar).append('<button title="bold" class="epiceditor-bold-btn">B</button>');
+    //var utilbar=$(editor.getElement('wrapper')).find('#epiceditor-utilbar');
+    //$(utilbar).append('<button title="bold" class="epiceditor-bold-btn">B</button>');
     //$(utilbar).find('epiceditor-bold-btn').css('background-image');
     $('.submit').click(function () {
         var sendVal=editor.getElement('previewer').body.innerHTML;
@@ -55,10 +55,53 @@ function markdown(){
         var title=encodeURIComponent($('.blog-title input').val());
         addDocument(title,encodeURIComponent(sendVal),preview);
     });
-    $(utilbar).find('.epiceditor-bold-btn').click(function(){
+    /*$(utilbar).find('.epiceditor-bold-btn').click(function(){
 
-    });
+    });*/
+
+    boldText(getEditor);
+    italicText(getEditor);
+    headerText(getEditor);
+    addLink(getEditor);
     uploadImage($('.upload'),getEditor);
+    addCode(getEditor);
+}
+
+//粗体
+function boldText(getEditor){
+    $('.glyphicon-bold').click(function(){
+        $(getEditor).append('****');
+    });
+}
+
+//斜体
+function italicText(getEditor){
+    $('.glyphicon-italic').click(function(){
+        $(getEditor).append('**');
+    });
+}
+
+//标题
+function headerText(getEditor){
+    $('.glyphicon-header').click(function(){
+        $(getEditor).append('###');
+    });
+}
+
+//添加链接
+function addLink(getEditor){
+    $('.confirm').click(function(){
+        var linkAddress=$('.linkAddress').val();
+        var linkFont=$('.linkFont').val();
+        $(getEditor).append('['+linkFont+'](http://'+linkAddress+')');
+    });
+}
+
+//添加代码
+function addCode(getEditor){
+    $('.glyphicon-code').click(function(){
+        $(getEditor).append('``');
+    });
 }
 
 function addDocument(title,body,preview){
@@ -72,6 +115,8 @@ function addDocument(title,body,preview){
     });
 }
 
+
+//上传图片
 function uploadImage(target,getEditor){
     target.change(function(event){
         var file=this.files[0];
