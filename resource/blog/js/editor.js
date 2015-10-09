@@ -69,21 +69,21 @@ function markdown(){
 
 //粗体
 function boldText(getEditor){
-    $('.glyphicon-bold').click(function(){
+    $('.su-tool-bold').click(function(){
         $(getEditor).append('****');
     });
 }
 
 //斜体
 function italicText(getEditor){
-    $('.glyphicon-italic').click(function(){
+    $('.su-tool-italic').click(function(){
         $(getEditor).append('**');
     });
 }
 
 //标题
 function headerText(getEditor){
-    $('.glyphicon-header').click(function(){
+    $('.su-tool-head').click(function(){
         $(getEditor).append('###');
     });
 }
@@ -99,7 +99,7 @@ function addLink(getEditor){
 
 //添加代码
 function addCode(getEditor){
-    $('.glyphicon-code').click(function(){
+    $('.su-tool-code').click(function(){
         $(getEditor).append('``');
     });
 }
