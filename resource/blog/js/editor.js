@@ -39,8 +39,8 @@ function markdown(){
             toggleFullscreen: 'Enter Fullscreen'
         },
         autogrow:{
-            minHeight:100,
-            maxHeight:400,
+            minHeight:300,
+            maxHeight:500,
             scroll:true
         }
     };
