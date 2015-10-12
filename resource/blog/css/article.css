@@ -13,6 +13,10 @@ background:#eee;
     font-weight:bold;
     border-bottom:1px solid #ddd;
 }
+.article-body img{
+    max-height:100px;
+    max-width:100px;
+}
 /*********оЮ╧ьндуб**************/
 .relatedPosts{
     margin-top:30px;
