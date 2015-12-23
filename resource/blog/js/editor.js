@@ -39,27 +39,69 @@ function markdown(){
             toggleFullscreen: 'Enter Fullscreen'
         },
         autogrow:{
-            minHeight:100,
-            maxHeight:400,
+            minHeight:300,
+            maxHeight:500,
             scroll:true
         }
     };
     var editor = new EpicEditor(opts).load();
     var getEditor=editor.getElement('editor').body;
-    var utilbar=$(editor.getElement('wrapper')).find('#epiceditor-utilbar');
-    $(utilbar).append('<button title="bold" class="epiceditor-bold-btn">B</button>');
+    //var utilbar=$(editor.getElement('wrapper')).find('#epiceditor-utilbar');
+    //$(utilbar).append('<button title="bold" class="epiceditor-bold-btn">B</button>');
     //$(utilbar).find('epiceditor-bold-btn').css('background-image');
     $('.submit').click(function () {
         var sendVal=editor.getElement('previewer').body.innerHTML;
         var preview=encodeURIComponent(sendVal.slice(0,99));
         var title=encodeURIComponent($('.blog-title input').val());
         addDocument(title,encodeURIComponent(sendVal),preview);
-        console.log(document.selection);
     });
-    $(utilbar).find('.epiceditor-bold-btn').click(function(){
+    /*$(utilbar).find('.epiceditor-bold-btn').click(function(){
 
-    });
+    });*/
+
+    boldText(getEditor);
+    italicText(getEditor);
+    headerText(getEditor);
+    addLink(getEditor);
     uploadImage($('.upload'),getEditor);
+    addCode(getEditor);
+}
+
+//粗体
+function boldText(getEditor){
+    $('.su-tool-bold').click(function(){
+        $(getEditor).append('****');
+    });
+}
+
+//斜体
+function italicText(getEditor){
+    $('.su-tool-italic').click(function(){
+        $(getEditor).append('**');
+    });
+}
+
+//标题
+function headerText(getEditor){
+    $('.su-tool-head').click(function(){
+        $(getEditor).append('###');
+    });
+}
+
+//添加链接
+function addLink(getEditor){
+    $('.confirm').click(function(){
+        var linkAddress=$('.linkAddress').val();
+        var linkFont=$('.linkFont').val();
+        $(getEditor).append('['+linkFont+'](http://'+linkAddress+')');
+    });
+}
+
+//添加代码
+function addCode(getEditor){
+    $('.su-tool-code').click(function(){
+        $(getEditor).append('``');
+    });
 }
 
 function addDocument(title,body,preview){
@@ -73,6 +115,8 @@ function addDocument(title,body,preview){
     });
 }
 
+
+//上传图片
 function uploadImage(target,getEditor){
     target.change(function(event){
         var file=this.files[0];
@@ -87,11 +131,11 @@ function uploadImage(target,getEditor){
                 return null;
             }
         }
-        upload(file,getEditor);
+        uploadImg(file,getEditor);
     });
 }
 
-function upload(file,getEditor) {
+function uploadImg(file,getEditor) {
     //var formData = new FormData($('form')[0]);
     //formData.append('img', file);
     var xhr=false;
@@ -113,10 +157,10 @@ function upload(file,getEditor) {
     xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var data=JSON.parse(e.target.response);
-            console.log(data);
-            console.log(getEditor);
-            $(getEditor).append('<img src="http://127.0.0.1:8001/'+data.data.return+'">');
-            //getImage(data.data.return);
+            var hostName=window.location.hostname;
+            var fileName=data.data.return;
+            //$(getEditor).append('<p><img src="http://'+hostName+':8001/'+fileName+'"></p>');
+            $(getEditor).append('![Alt text](http://'+hostName+':8001/'+fileName+')');
         }
     };
 }

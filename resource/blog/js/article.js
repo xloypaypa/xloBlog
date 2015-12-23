@@ -52,6 +52,10 @@ $(function(){
     $('.chat').click(function(){
         location.href='letters.html?receiver='+author;
     });
+
+    //图片缩放
+    var test=$('img').attr('src');
+    console.log(test);
 });
 function getDocument(){
     var data={
