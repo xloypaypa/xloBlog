@@ -11,8 +11,8 @@ import net.server.serverSolver.SolverBuilder;
 import net.tool.connection.event.ConnectionEvent;
 import net.tool.connection.event.ConnectionEventManager;
 
-import javax.swing.*;
 import java.io.File;
+import java.util.concurrent.Executors;
 
 /**
  * Created by xlo on 2015/8/19.
@@ -29,34 +29,19 @@ public class Main {
         LogManager.getLogManager().putLog("blog read", normalLog);
         LogManager.getLogManager().putLog("blog write", normalLog);
 
-        JFrame frame = new JFrame("blog");
-        frame.setBounds(100, 100, 300, 300);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLayout(null);
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setBounds(0, 0, 200, 200);
-        frame.add(panel);
 
-        JButton jButton = new JButton("start");
-        jButton.setBounds(0, 0, 200, 200);
-        jButton.addActionListener(e -> {
-            panel.remove(jButton);
-            panel.repaint();
-            startServer(8001, DBImageSolver::new);
-            startServer(8000, CommandServerSolver::new);
-        });
-        panel.add(jButton);
-        frame.setVisible(true);
+        startServer(Integer.parseInt(args[0]), CommandServerSolver::new, Integer.parseInt(args[2]));
+        startServer(Integer.parseInt(args[1]), DBImageSolver::new, Integer.parseInt(args[3]));
 
         ConnectionEventManager.getConnectionEventManager().addEventHandler(ConnectionEvent.connectFail, (event, solver) -> System.out.println(event));
     }
 
-    private static void startServer(int port, SolverBuilder solverBuilder) {
+    private static void startServer(int port, SolverBuilder solverBuilder, int threadNum) {
         new Thread() {
             @Override
             public void run() {
                 Server server = Server.getNewServer();
+                server.changeThreadPool(Executors.newFixedThreadPool(threadNum));
                 server.setSolverBuilder(solverBuilder);
                 server.getInstance(port);
                 server.accept();
