@@ -25,6 +25,18 @@ public class BlogManager extends Manager {
         sendEvent.submit();
     }
 
+    public void removeDocument(String username, String password, String id) {
+        SendEvent sendEvent = new SendEvent() {
+            @Override
+            public boolean run() throws Exception {
+                return accessConfig.isAccept(username, password, this)
+                        && (boolean) ManagerLogic.invoke(this.getClojureName(), username, password, id);
+            }
+        };
+        sendManager.addSendMessage(sendEvent);
+        sendEvent.submit();
+    }
+
     public void addReply(String username, String password, String documentID, String reply) {
         SendEvent sendEvent = new SendEvent() {
             @Override

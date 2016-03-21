@@ -27,6 +27,15 @@ public class BlogManagerTest {
         }
     }
 
+    public static void removeDocument(String author, String id, Counter counter) throws InterruptedException {
+        BlogManagerNoSend blogManagerNoSend = new BlogManagerNoSend(counter);
+        blogManagerNoSend.removeDocument(author, "pass", id);
+
+        while (counter.get() != 0) {
+            Thread.sleep(500);
+        }
+    }
+
     public static void addReply(Document document, String author, String reply, Counter counter) throws InterruptedException {
         BlogCollection collection = new BlogCollection();
         BlogDBCollection.DBData data = collection.findDocumentListData(document).get(0);
@@ -115,6 +124,18 @@ public class BlogManagerTest {
             List<BlogDBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user " + i));
             assertEquals(1, data.size());
         }
+    }
+
+    @Test
+    public void testRemoveDocument() throws Exception {
+        UserManagerTest.register("test user");
+        addDocument("test user", "title", "body", new Counter(1), "default");
+        BlogCollection collection = new BlogCollection();
+        List<BlogDBCollection.DBData> data = collection.findDocumentListData(new Document().append("author", "test user"));
+        String id = data.get(0).object.get("_id").toString();
+        removeDocument("test user", id, new Counter(1));
+
+        assertEquals(0, new BlogCollection().findDocumentListData(new Document().append("author", "test user")).size());
     }
 
     @Test

@@ -55,6 +55,11 @@
             <data default="100">preview</data>
         </method>
     </solver>
+    <solver name="remove document" url="/removeDocument" manager="control.BlogManager" access="true">
+        <method name="removeDocument">
+            <data>id</data>
+        </method>
+    </solver>
     <solver name="get document" url="/getDocument" manager="control.BlogManager" access="false">
         <method name="getDocument">
             <data>id</data>

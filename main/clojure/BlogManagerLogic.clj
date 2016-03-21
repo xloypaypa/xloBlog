@@ -88,6 +88,14 @@
         (let [object (. (. data object) toJson)]
           (. manager addSuccessMessage event object) true)))))
 
+(defn removeDocument [username password id]
+  (if (nil? id)
+    false
+    (let [data (. (new BlogCollection) getDocumentData id)]
+      (if (or (nil? data) (not (.equals username (.get (. data object) "author"))))
+        false
+        (do (.removeDocument (new BlogCollection) id) true)))))
+
 (defn addReader [id]
   (let [data (. (new BlogCollection) getDocument id)]
     (if (nil? data) false
@@ -122,6 +130,7 @@
       (sendDocumentListSize manager event (. document append typeKey typeMessage)))))
 
 (. ManagerLogic put "control.BlogManager$addDocument" addDocument 6)
+(. ManagerLogic put "control.BlogManager$removeDocument" removeDocument 3)
 (. ManagerLogic put "control.BlogManager$addReply" addReply 4)
 (. ManagerLogic put "control.BlogManager$getDocument" getDocument 4)
 (. ManagerLogic put "control.BlogManager$addReader" addReader 1)
